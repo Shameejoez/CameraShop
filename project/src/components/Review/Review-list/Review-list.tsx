@@ -1,28 +1,35 @@
-import { Review } from '../../types/types';
-import ReviewItem from './ReviewItem';
-import ReviewForm from './ReviewForm';
+import { Review, sendRewiew } from '../../../types/types';
+import ReviewItem from '../Review-Item/ReviewItem';
+import ReviewSucsessPopup from '../Review-sucsess-popup';
+import ReviewForm from '../Review-form/Review-form';
 import { useState } from 'react';
 
 type ReviewListProps = {
     dataReviews: Review[];
     loadMoreReview: (number: number) => void;
     visibleArrayPath: number;
+    onSubmit: (review: sendRewiew) => void;
 }
 
-function ReviewList ({dataReviews, loadMoreReview = () => void 0, visibleArrayPath}: ReviewListProps):JSX.Element {
+function ReviewList ({dataReviews, loadMoreReview = () => void 0, visibleArrayPath, onSubmit}: ReviewListProps):JSX.Element {
   const copyDataReviwes = [...dataReviews];
   const [modalVisible, setModalVisible] = useState<string>('');
+  const [successVisible, setSuccessVisible] = useState<string>('');
 
   const handleSetModalVisible = (mode: string) => {
     setModalVisible(mode);
-  }
+  };
+
+  const handleSuccessVisible = (mode: string) => {
+    setSuccessVisible(mode);
+  };
 
   const renderMoreReviews = () => copyDataReviwes.reverse().splice(0, 3 * visibleArrayPath).map((review) => <ReviewItem key={review.id} dataReview={review}/> );
 
 
   return (
     <>
-      <section className="review-block">
+      <section className="review-block" data-review-list='review-list-test'>
         <div className="container">
           <div className="page-content__headed">
             <h2 className="title title--h3">Отзывы</h2>
@@ -40,7 +47,10 @@ function ReviewList ({dataReviews, loadMoreReview = () => void 0, visibleArrayPa
           </div>
         </div>
       </section>
-      <ReviewForm isVisible={modalVisible} setIsVisible={handleSetModalVisible}/>
+
+      <ReviewForm isVisible={modalVisible} setIsVisible={handleSetModalVisible} onSubmit={onSubmit} setIsVisibleSuccess={setSuccessVisible}/>
+
+      <ReviewSucsessPopup isVisible={successVisible} setIsVisible={handleSuccessVisible}/>
     </>
 
   );

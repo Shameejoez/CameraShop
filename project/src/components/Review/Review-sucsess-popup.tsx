@@ -1,0 +1,42 @@
+import { useRef } from 'react';
+import useOutsideClick from '../../hooks/useOutsideClick/useOutsideClick';
+import useKeyDownEsc from '../../hooks/useKeyDownEsc/useKeyDownEsc';
+
+type sucsessPopupProps = {
+  isVisible: string;
+  setIsVisible: (mode: string) => void;
+}
+
+function ReviewSucsessPopup ({isVisible, setIsVisible}:sucsessPopupProps):JSX.Element {
+
+  const modalSuccessRef = useRef<HTMLDivElement | null>(null);
+
+  useKeyDownEsc({handler: setIsVisible, isVisible});
+
+  useOutsideClick({elementRef: modalSuccessRef, handler:setIsVisible, isVisible});
+
+  return (
+    <div className={`modal ${isVisible} modal--narrow`} data-testid={'modal-success-test'}>
+      <div className="modal__wrapper">
+        <div className="modal__overlay"></div>
+        <div className="modal__content" ref={modalSuccessRef}>
+          <p className="title title--h4">Спасибо за отзыв</p>
+          <svg className="modal__icon" width="80" height="78" aria-hidden="true">
+            <use xlinkHref="#icon-review-success"></use>
+          </svg>
+          <div className="modal__buttons">
+            <button className="btn btn--purple modal__btn modal__btn--fit-width" type="button" onClick={() => setIsVisible('')}>Вернуться к покупкам
+            </button>
+          </div>
+          <button className="cross-btn" type="button" aria-label="Закрыть попап" onClick={() => setIsVisible('')}>
+            <svg width="10" height="10" aria-hidden="true">
+              <use xlinkHref="#icon-close"></use>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default ReviewSucsessPopup;

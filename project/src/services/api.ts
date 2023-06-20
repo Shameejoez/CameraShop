@@ -1,6 +1,6 @@
 import axios, {AxiosInstance} from 'axios';
 
-const BACK_URL = 'https://camera-shop.accelerator.pages.academy';
+export const BACK_URL = 'https://camera-shop.accelerator.pages.academy';
 const REQUST_TIMEOUT = 5000;
 
 export const createAPI = (): AxiosInstance => {

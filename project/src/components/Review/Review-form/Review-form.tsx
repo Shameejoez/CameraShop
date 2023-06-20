@@ -1,30 +1,39 @@
 /* eslint-disable no-nested-ternary */
-import { useAppDispatch } from '../../hooks';
-import { RatingStarCategories, ReviewCustomInputData, STARS_COUNT } from '../../consts';
-import { ChangeEvent, FormEvent, Fragment, useState } from 'react';
-import type { sendRewiew } from '../../types/types';
-import { getReviews, postReview } from '../../store/action';
+import { RatingStarCategories, ReviewCustomInputData, ReviewSubmitStatus, STARS_COUNT } from '../../../consts';
+import { ChangeEvent, FormEvent, Fragment, useEffect, useRef, useState } from 'react';
+import type { sendRewiew } from '../../../types/types';
 import { useParams } from 'react-router-dom';
-import useInput from '../../hooks/useInput';
+import useInput from '../../../hooks/useInput/useInput';
+import { useAppDispatch, useAppSelector } from '../../../hooks';
+import { takeReviewSubmitStatus } from '../../../store/data-process/data-selector';
+import { setSubmitReviewStatus } from '../../../store/data-process/data-slicer';
+import useOutsideClick from '../../../hooks/useOutsideClick/useOutsideClick';
+import useKeyDownEsc from '../../../hooks/useKeyDownEsc/useKeyDownEsc';
 
 type ReviewFormProps = {
   isVisible: string;
   setIsVisible: (mode: string) => void;
+  onSubmit: (review: sendRewiew) => void;
+  setIsVisibleSuccess: (mode: string) => void;
 }
 
-function ReviewForm({ isVisible, setIsVisible }: ReviewFormProps): JSX.Element {
+function ReviewForm ({ isVisible, setIsVisible, onSubmit, setIsVisibleSuccess }: ReviewFormProps): JSX.Element {
   const dispatch = useAppDispatch();
+  const reviewFormRef = useRef<HTMLDivElement | null>(null);
   const { id } = useParams();
-
+  const submitReviewStatus = useAppSelector(takeReviewSubmitStatus);
   const advantage = useInput('');
   const disadvantage = useInput('');
   const name = useInput('');
   const [review, setReview] = useState<string>('');
   const [reviewDurty, setReviewDurty] = useState(false);
   const [reviewError, setReviewError] = useState(false);
-  const [rating, setRating] = useState<number>(5);
+  const [rating, setRating] = useState<number>(0);
   const [ratingError, setRatingError] = useState(false);
 
+
+  useOutsideClick({elementRef: reviewFormRef, handler: setIsVisible, isVisible});
+  useKeyDownEsc({handler: setIsVisible, isVisible});
 
   const onBlurisDurtyHandler = ( e: ChangeEvent) => {
     getReviewHandler(e as ChangeEvent<HTMLTextAreaElement>);
@@ -73,31 +82,33 @@ function ReviewForm({ isVisible, setIsVisible }: ReviewFormProps): JSX.Element {
   const setStateInputHandler = (nameInput: string, e: ChangeEvent<HTMLInputElement>) => {
     switch (nameInput) {
       case 'Ваше имя':
-        return name.onChange(e);
+        return name.onChange(e.target.value);
       case 'Достоинства':
-        return advantage.onChange(e);
+        return advantage.onChange(e.target.value);
       case 'Недостатки':
-        return disadvantage.onChange(e);
+        return disadvantage.onChange(e.target.value);
     }
   };
 
   const removeAllFields = () => {
+    setReview('');
     name.clearInput();
     advantage.clearInput();
     disadvantage.clearInput();
-    setReview('');
     setRating(0);
-  }
+    removeValidToDefult();
+  };
 
   const renderStarsRating = () =>
     RatingStarCategories.map((categories, i) => (
       <Fragment key={categories}>
-        <input className="visually-hidden" id={`star-${STARS_COUNT - i}`} name="rate" type="radio" defaultValue={STARS_COUNT - i} onChange={(e) => getRatingHandler(e)} />
+        <input className="visually-hidden" id={`star-${STARS_COUNT - i}`} name="rate" type="radio" value={STARS_COUNT - i} checked={STARS_COUNT - i === rating} onChange={(e) => getRatingHandler(e)}/>
         <label className="rate__label" htmlFor={`star-${STARS_COUNT - i}`} title={categories} />
       </Fragment>
     ));
 
 
+  // включить состояние ошибки во всех полях
   const isAllInputError = () => {
     advantage.setIsDerty(true);
     disadvantage.setIsDerty(true);
@@ -109,6 +120,19 @@ function ReviewForm({ isVisible, setIsVisible }: ReviewFormProps): JSX.Element {
       setReviewError(true);
     }
   };
+
+  // привести инпуты в дефолтное состояние
+
+  const removeValidToDefult = () => {
+    advantage.setIsDerty(false);
+    disadvantage.setIsDerty(false);
+    name.setIsDerty(false);
+    setReviewDurty(false);
+    setRatingError(false);
+    setReviewError(false);
+
+  };
+
   const postReviewHandler = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -124,18 +148,21 @@ function ReviewForm({ isVisible, setIsVisible }: ReviewFormProps): JSX.Element {
       review: review,
     };
 
-
-    dispatch(postReview(currentReview));
-    dispatch(getReviews(Number(id)));
-    setIsVisible('');
-    removeAllFields();
+    onSubmit(currentReview);
 
   };
 
+  useEffect(() => {
+    if (submitReviewStatus === ReviewSubmitStatus.Fullfield) {
+      setIsVisible('');
+      removeAllFields();
+      setIsVisibleSuccess('is-active');
+      dispatch(setSubmitReviewStatus(ReviewSubmitStatus.Unknown));// возвращает статус unknown
+    }
+  });
 
   const isValidOrNoHandler = (inputName: string) =>
     !getStateInputHandler(inputName)?.isDurty ? '' : getStateInputHandler(inputName)?.isValid && getStateInputHandler(inputName)?.isDurty ? 'is-valid' : 'is-invalid';
-
 
   const renderCustomInput = () =>
     ReviewCustomInputData.map(({ placeholder, labelSpan, errorMessage }) => (
@@ -149,7 +176,7 @@ function ReviewForm({ isVisible, setIsVisible }: ReviewFormProps): JSX.Element {
             </svg>
           </span>
           <input type="text" name={labelSpan} placeholder={placeholder} value={getStateInputHandler(labelSpan)?.value}
-            onChange={(e) => setStateInputHandler(labelSpan, e)} onBlur={(e) => getStateInputHandler(labelSpan)?.onBlur(e)}
+            onChange={(e) => setStateInputHandler(labelSpan, e)} onBlur={(e) => getStateInputHandler(labelSpan)?.onBlur(e.target.value)}
           />
         </label>
         <p className="custom-input__error">{errorMessage}</p>
@@ -157,11 +184,11 @@ function ReviewForm({ isVisible, setIsVisible }: ReviewFormProps): JSX.Element {
     ));
 
   return (
-    <div className={`modal ${isVisible}`}>
+    <div className={`modal ${isVisible}`} data-testid="review-form-test">
       <div className="modal__wrapper">
-        <div className="modal__overlay" />
-        <div className="modal__content">
-          <p className="title title--h4">Оставить отзыв</p>
+        <div className="modal__overlay" /* onClick={() => setIsVisible('')} */ />
+        <div className="modal__content" ref={isVisible === 'is-active' ? reviewFormRef : null}>
+          <p className="title title--h4" >Оставить отзыв</p>
           <div className="form-review">
             <form method="post" onSubmit={(e) => postReviewHandler(e)}>
               <div className="form-review__rate">
@@ -188,14 +215,14 @@ function ReviewForm({ isVisible, setIsVisible }: ReviewFormProps): JSX.Element {
                         <use xlinkHref="#icon-snowflake" />
                       </svg>
                     </span>
-                    <textarea name="user-comment" minLength={5} placeholder="Поделитесь своим опытом покупки" defaultValue={review}
+                    <textarea name="user-comment" minLength={5} placeholder="Поделитесь своим опытом покупки" value={review}
                       onChange={getReviewHandler} onBlur={(e) => onBlurisDurtyHandler(e)}
                     />
                   </label>
                   <div className="custom-textarea__error">Нужно добавить комментарий</div>
                 </div>
               </div>
-              <button className="btn btn--purple form-review__btn" type="submit" >Отправить отзыв</button>
+              <button className="btn btn--purple form-review__btn" type="submit" disabled={submitReviewStatus === ReviewSubmitStatus.Pending} >Отправить отзыв</button>
             </form>
           </div>
           <button className="cross-btn" type="button" aria-label="Закрыть попап" onClick={() => setIsVisible('') }>

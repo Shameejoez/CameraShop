@@ -1,3 +1,4 @@
+import { ReviewSubmitStatus } from '../consts';
 import { store} from '../store';
 import { CardProductInfo, PromoProduct, Review } from './types';
 
@@ -11,4 +12,5 @@ export type DataStore = {
     similar: CardProductInfo[];
     reviews: Review[];
     promo: PromoProduct | null;
+    reviewSubmitStatus: ReviewSubmitStatus;
 }

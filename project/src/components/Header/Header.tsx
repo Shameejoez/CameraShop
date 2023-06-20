@@ -1,6 +1,6 @@
 import { Outlet, Link } from 'react-router-dom';
 import Footer from '../Footer/Footer';
-import HeaderNavElement from './HeaderNavElement';
+import HeaderNavElement from './Header-nav-element';
 import { AppRoutes, HeaderNames } from '../../consts';
 
 function Header ():JSX.Element {

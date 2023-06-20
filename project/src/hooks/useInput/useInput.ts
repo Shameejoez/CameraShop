@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from 'react';
+import { useState } from 'react';
 
 //'is-invalid'
 const useInput = (initialValue: string) => {
@@ -6,13 +6,13 @@ const useInput = (initialValue: string) => {
   const [ isDurty, setIsDerty] = useState(false);
   const [isValid, setIsValid] = useState(false);
 
-  const onChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setIsValidHandler(e.target.value);
-    setValue(e.target.value);
+  const onChange = (data: string) => {
+    setIsValidHandler(data);
+    setValue(data);
   };
 
-  const onBlur = (e: ChangeEvent<HTMLInputElement>) => {
-    setIsValidHandler(e.target.value);
+  const onBlur = ( data: string) => {
+    setIsValidHandler(data);
     setIsDerty(true);
 
   };

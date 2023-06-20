@@ -6,9 +6,10 @@ import { useAppDispatch, useAppSelector } from '../hooks';
 import { takeCamera, takeReviews, takeSimilar } from '../store/data-process/data-selector';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { getCamera, getReviews, getSimilarCameras } from '../store/action';
-import ProductTabs from '../components/ProductTabs/ProductTabs';
-import ReviewList from '../components/Review/ReviewList';
+import { getCamera, getReviews, getSimilarCameras, postReview } from '../store/action';
+import ProductTabs from '../components/Product-tabs/Product-tabs';
+import ReviewList from '../components/Review/Review-list/Review-list';
+import { sendRewiew } from '../types/types';
 
 
 function Product(): JSX.Element | null {
@@ -20,14 +21,6 @@ function Product(): JSX.Element | null {
   const FIRST_REVIEWS_PATH = 1;
   const [visibleArrayPathReviews, setVisibleArrayPathReviews] = useState(FIRST_REVIEWS_PATH);
 
-  const onChangevisibleArrayPathReviewsMore = (numberPath: number) => {
-    setVisibleArrayPathReviews((prev) => prev + numberPath );
-  };
-
-  const onChangevisibleArrayPathReviewsRBack = () => {
-    setVisibleArrayPathReviews(1);
-  };
-
   useEffect(() => {
     if (id) {
       const parseId = Number(id);
@@ -38,6 +31,18 @@ function Product(): JSX.Element | null {
 
   }, [dispatch, id]);
 
+  const onSubmitPostReview = (review: sendRewiew) => {
+    dispatch(postReview(review));
+  };
+
+
+  const onChangevisibleArrayPathReviewsMore = (numberPath: number) => {
+    setVisibleArrayPathReviews((prev) => prev + numberPath );
+  };
+
+  const onChangevisibleArrayPathReviewsRBack = () => {
+    setVisibleArrayPathReviews(1);
+  };
 
   const [sliderPosition, setSliderPosition] = useState(START_SLIDER_POSITION);
   const MAX_SLIDER_WIDTH = -Math.ceil(similarProducts.length / COUNT_SLIDER_VISIBLE_ELEMENT) * SLIDER_STEP + SLIDER_STEP;
@@ -74,7 +79,7 @@ function Product(): JSX.Element | null {
     );
 
   return (
-    <main>
+    <main style={{overflow: 'hidden' }} data-testid={'productid-test'}>
       <div className="page-content">
         <Breadcrumb name={name} id={id}/>
         <div className="page-content__section">
@@ -94,7 +99,7 @@ function Product(): JSX.Element | null {
                   <p className="rate__count"><span className="visually-hidden" >Всего оценок:</span>{reviewCount}</p>
                 </div>
                 <p className="product__price"><span className="visually-hidden">Цена:</span>{price.toLocaleString('ru-Ru')} ₽</p>
-                <button className="btn btn--purple" type="button">
+                <button className="btn btn--purple" type="button" name='add-to-basket'>
                   <svg width={24} height={16} aria-hidden="true">
                     <use xlinkHref="#icon-add-basket" />
                   </svg>Добавить в корзину
@@ -138,9 +143,10 @@ function Product(): JSX.Element | null {
         </div>
         <div className="page-content__section">
           {/* Отзывы */}
-          <ReviewList dataReviews={reviews} loadMoreReview={onChangevisibleArrayPathReviewsMore} visibleArrayPath={visibleArrayPathReviews} />
+          <ReviewList dataReviews={reviews} loadMoreReview={onChangevisibleArrayPathReviewsMore} visibleArrayPath={visibleArrayPathReviews} onSubmit={onSubmitPostReview}/>
         </div>
       </div>
+      {/*  <ReviewSucsessPopup/> */}
     </main>
   );
 }

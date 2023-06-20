@@ -1,8 +1,8 @@
 import CardProduct from '../components/Card-product/Card-product';
 import Banner from '../components/Banner/Banner';
 import Breadcrumb from '../components/Breadcrumbs/Breadcrumbs';
-import CatalogSort from '../components/CatalogSort/Catalog-sort';
-import CatalogFilter from '../components/CatalogFilter/Catalog-filter';
+import CatalogSort from '../components/Catalog-sort/Catalog-sort';
+import CatalogFilter from '../components/Catalog-filter/Catalog-filter';
 import Pagination from '../components/Pagination/Pagination';
 import { useAppSelector } from '../hooks';
 import { takeCameras } from '../store/data-process/data-selector';

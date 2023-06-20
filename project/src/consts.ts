@@ -6,6 +6,13 @@ export enum DateFormat {
   commentFormat = 'D MMMM'
 }
 
+export enum ReviewSubmitStatus {
+  Pending = 'pending',
+  Rejected = 'rejected',
+  Fullfield = 'fullfield',
+  Unknown = 'unknown'
+}
+
 export const ReviewCustomInputData = [
   {
     placeholder: 'Введите ваше имя',

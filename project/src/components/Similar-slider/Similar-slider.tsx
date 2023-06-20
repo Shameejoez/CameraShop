@@ -11,7 +11,7 @@ function SimilarSlider ({data}: SimilarSliderProps): JSX.Element {
       <div className="product-similar__slider-list">
         {/* Похожие товары */}
         {
-          data.map((product) => <CardProduct data={product} key={product.id} /* place='similar' *//>)
+          data.map((product) => <CardProduct data={product} key={product.id} />)
         }
       </div>
       <button className="slider-controls slider-controls--prev" type="button" aria-label="Предыдущий слайд" disabled>

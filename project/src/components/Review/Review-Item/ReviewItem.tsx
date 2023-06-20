@@ -1,7 +1,7 @@
-import { DateFormat, RAITING_COUNT } from '../../consts';
-import { Review } from '../../types/types';
-import { renderData } from '../../utils';
-import StarsRating from '../Stars-rating/Stars-rating';
+import { DateFormat, RAITING_COUNT } from '../../../consts';
+import { Review } from '../../../types/types';
+import { renderData } from '../../../utils';
+import StarsRating from '../../Stars-rating/Stars-rating';
 
 type ReviewItemProps = {
   dataReview: Review;

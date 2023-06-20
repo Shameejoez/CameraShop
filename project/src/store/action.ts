@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import {AxiosInstance} from 'axios';
+import {AxiosError, AxiosInstance} from 'axios';
 import { CardProductInfo, Coupon, Order, PromoProduct, Review, sendRewiew } from '../types/types';
 import { ApiRoutes } from '../consts';
 
@@ -25,9 +25,17 @@ export const getCameras = createAsyncThunk<CardProductInfo[], undefined, {extra:
   Action.GET_CAMERAS,
   async(_, {extra}) => {
     const {api} = extra;
-    const {data} = await api.get<CardProductInfo[]>(ApiRoutes.cameras);
 
-    return data;
+    try {
+      const {data} = await api.get<CardProductInfo[]>(ApiRoutes.cameras);
+      return data;
+
+    } catch(e) {
+
+      return [];
+    }
+
+
   }
 );
 
@@ -36,9 +44,16 @@ export const getCamera = createAsyncThunk<CardProductInfo, CardProductInfo['id']
   Action.GET_CAMERA,
   async(id, {extra}) => {
     const {api} = extra;
-    const {data} = await api.get<CardProductInfo>(`${ApiRoutes.cameras}/${id}`);
+    try {
+      const {data} = await api.get<CardProductInfo>(`${ApiRoutes.cameras}/${id}`);
 
-    return data;
+      return data;
+    } catch (e) {
+      const axiosError = e as AxiosError;
+
+      return Promise.reject(axiosError);
+    }
+
 
   }
 );
@@ -60,6 +75,7 @@ export const getReviews = createAsyncThunk<Review[], CardProductInfo['id'], {ext
   async(id, {extra}) => {
     const {api} = extra;
     const {data} = await api.get<Review[]>(`${ApiRoutes.cameras}/${id}${ApiRoutes.reviews}`);
+
     return data;
 
   }
