@@ -1,5 +1,5 @@
 import { screen, render } from '@testing-library/react';
-import ReviewItem from './ReviewItem';
+import ReviewItem from './Review-drop';
 import { Review } from '../../../types/types';
 
 
