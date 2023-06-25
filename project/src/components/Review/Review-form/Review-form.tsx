@@ -3,12 +3,12 @@ import { RatingStarCategories, ReviewCustomInputData, ReviewSubmitStatus, STARS_
 import { ChangeEvent, FormEvent, Fragment, useEffect, useRef, useState } from 'react';
 import type { sendRewiew } from '../../../types/types';
 import { useParams } from 'react-router-dom';
-import useInput from '../../../hooks/useInput/useInput';
+import useInput from '../../../hooks/use-input/use-input';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
 import { takeReviewSubmitStatus } from '../../../store/data-process/data-selector';
 import { setSubmitReviewStatus } from '../../../store/data-process/data-slicer';
-import useOutsideClick from '../../../hooks/useOutsideClick/useOutsideClick';
-import useKeyDownEsc from '../../../hooks/useKeyDownEsc/useKeyDownEsc';
+import useOutsideClick from '../../../hooks/use-out-side-click/use-out-side-click';
+import useKeyDownEsc from '../../../hooks/use-key-down-esc/use-key-down-esc';
 
 type ReviewFormProps = {
   isVisible: string;
@@ -186,7 +186,7 @@ function ReviewForm ({ isVisible, setIsVisible, onSubmit, setIsVisibleSuccess }:
   return (
     <div className={`modal ${isVisible}`} data-testid="review-form-test">
       <div className="modal__wrapper">
-        <div className="modal__overlay" /* onClick={() => setIsVisible('')} */ />
+        <div className="modal__overlay" />
         <div className="modal__content" ref={isVisible === 'is-active' ? reviewFormRef : null}>
           <p className="title title--h4" >Оставить отзыв</p>
           <div className="form-review">
@@ -222,6 +222,7 @@ function ReviewForm ({ isVisible, setIsVisible, onSubmit, setIsVisibleSuccess }:
                   <div className="custom-textarea__error">Нужно добавить комментарий</div>
                 </div>
               </div>
+              <div style={{color: 'red', textAlign: 'center'}}>{submitReviewStatus === ReviewSubmitStatus.Rejected && 'Ошибка. Сервер не отвечает.'} </div>
               <button className="btn btn--purple form-review__btn" type="submit" disabled={submitReviewStatus === ReviewSubmitStatus.Pending} >Отправить отзыв</button>
             </form>
           </div>

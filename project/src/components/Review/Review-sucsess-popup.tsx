@@ -1,6 +1,6 @@
 import { useRef } from 'react';
-import useOutsideClick from '../../hooks/useOutsideClick/useOutsideClick';
-import useKeyDownEsc from '../../hooks/useKeyDownEsc/useKeyDownEsc';
+import useOutsideClick from '../../hooks/use-out-side-click/use-out-side-click';
+import useKeyDownEsc from '../../hooks/use-key-down-esc/use-key-down-esc';
 
 type sucsessPopupProps = {
   isVisible: string;

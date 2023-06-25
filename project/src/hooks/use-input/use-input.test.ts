@@ -1,5 +1,5 @@
 import { fireEvent, renderHook } from '@testing-library/react';
-import useInput from './useInput';
+import useInput from './use-input';
 import { act } from 'react-dom/test-utils';
 
 describe('useInput', () => {

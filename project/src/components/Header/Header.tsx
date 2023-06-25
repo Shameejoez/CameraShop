@@ -1,14 +1,14 @@
 import { Outlet, Link } from 'react-router-dom';
 import Footer from '../Footer/Footer';
-import HeaderNavElement from './Header-nav-element';
+import HeaderNavElement from './Header-nav-element/Header-nav-element';
 import { AppRoutes, HeaderNames } from '../../consts';
 
 function Header ():JSX.Element {
   return (
-    <div className="wrapper">
+    <div className="wrapper" data-testid={'header-test'}>
       <header className="header" id="header">
         <div className="container">
-          <Link className="header__logo" to={AppRoutes.Catalog} aria-label="Переход на главную">
+          <Link className="header__logo" to={`/${AppRoutes.Catalog}`} aria-label="Переход на главную">
             <svg width={100} height={36} aria-hidden="true">
               <use xlinkHref="#icon-logo" />
             </svg>
@@ -40,11 +40,11 @@ function Header ():JSX.Element {
               </svg><span className="visually-hidden">Сбросить поиск</span>
             </button>
           </div>
-          <a className="header__basket-link" href="#">
+          <Link className="header__basket-link" to="#">
             <svg width={16} height={16} aria-hidden="true">
               <use xlinkHref="#icon-basket" />
             </svg>
-          </a>
+          </Link>
         </div>
       </header>
       <Outlet />

@@ -78,7 +78,7 @@ describe('Main tests', () => {
     expect(screen.getByText('Каталог фото- и видеотехники')).toBeInTheDocument();
     expect(screen.getAllByTestId('product-card-test')).toBeTruthy();
     expect(screen.getAllByText('Ретрокамера Dus Auge lV')).toBeTruthy();
-    expect(screen.getAllByText('Купить' || 'Подробнее')).toBeTruthy();
+    expect(screen.getAllByText('Купить' && 'Подробнее')).toBeTruthy();
     expect(screen.getByTestId('banner-test')).toBeInTheDocument();
     expect(screen.getByTestId('footer-test')).toBeInTheDocument();
   });

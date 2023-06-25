@@ -1,4 +1,4 @@
-import { HeaderNames } from '../../consts';
+import { HeaderNames } from '../../../consts';
 
 type HeaderNavElementProps = {
     name: HeaderNames;

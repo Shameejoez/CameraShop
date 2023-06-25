@@ -18,7 +18,7 @@ function Breadcrumb({ name, id}: BreadcrumbProps): JSX.Element {
   const crumbs = allRoutes.map((crumb, i) => {
     crumbLink += `/${crumb}`;
     return (
-      <li className="breadcrumbs__item" key={crumb}>
+      <li className="breadcrumbs__item" key={crumb} data-testid={`${crumb}-test`}>
         {
           crumb === id || i === allRoutes.length - 1 ? <span className="breadcrumbs__link breadcrumbs__link--active">{name || translateRoute(crumb)}</span> :
 

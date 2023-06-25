@@ -33,9 +33,9 @@ export const ReviewCustomInputData = [
 
 export const RatingStarCategories = [ 'Отлично', 'Хорошо', 'Нормально', 'Плохо', 'Ужасно'];
 
-export enum tabName {
-  Characteristic = 'Характеристики',
-  Description = 'Описание'
+export enum HashName {
+  Characteristic = '#characteristic',
+  Description = '#description'
 }
 
 export enum FilterCategoryName {

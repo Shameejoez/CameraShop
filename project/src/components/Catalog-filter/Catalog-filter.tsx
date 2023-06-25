@@ -9,7 +9,7 @@ function CatalogFilter (): JSX.Element {
         categories.map((category) => (
           <div key={category} className="custom-checkbox catalog-filter__item">
             <label>
-              <input type="checkbox" /* name="digital" ОН НУЖЕН??? */ key={`${category}-input`} /><span className="custom-checkbox__icon" /><span className="custom-checkbox__label">{category}</span>
+              <input type="checkbox" key={`${category}-input`} name={category}/><span className="custom-checkbox__icon" /><span className="custom-checkbox__label">{category}</span>
             </label>
           </div>
         ))

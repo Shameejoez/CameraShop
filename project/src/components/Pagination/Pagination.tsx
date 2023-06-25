@@ -14,7 +14,7 @@ function Pagination ({ setActivePage, countPage, activePage}: PaginationProps): 
   const renderPaginationLi = () =>
     Array.from({length: countPage }, (_, i) =>
       (
-        <li key={i + 1} className="pagination__item" onClick={()=> { setActivePage(i);}}>
+        <li key={i + 1} className="pagination__item" onClick={()=> { setActivePage(i);}} data-testid={`${i + 1}-pag-test`}>
 
           <Link className={`pagination__link pagination__link${activePage + intForPageCount === i + intForPageCount ? '--active' : ''}`} to="#">{ i + intForPageCount }</Link>
 

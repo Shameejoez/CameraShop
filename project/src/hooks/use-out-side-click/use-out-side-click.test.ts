@@ -1,9 +1,10 @@
 import { fireEvent, renderHook } from '@testing-library/react';
-import useOutsideClick from './useOutsideClick';
+import useOutsideClick from './use-out-side-click';
 
 describe('useOutsideClick', () => {
   it('should handle outside click', () => {
     const isVisible = 'is-active';
+    const setVisible = jest.fn();
     const target = document.createElement('div');
     document.body.appendChild(target);
     target.className = isVisible;
@@ -16,12 +17,10 @@ describe('useOutsideClick', () => {
       current: target,
     };
 
-    const setVisible = jest.fn();
-
     const view = renderHook(() => useOutsideClick({ elementRef: ref, handler: setVisible, isVisible }));
 
     expect(setVisible).toHaveBeenCalledTimes(0);
-    fireEvent.click(outside);
+    fireEvent.mouseUp(outside);
     expect(setVisible).toHaveBeenCalledTimes(1);
 
     jest.spyOn(document, 'removeEventListener');

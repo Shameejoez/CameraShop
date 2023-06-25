@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { CardProductInfo } from '../../types/types';
-import { tabName } from '../../consts';
+import { HashName } from '../../consts';
+import { Link, useLocation } from 'react-router-dom';
 
 type ProductTabProps = {
  characteristics: Pick<CardProductInfo, 'type' | 'category' | 'vendorCode' | 'level' | 'description'>;
@@ -8,11 +9,12 @@ type ProductTabProps = {
 
 
 function ProductTabs ({characteristics}: ProductTabProps):JSX.Element {
+  const parsedHash = useLocation().hash;
 
-  const [currentTab, setCurrentTab] = useState<tabName>(tabName.Characteristic);
+  const [currentHash, setCurrentHash] = useState<string>(parsedHash);
 
-  const renderActiveTab = (tab: tabName) => {
-    setCurrentTab(tab);
+  const renderActiveTab = (hash: string) => {
+    setCurrentHash(hash);
   };
 
   const {vendorCode, category, level, type, description} = characteristics;
@@ -20,17 +22,17 @@ function ProductTabs ({characteristics}: ProductTabProps):JSX.Element {
   return (
     <div className="tabs product__tabs">
       <div className="tabs__controls product__tabs-controls">
-        <button className={`tabs__control ${currentTab === tabName.Characteristic ? 'is-active' : ''}`} type="button"
-          onClick={(e) => renderActiveTab(e.currentTarget.textContent as tabName)}
+        <Link className={`tabs__control ${currentHash === HashName.Characteristic ? 'is-active' : ''}`} type="button" to={'#characteristic'}
+          onClick={() => renderActiveTab('#characteristic')}
         >Характеристики
-        </button>
-        <button className={`tabs__control ${currentTab === tabName.Description ? 'is-active' : ''}`} type="button"
-          onClick={(e) => renderActiveTab(e.currentTarget.textContent as tabName)}
+        </Link>
+        <Link className={`tabs__control ${currentHash === HashName.Description ? 'is-active' : ''}`} type="button" to={'#description'}
+          onClick={() => renderActiveTab('#description')}
         >Описание
-        </button>
+        </Link>
       </div>
       <div className="tabs__content">
-        <div className={`tabs__element ${currentTab === tabName.Characteristic ? 'is-active' : ''}`}>
+        <div className={`tabs__element ${currentHash === HashName.Characteristic ? 'is-active' : ''}`}>
           <ul className="product__tabs-list">
             <div>
               <li className="item-list"><span className="item-list__title">Артикул:</span>
@@ -48,7 +50,7 @@ function ProductTabs ({characteristics}: ProductTabProps):JSX.Element {
             </div>
           </ul>
         </div>
-        <div className={`tabs__element ${currentTab === tabName.Description ? 'is-active' : ''}`}>
+        <div className={`tabs__element ${currentHash === HashName.Description ? 'is-active' : ''}`}>
           <div className="product__tabs-text">
             {description}
           </div>

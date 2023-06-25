@@ -71,11 +71,11 @@ function Product(): JSX.Element | null {
   };
 
   // рейтинг заглушка
-  const rating = 3;
+  const RATING = 3;
 
   const renderStarsRating = () =>
     Array.from({ length: RAITING_COUNT }, (_, i) =>
-      <StarsRating key={i} count={i + 1 <= rating ? 1 : 0} />
+      <StarsRating key={i} count={i + 1 <= RATING ? 1 : 0} />
     );
 
   return (
@@ -95,7 +95,7 @@ function Product(): JSX.Element | null {
                 <h1 className="title title--h3" >{name}</h1>
                 <div className="rate product__rate">
                   {renderStarsRating()}
-                  <p className="visually-hidden">Рейтинг: {rating}</p>
+                  <p className="visually-hidden">Рейтинг: {RATING}</p>
                   <p className="rate__count"><span className="visually-hidden" >Всего оценок:</span>{reviewCount}</p>
                 </div>
                 <p className="product__price"><span className="visually-hidden">Цена:</span>{price.toLocaleString('ru-Ru')} ₽</p>
@@ -146,7 +146,6 @@ function Product(): JSX.Element | null {
           <ReviewList dataReviews={reviews} loadMoreReview={onChangevisibleArrayPathReviewsMore} visibleArrayPath={visibleArrayPathReviews} onSubmit={onSubmitPostReview}/>
         </div>
       </div>
-      {/*  <ReviewSucsessPopup/> */}
     </main>
   );
 }
