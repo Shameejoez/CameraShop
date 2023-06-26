@@ -12,7 +12,8 @@ import ReviewList from '../components/Review/Review-list/Review-list';
 import { sendRewiew } from '../types/types';
 import ErrorConnectMessage from '../components/Error-conntect-message/Error-connect-message';
 
-function Product(): JSX.Element | null {
+
+function Product(): JSX.Element {
   const { id } = useParams();
   const dispatch = useAppDispatch();
   const currentProduct = useAppSelector(takeCamera);
@@ -58,8 +59,9 @@ function Product(): JSX.Element | null {
     setSliderPosition((prev) => prev + SLIDER_STEP);
   };
 
+
   if (!currentProduct) {
-    return <ErrorConnectMessage isVisible={!currentProduct}/>;
+    return <ErrorConnectMessage isVisible/>;
   }
 
   const { category, description, level, name, previewImg,

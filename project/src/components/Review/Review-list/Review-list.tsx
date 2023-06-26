@@ -1,6 +1,6 @@
 import { Review, sendRewiew } from '../../../types/types';
 import ReviewItem from '../Review-Item/Review-item';
-import ReviewSucsessPopup from '../Review-sucsess-popup';
+import ReviewSucsessPopup from '../Review-success-popup/Review-sucsess-popup';
 import ReviewForm from '../Review-form/Review-form';
 import { useState } from 'react';
 

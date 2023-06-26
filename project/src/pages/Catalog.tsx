@@ -7,8 +7,8 @@ import Pagination from '../components/Pagination/Pagination';
 import { useAppSelector } from '../hooks';
 import { takeCameras, takeGetCamerasStatus } from '../store/data-process/data-selector';
 import { useState } from 'react';
-import ErrorConnectMessage from '../components/Error-conntect-message/Error-connect-message';
 import { LoadingStatus } from '../consts';
+import ErrorConnectMessage from '../components/Error-conntect-message/Error-connect-message';
 
 
 function Catalog(): JSX.Element | null {
@@ -36,7 +36,7 @@ function Catalog(): JSX.Element | null {
 
 
   if(renderCatalogBook().length === 0) {
-    return <ErrorConnectMessage isVisible={renderCatalogBook().length === 0}/>;
+    return <ErrorConnectMessage isVisible/>;
   }
 
   return (
