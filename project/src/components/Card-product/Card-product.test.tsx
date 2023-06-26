@@ -51,7 +51,6 @@ mockApi
 
 const mockStore = configureMockStore(middlewares);
 
-
 const store = mockStore({
   [SlicerName.DataProcess]: {
     cameras: productArray,
@@ -61,7 +60,6 @@ const store = mockStore({
     promo: promo
   }
 });
-
 
 const fakeApp = (
   <Provider store={store}>

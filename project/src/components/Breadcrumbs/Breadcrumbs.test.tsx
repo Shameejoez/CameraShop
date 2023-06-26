@@ -8,7 +8,6 @@ import { configureMockStore } from '@jedmao/redux-mock-store';
 import { Provider } from 'react-redux';
 import App from '../app/app';
 import browserHistory from '../../browser-history';
-import userEvent from '@testing-library/user-event';
 import { act } from 'react-dom/test-utils';
 
 
@@ -72,12 +71,12 @@ const fakeApp = (
   </Provider>
 );
 
+global.scrollTo = jest.fn();
 
 describe('Breadcrumbs', () => {
 
   it('should breadcrumbs link is added', () => {
     browserHistory.push(`${AppRoutes.Catalog}/${AppRoutes.Product}/${productArray[0].id}`);
-
     render(fakeApp);
     expect(screen.getByTestId('1-test')).toBeInTheDocument();
   });

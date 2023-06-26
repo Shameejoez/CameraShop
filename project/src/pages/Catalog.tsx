@@ -5,13 +5,16 @@ import CatalogSort from '../components/Catalog-sort/Catalog-sort';
 import CatalogFilter from '../components/Catalog-filter/Catalog-filter';
 import Pagination from '../components/Pagination/Pagination';
 import { useAppSelector } from '../hooks';
-import { takeCameras } from '../store/data-process/data-selector';
+import { takeCameras, takeGetCamerasStatus } from '../store/data-process/data-selector';
 import { useState } from 'react';
+import ErrorConnectMessage from '../components/Error-conntect-message/Error-connect-message';
+import { LoadingStatus } from '../consts';
 
 
 function Catalog(): JSX.Element | null {
   const products = useAppSelector(takeCameras);
   const [currentPage, setCurrentPage] = useState<number>(0);
+  const getCamerasStatus = useAppSelector(takeGetCamerasStatus);
 
   const currentPageHandler = (pageNumber: number) => {
     setCurrentPage(pageNumber);
@@ -33,7 +36,7 @@ function Catalog(): JSX.Element | null {
 
 
   if(renderCatalogBook().length === 0) {
-    return null;
+    return <ErrorConnectMessage isVisible={renderCatalogBook().length === 0}/>;
   }
 
   return (
@@ -63,6 +66,7 @@ function Catalog(): JSX.Element | null {
           </div>
         </section>
       </div>
+      <ErrorConnectMessage isVisible={getCamerasStatus === LoadingStatus.Rejected}/>
     </main>
 
   );

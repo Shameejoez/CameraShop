@@ -1,5 +1,5 @@
 import {PayloadAction, createSlice} from '@reduxjs/toolkit';
-import { ReviewSubmitStatus, SlicerName } from '../../consts';
+import { LoadingStatus, SlicerName } from '../../consts';
 import { getCamera, getCameras, getPromo, getReviews, getSimilarCameras, postReview } from '../action';
 import { DataStore } from '../../types/state';
 
@@ -10,7 +10,9 @@ const initialState: DataStore = {
   similar: [],
   reviews: [],
   promo: null,
-  reviewSubmitStatus: ReviewSubmitStatus.Unknown
+  reviewSubmitStatus: LoadingStatus.Unknown,
+  getCamerasStatus: LoadingStatus.Unknown,
+  getCameraStatus: LoadingStatus.Unknown
 };
 
 
@@ -18,7 +20,7 @@ export const dataSlicer = createSlice({
   name: SlicerName.DataProcess,
   initialState,
   reducers: {
-    setSubmitReviewStatus(state, action: PayloadAction<ReviewSubmitStatus>) {
+    setSubmitReviewStatus(state, action: PayloadAction<LoadingStatus>) {
       state.reviewSubmitStatus = action.payload;
     }
   },
@@ -27,10 +29,24 @@ export const dataSlicer = createSlice({
     // получить массив продуктов
       .addCase(getCameras.fulfilled, (state, action) => {
         state.cameras = action.payload;
+        state.getCamerasStatus = LoadingStatus.Fullfield;
+      })
+      .addCase(getCameras.pending, (state) => {
+        state.getCamerasStatus = LoadingStatus.Pending;
+      })
+      .addCase(getCameras.rejected, (state) => {
+        state.getCamerasStatus = LoadingStatus.Rejected;
       })
     // полчить продуукт по id
       .addCase(getCamera.fulfilled, (state, action) => {
         state.camera = action.payload;
+        state.getCameraStatus = LoadingStatus.Fullfield;
+      })
+      .addCase(getCamera.pending, (state) => {
+        state.getCameraStatus = LoadingStatus.Pending;
+      })
+      .addCase(getCamera.rejected, (state) => {
+        state.getCameraStatus = LoadingStatus.Rejected;
       })
     // массив похожих продуктов
       .addCase(getSimilarCameras.fulfilled, (state, action) => {
@@ -48,13 +64,13 @@ export const dataSlicer = createSlice({
       .addCase(postReview.fulfilled, (state, action) => {
         const newReview = action.payload;
         state.reviews.push(newReview);
-        state.reviewSubmitStatus = ReviewSubmitStatus.Fullfield;
+        state.reviewSubmitStatus = LoadingStatus.Fullfield;
       })
       .addCase(postReview.pending, (state) => {
-        state.reviewSubmitStatus = ReviewSubmitStatus.Pending;
+        state.reviewSubmitStatus = LoadingStatus.Pending;
       })
       .addCase(postReview.rejected, (state) => {
-        state.reviewSubmitStatus = ReviewSubmitStatus.Rejected;
+        state.reviewSubmitStatus = LoadingStatus.Rejected;
       });
   }
 });

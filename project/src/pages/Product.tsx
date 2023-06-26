@@ -1,16 +1,16 @@
 import Breadcrumb from '../components/Breadcrumbs/Breadcrumbs';
-import { COUNT_SLIDER_VISIBLE_ELEMENT, RAITING_COUNT, SLIDER_STEP, START_SLIDER_POSITION } from '../consts';
+import { COUNT_SLIDER_VISIBLE_ELEMENT, LoadingStatus, RAITING_COUNT, SLIDER_STEP, START_SLIDER_POSITION } from '../consts';
 import StarsRating from '../components/Stars-rating/Stars-rating';
 import CardProduct from '../components/Card-product/Card-product';
 import { useAppDispatch, useAppSelector } from '../hooks';
-import { takeCamera, takeReviews, takeSimilar } from '../store/data-process/data-selector';
+import { takeCamera, takeGetCameraStatus, takeReviews, takeSimilar } from '../store/data-process/data-selector';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { getCamera, getReviews, getSimilarCameras, postReview } from '../store/action';
 import ProductTabs from '../components/Product-tabs/Product-tabs';
 import ReviewList from '../components/Review/Review-list/Review-list';
 import { sendRewiew } from '../types/types';
-
+import ErrorConnectMessage from '../components/Error-conntect-message/Error-connect-message';
 
 function Product(): JSX.Element | null {
   const { id } = useParams();
@@ -20,6 +20,8 @@ function Product(): JSX.Element | null {
   const reviews = useAppSelector(takeReviews);
   const FIRST_REVIEWS_PATH = 1;
   const [visibleArrayPathReviews, setVisibleArrayPathReviews] = useState(FIRST_REVIEWS_PATH);
+  const getCameraStatus = useAppSelector(takeGetCameraStatus);
+
 
   useEffect(() => {
     if (id) {
@@ -27,6 +29,7 @@ function Product(): JSX.Element | null {
       dispatch(getCamera(parseId));
       dispatch(getSimilarCameras(parseId));
       dispatch(getReviews(parseId));
+      window.scrollTo(0,0);
     }
 
   }, [dispatch, id]);
@@ -56,7 +59,7 @@ function Product(): JSX.Element | null {
   };
 
   if (!currentProduct) {
-    return null;
+    return <ErrorConnectMessage isVisible={!currentProduct}/>;
   }
 
   const { category, description, level, name, previewImg,
@@ -82,7 +85,7 @@ function Product(): JSX.Element | null {
     <main style={{overflow: 'hidden' }} data-testid={'productid-test'}>
       <div className="page-content">
         <Breadcrumb name={name} id={id}/>
-        <div className="page-content__section">
+        <div className="page-content__section" >
           <section className="product">
             <div className="container">
               <div className="product__img">
@@ -146,6 +149,7 @@ function Product(): JSX.Element | null {
           <ReviewList dataReviews={reviews} loadMoreReview={onChangevisibleArrayPathReviewsMore} visibleArrayPath={visibleArrayPathReviews} onSubmit={onSubmitPostReview}/>
         </div>
       </div>
+      <ErrorConnectMessage isVisible={getCameraStatus === LoadingStatus.Rejected}/>
     </main>
   );
 }

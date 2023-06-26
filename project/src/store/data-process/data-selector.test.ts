@@ -1,4 +1,4 @@
-import { CategoryProduct, Mastery, ReviewSubmitStatus, TypeProduct } from '../../consts';
+import { CategoryProduct, LoadingStatus, Mastery, TypeProduct } from '../../consts';
 import { CardProductInfo, PromoProduct, Review } from '../../types/types';
 import { getCamera, getCameras, getPromo, getReviews, getSimilarCameras, postReview } from '../action';
 import { dataSlicer } from './data-slicer';
@@ -50,12 +50,26 @@ describe('Reduser: data-slicer', () => {
       similar: [],
       reviews: [],
       promo: null,
-      reviewSubmitStatus: ReviewSubmitStatus.Unknown
+      reviewSubmitStatus: LoadingStatus.Unknown,
+      getCameraStatus: LoadingStatus.Unknown,
+      getCamerasStatus: LoadingStatus.Unknown,
     };
     expect(dataSlicer.reducer(state, {type: getCameras.fulfilled.type, payload: productCards}))
       .toEqual({...state,
-        cameras: productCards
+        cameras: productCards,
+        getCamerasStatus: LoadingStatus.Fullfield
       });
+    expect(dataSlicer.reducer(state, {type: getCameras.pending.type, payload: []}))
+      .toEqual({...state,
+        cameras: [],
+        getCamerasStatus: LoadingStatus.Pending
+      });
+    expect(dataSlicer.reducer(state, {type: getCameras.rejected.type, payload: []}))
+      .toEqual({...state,
+        cameras: [],
+        getCamerasStatus: LoadingStatus.Rejected
+      });
+
   });
   // один продукт
   it('should return fetch camera', () => {
@@ -65,12 +79,25 @@ describe('Reduser: data-slicer', () => {
       similar: [],
       reviews: [],
       promo: null,
-      reviewSubmitStatus: ReviewSubmitStatus.Unknown
+      reviewSubmitStatus: LoadingStatus.Unknown,
+      getCameraStatus: LoadingStatus.Unknown,
+      getCamerasStatus: LoadingStatus.Unknown,
     };
 
     expect(dataSlicer.reducer(state, {type: getCamera.fulfilled.type, payload: productCards[0]}))
       .toEqual({...state,
-        camera: productCards[0]
+        camera: productCards[0],
+        getCameraStatus: LoadingStatus.Fullfield,
+      });
+    expect(dataSlicer.reducer(state, {type: getCamera.pending.type, payload: []}))
+      .toEqual({...state,
+        camera: null,
+        getCameraStatus: LoadingStatus.Pending,
+      });
+    expect(dataSlicer.reducer(state, {type: getCamera.rejected.type, payload: []}))
+      .toEqual({...state,
+        camera: null,
+        getCameraStatus: LoadingStatus.Rejected,
       });
   });
   // массивс похожих продуктов
@@ -81,7 +108,9 @@ describe('Reduser: data-slicer', () => {
       similar: [],
       reviews: [],
       promo: null,
-      reviewSubmitStatus: ReviewSubmitStatus.Unknown
+      reviewSubmitStatus: LoadingStatus.Unknown,
+      getCameraStatus: LoadingStatus.Unknown,
+      getCamerasStatus: LoadingStatus.Unknown,
     };
 
     expect(dataSlicer.reducer(state, {type: getSimilarCameras.fulfilled.type, payload: productCards}))
@@ -97,7 +126,9 @@ describe('Reduser: data-slicer', () => {
       similar: [],
       reviews: [],
       promo: null,
-      reviewSubmitStatus: ReviewSubmitStatus.Unknown
+      reviewSubmitStatus: LoadingStatus.Unknown,
+      getCameraStatus: LoadingStatus.Unknown,
+      getCamerasStatus: LoadingStatus.Unknown,
     };
 
     expect(dataSlicer.reducer(state, {type: getPromo.fulfilled.type, payload: promo}))
@@ -113,7 +144,9 @@ describe('Reduser: data-slicer', () => {
       similar: [],
       reviews: [],
       promo: null,
-      reviewSubmitStatus: ReviewSubmitStatus.Unknown
+      reviewSubmitStatus: LoadingStatus.Unknown,
+      getCameraStatus: LoadingStatus.Unknown,
+      getCamerasStatus: LoadingStatus.Unknown,
     };
 
     expect(dataSlicer.reducer(state, {type:getReviews.fulfilled.type, payload: review}))
@@ -129,21 +162,23 @@ describe('Reduser: data-slicer', () => {
       similar: [],
       reviews: [] as Review[] ,
       promo: null,
-      reviewSubmitStatus: ReviewSubmitStatus.Unknown
+      reviewSubmitStatus: LoadingStatus.Unknown,
+      getCameraStatus: LoadingStatus.Unknown,
+      getCamerasStatus: LoadingStatus.Unknown,
     };
 
     expect(dataSlicer.reducer(state, {type: postReview.fulfilled.type, payload: review[0], }))
       .toEqual({...state,
         reviews: [review[0]],
-        reviewSubmitStatus: ReviewSubmitStatus.Fullfield,
+        reviewSubmitStatus: LoadingStatus.Fullfield,
       });
     expect(dataSlicer.reducer(state, {type: postReview.pending.type}))
       .toEqual({...state,
-        reviewSubmitStatus: ReviewSubmitStatus.Pending
+        reviewSubmitStatus: LoadingStatus.Pending
       });
     expect(dataSlicer.reducer(state, {type: postReview.rejected.type}))
       .toEqual({...state,
-        reviewSubmitStatus: ReviewSubmitStatus.Rejected
+        reviewSubmitStatus: LoadingStatus.Rejected
       });
   });
 });

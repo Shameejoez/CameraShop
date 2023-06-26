@@ -26,6 +26,5 @@ describe('ReviewSucsessPopup', () => {
     fireEvent.click(btnSuccess);
 
     expect(setVisible).toBeCalled();
-    //expect(btnSuccess).toBeCalled();
   });
 });

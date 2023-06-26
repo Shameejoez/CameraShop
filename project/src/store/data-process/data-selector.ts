@@ -1,5 +1,5 @@
 import type { CardProductInfo, PromoProduct, Review } from '../../types/types';
-import { ReviewSubmitStatus, SlicerName } from '../../consts';
+import { LoadingStatus, SlicerName } from '../../consts';
 import { State } from '../../types/state';
 
 
@@ -8,4 +8,6 @@ export const takeCamera = ({[SlicerName.DataProcess]: SITE_DATA}: State): CardPr
 export const takeSimilar = ({[SlicerName.DataProcess]: SITE_DATA}: State): CardProductInfo[] => SITE_DATA.similar;
 export const takeReviews = ({[SlicerName.DataProcess]: SITE_DATA}: State): Review[] => SITE_DATA.reviews;
 export const takePromo = ({[SlicerName.DataProcess]: SITE_DATA}: State): PromoProduct| null => SITE_DATA.promo;
-export const takeReviewSubmitStatus = ({[SlicerName.DataProcess]: SITE_DATA}: State): ReviewSubmitStatus => SITE_DATA.reviewSubmitStatus;
+export const takeReviewSubmitStatus = ({[SlicerName.DataProcess]: SITE_DATA}: State): LoadingStatus => SITE_DATA.reviewSubmitStatus;
+export const takeGetCamerasStatus = ({[SlicerName.DataProcess]: SITE_DATA}: State): LoadingStatus => SITE_DATA.getCamerasStatus;
+export const takeGetCameraStatus = ({[SlicerName.DataProcess]: SITE_DATA}: State): LoadingStatus => SITE_DATA.getCameraStatus;

@@ -1,5 +1,5 @@
 /* eslint-disable no-nested-ternary */
-import { RatingStarCategories, ReviewCustomInputData, ReviewSubmitStatus, STARS_COUNT } from '../../../consts';
+import { LoadingStatus, RatingStarCategories, ReviewCustomInputData, STARS_COUNT } from '../../../consts';
 import { ChangeEvent, FormEvent, Fragment, useEffect, useRef, useState } from 'react';
 import type { sendRewiew } from '../../../types/types';
 import { useParams } from 'react-router-dom';
@@ -153,11 +153,11 @@ function ReviewForm ({ isVisible, setIsVisible, onSubmit, setIsVisibleSuccess }:
   };
 
   useEffect(() => {
-    if (submitReviewStatus === ReviewSubmitStatus.Fullfield) {
+    if (submitReviewStatus === LoadingStatus.Fullfield) {
       setIsVisible('');
       removeAllFields();
       setIsVisibleSuccess('is-active');
-      dispatch(setSubmitReviewStatus(ReviewSubmitStatus.Unknown));// возвращает статус unknown
+      dispatch(setSubmitReviewStatus(LoadingStatus.Unknown));// возвращает статус unknown
     }
   });
 
@@ -222,8 +222,8 @@ function ReviewForm ({ isVisible, setIsVisible, onSubmit, setIsVisibleSuccess }:
                   <div className="custom-textarea__error">Нужно добавить комментарий</div>
                 </div>
               </div>
-              <div style={{color: 'red', textAlign: 'center'}}>{submitReviewStatus === ReviewSubmitStatus.Rejected && 'Ошибка. Сервер не отвечает.'} </div>
-              <button className="btn btn--purple form-review__btn" type="submit" disabled={submitReviewStatus === ReviewSubmitStatus.Pending} >Отправить отзыв</button>
+              <div style={{color: 'red', textAlign: 'center'}}>{submitReviewStatus === LoadingStatus.Rejected && 'Ошибка. Сервер не отвечает.'} </div>
+              <button className="btn btn--purple form-review__btn" type="submit" disabled={submitReviewStatus === LoadingStatus.Pending} >Отправить отзыв</button>
             </form>
           </div>
           <button className="cross-btn" type="button" aria-label="Закрыть попап" onClick={() => setIsVisible('') }>

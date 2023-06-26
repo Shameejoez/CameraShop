@@ -953,6 +953,8 @@ button,
   border-radius: 8px;
   -webkit-box-shadow: 0 4px 16px rgba(56, 56, 117, 0.2);
   box-shadow: 0 4px 16px rgba(56, 56, 117, 0.2);
+  justify-content: center;
+  
 }
 
 .modal .cross-btn {

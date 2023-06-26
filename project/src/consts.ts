@@ -6,7 +6,7 @@ export enum DateFormat {
   commentFormat = 'D MMMM'
 }
 
-export enum ReviewSubmitStatus {
+export enum LoadingStatus {
   Pending = 'pending',
   Rejected = 'rejected',
   Fullfield = 'fullfield',
@@ -30,6 +30,7 @@ export const ReviewCustomInputData = [
     errorMessage: 'Нужно указать недостатки'
   },
 ];
+
 
 export const RatingStarCategories = [ 'Отлично', 'Хорошо', 'Нормально', 'Плохо', 'Ужасно'];
 

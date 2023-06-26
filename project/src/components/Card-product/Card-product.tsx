@@ -40,7 +40,7 @@ function CardProduct ({data, reviewsBack = () => void 0}: CardProductProps):JSX.
       <div className="product-card__buttons">
         <button className="btn btn--purple product-card__btn" type="button">Купить
         </button>
-        <Link className="btn btn--transparent" to={`/catalog/${AppRoutes.Product}/${id}`} onClick={() => reviewsBack()}>Подробнее
+        <Link className="btn btn--transparent" to={`/catalog/${AppRoutes.Product}/${id}#description`} onClick={() => reviewsBack()}>Подробнее
         </Link>
       </div>
     </div>

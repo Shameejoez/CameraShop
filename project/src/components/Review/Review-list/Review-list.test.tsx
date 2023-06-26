@@ -57,6 +57,7 @@ const productArray: CardProductInfo [] = [
   }
 ];
 
+global.scrollTo = jest.fn();
 const api = createAPI();
 const mockApi = new MockAdapter(api);
 const middlewares = [thunk.withExtraArgument(api)];

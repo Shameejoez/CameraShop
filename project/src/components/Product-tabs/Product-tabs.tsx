@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { CardProductInfo } from '../../types/types';
 import { HashName } from '../../consts';
 import { Link, useLocation } from 'react-router-dom';
@@ -9,30 +8,23 @@ type ProductTabProps = {
 
 
 function ProductTabs ({characteristics}: ProductTabProps):JSX.Element {
-  const parsedHash = useLocation().hash;
 
-  const [currentHash, setCurrentHash] = useState<string>(parsedHash);
-
-  const renderActiveTab = (hash: string) => {
-    setCurrentHash(hash);
-  };
+  const parsedHash = useLocation().hash ;
 
   const {vendorCode, category, level, type, description} = characteristics;
 
   return (
     <div className="tabs product__tabs">
       <div className="tabs__controls product__tabs-controls">
-        <Link className={`tabs__control ${currentHash === HashName.Characteristic ? 'is-active' : ''}`} type="button" to={'#characteristic'}
-          onClick={() => renderActiveTab('#characteristic')}
-        >Характеристики
+        <Link className={`tabs__control ${parsedHash === HashName.Characteristic ? 'is-active' : ''}`} type="button" to={'#characteristic'}>
+          Характеристики
         </Link>
-        <Link className={`tabs__control ${currentHash === HashName.Description ? 'is-active' : ''}`} type="button" to={'#description'}
-          onClick={() => renderActiveTab('#description')}
-        >Описание
+        <Link className={`tabs__control ${parsedHash === HashName.Description ? 'is-active' : ''}`} type="button" to={'#description'}>
+        Описание
         </Link>
       </div>
       <div className="tabs__content">
-        <div className={`tabs__element ${currentHash === HashName.Characteristic ? 'is-active' : ''}`}>
+        <div className={`tabs__element ${parsedHash === HashName.Characteristic ? 'is-active' : ''}`}>
           <ul className="product__tabs-list">
             <div>
               <li className="item-list"><span className="item-list__title">Артикул:</span>
@@ -50,7 +42,7 @@ function ProductTabs ({characteristics}: ProductTabProps):JSX.Element {
             </div>
           </ul>
         </div>
-        <div className={`tabs__element ${currentHash === HashName.Description ? 'is-active' : ''}`}>
+        <div className={`tabs__element ${parsedHash === HashName.Description ? 'is-active' : ''}`}>
           <div className="product__tabs-text">
             {description}
           </div>
