@@ -33,7 +33,6 @@
     ],
     "parserOptions": {
       "project": "tsconfig.json",
-      "tsconfigRootDir": "c:/users/user/desktop/camerashop/camerashop/project/",
       "sourceType": "module"
     },
     "overrides": [
