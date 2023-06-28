@@ -1,10 +1,10 @@
 import { Route, Routes, } from 'react-router-dom';
-import Catalog from '../../pages/1catalog';
-import Header from '../Header/1header';
+import Catalog from '../../pages/catalog';
+import Header from '../Header/header';
 import { AppRoutes } from '../../consts';
-import Product from '../../pages/1rroduct';
-import NotFound from '../1not-found/1not-found';
-import HistoryRouter from '../1history-router.tsx/1history-router';
+import Product from '../../pages/product';
+import NotFound from '../not-found/not-found';
+import HistoryRouter from '../history-router.tsx/history-router';
 import browserHistory from '../../browser-history';
 
 function App(): JSX.Element {
