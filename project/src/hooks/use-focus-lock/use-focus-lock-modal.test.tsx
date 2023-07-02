@@ -1,5 +1,5 @@
 import useFocusLockModal from './use-focus-lock-modal';
-import ReviewSucsessPopup from '../../components/Review/review-success-popup/review-sucsess-popup';
+import ReviewSucsessPopup from '../../components/review/review-success-popup/review-sucsess-popup';
 import { screen, render, renderHook } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import userEvent from '@testing-library/user-event';

@@ -1,5 +1,5 @@
 import { screen, render, fireEvent } from '@testing-library/react';
-import Pagination from './1pagination';
+import Pagination from './pagination';
 import { BrowserRouter } from 'react-router-dom';
 
 

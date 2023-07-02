@@ -1,9 +1,9 @@
 import CardProduct from '../components/card-product/card-product';
 import Banner from '../components/banner/banner';
-import Breadcrumb from '../components/breadcrumbs/1breadcrumbs';
+import Breadcrumb from '../components/breadcrumbs/breadcrumbs';
 import CatalogSort from '../components/catalog-sort/catalog-sort';
 import CatalogFilter from '../components/catalog-filter/catalog-filter';
-import Pagination from '../components/agination/1pagination';
+import Pagination from '../components/pagination/pagination';
 import { useAppSelector } from '../hooks';
 import { takeCameras, takeGetCamerasStatus } from '../store/data-process/data-selectors';
 import { useState } from 'react';

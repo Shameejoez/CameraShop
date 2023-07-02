@@ -1,4 +1,4 @@
-import Breadcrumb from '../components/breadcrumbs/1breadcrumbs';
+import Breadcrumb from '../components/breadcrumbs/breadcrumbs';
 import { COUNT_SLIDER_VISIBLE_ELEMENT, LoadingStatus, RAITING_COUNT, SLIDER_STEP, START_SLIDER_POSITION } from '../consts';
 import StarsRating from '../components/stars-rating/stars-rating';
 import CardProduct from '../components/card-product/card-product';
@@ -8,7 +8,7 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { getCamera, getReviews, getSimilarCameras, postReview } from '../store/action';
 import ProductTabs from '../components/product-tabs/product-tabs';
-import ReviewList from '../components/Review/review-list/review-list';
+import ReviewList from '../components/review/review-list/review-list';
 import { sendRewiew } from '../types/types';
 import ErrorConnectMessage from '../components/error-conntect-message/error-connect-message';
 import ButtonScrollUp from '../components/button-scroll-up/button-scroll-up';
