@@ -8,11 +8,11 @@ function Header ():JSX.Element {
     <div className="wrapper" data-testid={'header-test'}>
       <header className="header" id="header">
         <div className="container">
-          <Link className="header__logo" to={`/${AppRoutes.Catalog}`} aria-label="Переход на главную">
+          <a className="header__logo" href={`/${AppRoutes.Catalog}`} aria-label="Переход на главную">
             <svg width={100} height={36} aria-hidden="true">
               <use xlinkHref="#icon-logo" />
             </svg>
-          </Link>
+          </a>
           <nav className="main-nav header__main-nav">
             <ul className="main-nav__list">
               {Object.values(HeaderNames).map((name) => <HeaderNavElement key={name} name={name}/> )}
