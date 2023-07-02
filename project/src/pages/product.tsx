@@ -8,7 +8,7 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { getCamera, getReviews, getSimilarCameras, postReview } from '../store/action';
 import ProductTabs from '../components/product-tabs/product-tabs';
-import ReviewList from '../components/beview/review-list/review-list';
+import ReviewList from '../components/review/review-list/review-list';
 import { sendRewiew } from '../types/types';
 import ErrorConnectMessage from '../components/error-conntect-message/error-connect-message';
 import ButtonScrollUp from '../components/button-scroll-up/button-scroll-up';
