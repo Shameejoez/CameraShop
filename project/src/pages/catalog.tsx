@@ -36,7 +36,7 @@ function Catalog(): JSX.Element | null {
 
 
   if(renderCatalogBook().length === 0) {
-    return <ErrorConnectMessage isVisible={getCamerasStatus === LoadingStatus.Rejected}/>;
+    return <ErrorConnectMessage isVisible={getCamerasStatus === LoadingStatus.Rejected ? 'is-active' : ''}/>;
   }
 
   return (
@@ -66,7 +66,7 @@ function Catalog(): JSX.Element | null {
           </div>
         </section>
       </div>
-      <ErrorConnectMessage isVisible={getCamerasStatus === LoadingStatus.Rejected}/>
+      <ErrorConnectMessage isVisible={getCamerasStatus === LoadingStatus.Rejected ? 'is-active' : ''}/>
     </main>
 
   );

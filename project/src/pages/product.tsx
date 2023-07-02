@@ -7,10 +7,11 @@ import { takeCamera, takeGetCameraStatus, takeReviews, takeSimilar } from '../st
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { getCamera, getReviews, getSimilarCameras, postReview } from '../store/action';
-import ProductTabs from '../components/roduct-tabs/product-tabs';
+import ProductTabs from '../components/product-tabs/product-tabs';
 import ReviewList from '../components/Review/review-list/review-list';
 import { sendRewiew } from '../types/types';
 import ErrorConnectMessage from '../components/error-conntect-message/error-connect-message';
+import ButtonScrollUp from '../components/button-scroll-up/button-scroll-up';
 
 
 function Product(): JSX.Element {
@@ -23,7 +24,6 @@ function Product(): JSX.Element {
   const [visibleArrayPathReviews, setVisibleArrayPathReviews] = useState(FIRST_REVIEWS_PATH);
   const getCameraStatus = useAppSelector(takeGetCameraStatus);
 
-
   useEffect(() => {
     if (id) {
       const parseId = Number(id);
@@ -35,12 +35,19 @@ function Product(): JSX.Element {
 
   }, [dispatch, id]);
 
+  const onScrollUp = () => {
+    window.scroll({
+      top: 0,
+      behavior: 'smooth'
+    });
+  };
+
   const onSubmitPostReview = (review: sendRewiew) => {
     dispatch(postReview(review));
   };
 
 
-  const onChangevisibleArrayPathReviewsMore = (numberPath: number) => {
+  const onloadMoreReview = (numberPath: number) => {
     setVisibleArrayPathReviews((prev) => prev + numberPath );
   };
 
@@ -61,7 +68,7 @@ function Product(): JSX.Element {
 
 
   if (!currentProduct) {
-    return <ErrorConnectMessage isVisible={getCameraStatus === LoadingStatus.Rejected}/>;
+    return <ErrorConnectMessage isVisible={getCameraStatus === LoadingStatus.Rejected ? 'is-active' : ''}/>;
   }
 
   const { category, description, level, name, previewImg,
@@ -84,75 +91,78 @@ function Product(): JSX.Element {
     );
 
   return (
-    <main style={{overflow: 'hidden' }} data-testid={'productid-test'}>
-      <div className="page-content">
-        <Breadcrumb name={name} id={id}/>
-        <div className="page-content__section" >
-          <section className="product">
-            <div className="container">
-              <div className="product__img">
-                <picture>
-                  <source type="image/webp" srcSet={`/${previewImgWebp}, /${previewImgWebp2x}`} />
-                  <img src={`/${previewImg}`} srcSet={`/${previewImg2x}`} width={560} height={480} alt={`${category} ${name}`} />
-                </picture>
-              </div>
-              <div className="product__content">
-                <h1 className="title title--h3" >{name}</h1>
-                <div className="rate product__rate">
-                  {renderStarsRating()}
-                  <p className="visually-hidden">Рейтинг: {RATING}</p>
-                  <p className="rate__count"><span className="visually-hidden" >Всего оценок:</span>{reviewCount}</p>
+    <>
+      <main style={{overflow: 'hidden' }} data-testid={'productid-test'}>
+        <div className="page-content">
+          <Breadcrumb name={name} id={id}/>
+          <div className="page-content__section" >
+            <section className="product">
+              <div className="container">
+                <div className="product__img">
+                  <picture>
+                    <source type="image/webp" srcSet={`/${previewImgWebp}, /${previewImgWebp2x}`} />
+                    <img src={`/${previewImg}`} srcSet={`/${previewImg2x}`} width={560} height={480} alt={`${category} ${name}`} />
+                  </picture>
                 </div>
-                <p className="product__price"><span className="visually-hidden">Цена:</span>{price.toLocaleString('ru-Ru')} ₽</p>
-                <button className="btn btn--purple" type="button" name='add-to-basket'>
-                  <svg width={24} height={16} aria-hidden="true">
-                    <use xlinkHref="#icon-add-basket" />
-                  </svg>Добавить в корзину
-                </button>
-                <ProductTabs characteristics={productTabsData} />
-              </div>
-            </div>
-          </section>
-        </div>
-        <div className="page-content__section">
-          <section className="product-similar" >
-            <div className="container">
-              <h2 className="title title--h3">Похожие товары</h2>
-              <div className="product-similar__slider">
-                <div className='product-similar__slider-list-box'>
-                  <div className="product-similar__slider-list" style={{ left: sliderPosition }} >
-                    {/* Похожие товары */}
-                    {
-                      similarProducts.map((product) => (
-                        <CardProduct data={product} key={product.id} reviewsBack={onChangevisibleArrayPathReviewsRBack} />))
-                    }
+                <div className="product__content">
+                  <h1 className="title title--h3" >{name}</h1>
+                  <div className="rate product__rate">
+                    {renderStarsRating()}
+                    <p className="visually-hidden">Рейтинг: {RATING}</p>
+                    <p className="rate__count"><span className="visually-hidden" >Всего оценок:</span>{reviewCount}</p>
                   </div>
+                  <p className="product__price"><span className="visually-hidden">Цена:</span>{price.toLocaleString('ru-Ru')} ₽</p>
+                  <button className="btn btn--purple" type="button" name='add-to-basket'>
+                    <svg width={24} height={16} aria-hidden="true">
+                      <use xlinkHref="#icon-add-basket" />
+                    </svg>Добавить в корзину
+                  </button>
+                  <ProductTabs characteristics={productTabsData} />
                 </div>
-                <button className="slider-controls slider-controls--prev" type="button" aria-label="Предыдущий слайд" disabled={sliderPosition === 0}
-                  onClick={onPrevSliderPosition}
-                >
-                  <svg width={7} height={12} aria-hidden="true">
-                    <use xlinkHref="#icon-arrow" />
-                  </svg>
-                </button>
-                <button className="slider-controls slider-controls--next" type="button" aria-label="Следующий слайд" disabled={sliderPosition === MAX_SLIDER_WIDTH}
-                  onClick={onNextSliderPosition}
-                >
-                  <svg width={7} height={12} aria-hidden="true">
-                    <use xlinkHref="#icon-arrow" />
-                  </svg>
-                </button>
               </div>
-            </div>
-          </section>
+            </section>
+          </div>
+          <div className="page-content__section">
+            <section className="product-similar" >
+              <div className="container">
+                <h2 className="title title--h3">Похожие товары</h2>
+                <div className="product-similar__slider">
+                  <div className='product-similar__slider-list-box'>
+                    <div className="product-similar__slider-list" style={{ left: sliderPosition }} >
+                      {/* Похожие товары */}
+                      {
+                        similarProducts.map((product) => (
+                          <CardProduct data={product} key={product.id} onReviewsBack={onChangevisibleArrayPathReviewsRBack} />))
+                      }
+                    </div>
+                  </div>
+                  <button className="slider-controls slider-controls--prev" type="button" aria-label="Предыдущий слайд" disabled={sliderPosition === 0}
+                    onClick={onPrevSliderPosition}
+                  >
+                    <svg width={7} height={12} aria-hidden="true">
+                      <use xlinkHref="#icon-arrow" />
+                    </svg>
+                  </button>
+                  <button className="slider-controls slider-controls--next" type="button" aria-label="Следующий слайд" disabled={sliderPosition === MAX_SLIDER_WIDTH}
+                    onClick={onNextSliderPosition}
+                  >
+                    <svg width={7} height={12} aria-hidden="true">
+                      <use xlinkHref="#icon-arrow" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </section>
+          </div>
+          <div className="page-content__section">
+            {/* Отзывы */}
+            <ReviewList dataReviews={reviews} onClick={onloadMoreReview} visibleArrayPath={visibleArrayPathReviews} onSubmit={onSubmitPostReview} />
+          </div>
         </div>
-        <div className="page-content__section">
-          {/* Отзывы */}
-          <ReviewList dataReviews={reviews} loadMoreReview={onChangevisibleArrayPathReviewsMore} visibleArrayPath={visibleArrayPathReviews} onSubmit={onSubmitPostReview}/>
-        </div>
-      </div>
-      <ErrorConnectMessage isVisible={getCameraStatus === LoadingStatus.Rejected}/>
-    </main>
+        <ErrorConnectMessage isVisible={getCameraStatus === LoadingStatus.Rejected ? 'is-active' : ''}/>
+      </main>
+      <ButtonScrollUp onScrollUp={onScrollUp}/>
+    </>
   );
 }
 

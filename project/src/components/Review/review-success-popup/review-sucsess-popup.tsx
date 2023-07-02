@@ -1,6 +1,7 @@
 import { useRef } from 'react';
 import useOutsideClick from '../../../hooks/use-out-side-click/use-out-side-click';
 import useKeyDownEsc from '../../../hooks/use-key-down-esc/use-key-down-esc';
+import useFocusLockModal from '../../../hooks/use-focus-lock/use-focus-lock-modal';
 
 type sucsessPopupProps = {
   isVisible: string;
@@ -12,11 +13,11 @@ function ReviewSucsessPopup ({isVisible, setIsVisible}:sucsessPopupProps):JSX.El
   const modalSuccessRef = useRef<HTMLDivElement | null>(null);
 
   useKeyDownEsc({handler: setIsVisible, isVisible});
-
   useOutsideClick({elementRef: modalSuccessRef, handler:setIsVisible, isVisible});
+  useFocusLockModal({ref: modalSuccessRef, isVisible});
 
   return (
-    <div className={`modal ${isVisible} modal--narrow`} data-testid={'modal-success-test'}>
+    <div className={`modal ${isVisible} modal--narrow`} data-testid={'modal-success-test'} style={isVisible === 'is-active' ? {width: 'calc(100% - 18.8px)'} : undefined}>
       <div className="modal__wrapper">
         <div className="modal__overlay"></div>
         <div className="modal__content" ref={modalSuccessRef}>

@@ -1,7 +1,9 @@
-export const SLIDER_STEP = 955; //пиксели
+export const SLIDER_STEP = 955; //пиксели шаг слайдера
 export const COUNT_SLIDER_VISIBLE_ELEMENT = 3;
 export const START_SLIDER_POSITION = 0;
 export const STARS_COUNT = 5;
+export const REVIEW_COUNT = 3; // количесто отызов в одном блоке
+
 export enum DateFormat {
   commentFormat = 'D MMMM'
 }

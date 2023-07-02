@@ -6,7 +6,6 @@ type ProductTabProps = {
  characteristics: Pick<CardProductInfo, 'type' | 'category' | 'vendorCode' | 'level' | 'description'>;
 }
 
-
 function ProductTabs ({characteristics}: ProductTabProps):JSX.Element {
 
   const parsedHash = useLocation().hash ;

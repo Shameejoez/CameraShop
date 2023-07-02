@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import {AxiosError, AxiosInstance} from 'axios';
-import { CardProductInfo, Coupon, Order, PromoProduct, Review, sendRewiew } from '../types/types';
+import { CardProductInfo, Order, PromoProduct, Review, sendRewiew } from '../types/types';
 import { ApiRoutes } from '../consts';
 
 type Extra = {
@@ -34,8 +34,6 @@ export const getCameras = createAsyncThunk<CardProductInfo[], undefined, {extra:
 
       return [];
     }
-
-
   }
 );
 
@@ -90,12 +88,13 @@ export const postReview = createAsyncThunk<Review, sendRewiew, {extra: Extra}>(
     const {api} = extra;
 
     const {data} = await api.post<Review>(ApiRoutes.reviews, currentReview);
+
     return data;
   }
 );
 
 //купон на скидку
-export const postCupon = createAsyncThunk<number, Coupon, {extra: Extra}>(
+export const postCupon = createAsyncThunk<number, string, {extra: Extra}>(
   Action.COUPON,
 
   async(coupon, {extra}) => {

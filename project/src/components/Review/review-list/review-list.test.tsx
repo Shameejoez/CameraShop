@@ -34,7 +34,6 @@ const newReview: Review[] = [ {
   id: '123'
 }];
 
-
 const productArray: CardProductInfo [] = [
   {
     category: CategoryProduct.Camcorder,
@@ -83,7 +82,6 @@ const store = mockStore({
   }
 });
 
-
 const fakeApp = (
   <Provider store={store}>
     <App />
@@ -108,7 +106,6 @@ describe('RevieList', () => {
 
     await store.dispatch(postReview(commentToSend));
     fireEvent.click(submitReview);
-
 
     expect(screen.getByText('Ну ни че так' && 'Ва ва ваааууууу' && 'фу фу фиииии' && 'Зина')).toBeInTheDocument();
   });

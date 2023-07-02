@@ -29,9 +29,7 @@ export type Review = {
 
 export type Order = {
     camerasIds: CardProductInfo['id'] [];
-    coupon: Coupon;
 }
 
-export type Coupon = 'camera-333';
 export type sendRewiew = Omit <Review, 'id' | 'createAt'>;
 export type PromoProduct = Pick<CardProductInfo, 'id' | 'name' | 'previewImg' | 'previewImg2x' | 'previewImgWebp' | 'previewImgWebp2x'>

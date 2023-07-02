@@ -6,7 +6,7 @@ describe('ErrorConnectMessage', () => {
 
   it('should render ErrorConnectMessage', () => {
     render (
-      <ErrorConnectMessage isVisible />
+      <ErrorConnectMessage isVisible={'is-active'} />
     );
 
     expect(screen.getByRole('button', {name: 'Перезагрузить страницу'})).toBeInTheDocument();

@@ -14,6 +14,7 @@ html {
   line-height: 1.15;
   /* 1 */
   -webkit-text-size-adjust: 100%;
+
   /* 2 */
 }
 
@@ -3097,8 +3098,7 @@ button,
   position: relative;
   margin: 0 auto;
   left: 0;
-
-  transition: all ease 1s;
+  transition: all ease 0.4s;
 
 }
 

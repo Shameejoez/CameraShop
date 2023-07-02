@@ -9,11 +9,7 @@ import { takeReviewSubmitStatus } from '../../../store/data-process/data-selecto
 import { setSubmitReviewStatus } from '../../../store/data-process/data-slice';
 import useOutsideClick from '../../../hooks/use-out-side-click/use-out-side-click';
 import useKeyDownEsc from '../../../hooks/use-key-down-esc/use-key-down-esc';
-import ReactDOM from 'react-dom';
-import FocusTrap from 'focus-trap-react';
-
-
-const modalContainer = document.getElementById('modal') as HTMLElement;
+import useFocusLockModal from '../../../hooks/use-focus-lock/use-focus-lock-modal';
 
 type ReviewFormProps = {
   isVisible: string;
@@ -22,7 +18,7 @@ type ReviewFormProps = {
   setIsVisibleSuccess: (mode: string) => void;
 }
 
-function ReviewForm ({ isVisible, setIsVisible, onSubmit, setIsVisibleSuccess }: ReviewFormProps): JSX.Element {
+function ReviewForm ({ isVisible, setIsVisible, onSubmit, setIsVisibleSuccess, }: ReviewFormProps): JSX.Element {
   const dispatch = useAppDispatch();
   const reviewFormRef = useRef<HTMLDivElement | null>(null);
   const { id } = useParams();
@@ -35,26 +31,24 @@ function ReviewForm ({ isVisible, setIsVisible, onSubmit, setIsVisibleSuccess }:
   const [reviewError, setReviewError] = useState(false);
   const [rating, setRating] = useState<number>(0);
   const [ratingError, setRatingError] = useState(false);
+  const [ratingDurty, setRatingDuty] = useState(false);
+
 
   useOutsideClick({elementRef: reviewFormRef, handler: setIsVisible, isVisible});
   useKeyDownEsc({handler: setIsVisible, isVisible});
+  useFocusLockModal({ref: reviewFormRef, isVisible});
 
-  const onBlurisDurtyHandler = ( e: ChangeEvent) => {
-    getReviewHandler(e as ChangeEvent<HTMLTextAreaElement>);
-    setReviewDurty(true);
+
+  const onDurtyRating = () => {
+    setRatingDuty(true);
+    chekValidRating(rating); // чтобы выдать ошибку нужны оба параметра( ratingError и ratingDurty)
+
   };
 
-  if(isVisible) {
-    document.documentElement.style.overflow = 'hidden';
-    document.documentElement.style.width = 'calc(100% - 18.8px)';
-
-  }
-  else {
-    document.documentElement.style.overflow = '';
-    document.documentElement.style.width = '';
-
-  }
-
+  const onBlurisValidHandler = ( e: React.FocusEvent<HTMLTextAreaElement>) => {
+    setReviewDurty(true);
+    getReviewHandler(e);
+  };
 
   const getReviewHandler = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setReview(e.target.value);
@@ -117,7 +111,9 @@ function ReviewForm ({ isVisible, setIsVisible, onSubmit, setIsVisibleSuccess }:
   const renderStarsRating = () =>
     RatingStarCategories.map((categories, i) => (
       <Fragment key={categories}>
-        <input className="visually-hidden" id={`star-${STARS_COUNT - i}`} name="rate" type="radio" value={STARS_COUNT - i} checked={STARS_COUNT - i === rating} onChange={(e) => getRatingHandler(e)}/>
+        <input className="visually-hidden" id={`star-${STARS_COUNT - i}`} name="rate" type="radio" value={STARS_COUNT - i} checked={STARS_COUNT - i === rating} onChange={(e) => getRatingHandler(e)}
+          onBlur={() => onDurtyRating()}
+        />
         <label className="rate__label" htmlFor={`star-${STARS_COUNT - i}`} title={categories} />
       </Fragment>
     ));
@@ -137,7 +133,6 @@ function ReviewForm ({ isVisible, setIsVisible, onSubmit, setIsVisibleSuccess }:
   };
 
   // привести инпуты в дефолтное состояние
-
   const removeValidToDefult = () => {
     advantage.setIsDerty(false);
     disadvantage.setIsDerty(false);
@@ -154,6 +149,7 @@ function ReviewForm ({ isVisible, setIsVisible, onSubmit, setIsVisibleSuccess }:
     if (rating === 0 || name.value.trim() === '' || advantage.value.trim() === '' || disadvantage.value.trim() === '' || review.length === 0 ) {
       return isAllInputError();
     }
+
     const currentReview: sendRewiew = {
       cameraId: Number(id),
       rating: rating,
@@ -176,13 +172,13 @@ function ReviewForm ({ isVisible, setIsVisible, onSubmit, setIsVisibleSuccess }:
     }
   });
 
-  const isValidOrNoHandler = (inputName: string) =>
+  const isValidOrNo = (inputName: string) =>
     !getStateInputHandler(inputName)?.isDurty ? '' : getStateInputHandler(inputName)?.isValid && getStateInputHandler(inputName)?.isDurty ? 'is-valid' : 'is-invalid';
 
   const renderCustomInput = () =>
     ReviewCustomInputData.map(({ placeholder, labelSpan, errorMessage }) => (
       <div className={`custom-input form-review__item 
-      ${isValidOrNoHandler(labelSpan)}`} key={labelSpan}
+      ${isValidOrNo(labelSpan)}`} key={labelSpan}
       >
         <label>
           <span className="custom-input__label">{labelSpan}
@@ -198,58 +194,58 @@ function ReviewForm ({ isVisible, setIsVisible, onSubmit, setIsVisibleSuccess }:
       </div>
     ));
 
-  return (ReactDOM.createPortal(
-      <div className={`modal ${isVisible}`} data-testid="review-form-test" >
-        <div className="modal__wrapper">
-          <div className="modal__overlay" />
-          <div className="modal__content" ref={isVisible === 'is-active' ? reviewFormRef : null}>
-            <p className="title title--h4" >Оставить отзыв</p>
-            <div className="form-review">
-              <form method="post" onSubmit={(e) => postReviewHandler(e)}>
-                <div className="form-review__rate">
-                  <fieldset className={`rate form-review__item ${ratingError ? 'is-invalid' : ''}`}>
-                    <legend className="rate__caption">Рейтинг
+  return (
+    <div className={`modal ${isVisible}`} data-testid="review-form-test" style={isVisible === 'is-active' ? {width: 'calc(100% - 18.8px)'} : undefined}>
+      <div className="modal__wrapper">
+        <div className="modal__overlay" />
+        <div className="modal__content" ref={reviewFormRef} >
+          <p className="title title--h4" >Оставить отзыв</p>
+          <div className="form-review">
+            <form method="post" onSubmit={(e) => postReviewHandler(e)}>
+              <div className="form-review__rate">
+                <fieldset className={`rate form-review__item ${ratingError && ratingDurty ? 'is-invalid' : ''}`}>
+                  <legend className="rate__caption">Рейтинг
+                    <svg width={9} height={9} aria-hidden="true">
+                      <use xlinkHref="#icon-snowflake" />
+                    </svg>
+                  </legend>
+                  <div className="rate__bar">
+                    <div className="rate__group ">
+                      {renderStarsRating()}
+                    </div>
+                    <div className="rate__progress"><span className="rate__stars">0</span> <span>/</span> <span className="rate__all-stars">5</span>
+                    </div>
+                  </div>
+                  <p className="rate__message ">Нужно оценить товар</p>
+                </fieldset>
+                {renderCustomInput()}
+                <div className={`custom-textarea ${isValidReview()}`}>
+                  <label>
+                    <span className="custom-textarea__label">Комментарий
                       <svg width={9} height={9} aria-hidden="true">
                         <use xlinkHref="#icon-snowflake" />
                       </svg>
-                    </legend>
-                    <div className="rate__bar">
-                      <div className="rate__group ">
-                        {renderStarsRating()}
-                      </div>
-                      <div className="rate__progress"><span className="rate__stars">0</span> <span>/</span> <span className="rate__all-stars">5</span>
-                      </div>
-                    </div>
-                    <p className="rate__message ">Нужно оценить товар</p>
-                  </fieldset>
-                  {renderCustomInput()}
-                  <div className={`custom-textarea ${isValidReview()}`}>
-                    <label>
-                      <span className="custom-textarea__label">Комментарий
-                        <svg width={9} height={9} aria-hidden="true">
-                          <use xlinkHref="#icon-snowflake" />
-                        </svg>
-                      </span>
-                      <textarea name="user-comment" minLength={5} placeholder="Поделитесь своим опытом покупки" value={review}
-                        onChange={getReviewHandler} onBlur={(e) => onBlurisDurtyHandler(e)}
-                      />
-                    </label>
-                    <div className="custom-textarea__error">Нужно добавить комментарий</div>
-                  </div>
+                    </span>
+                    <textarea name="user-comment" minLength={5} placeholder="Поделитесь своим опытом покупки" value={review}
+                      onChange={getReviewHandler} onBlur={(e) => onBlurisValidHandler(e)}
+                    />
+                  </label>
+                  <div className="custom-textarea__error">Нужно добавить комментарий</div>
                 </div>
-                <div style={{color: 'red', textAlign: 'center'}}>{submitReviewStatus === LoadingStatus.Rejected && 'Ошибка. Сервер не отвечает.'} </div>
-                <button className="btn btn--purple form-review__btn" type="submit" disabled={submitReviewStatus === LoadingStatus.Pending} >Отправить отзыв</button>
-              </form>
-            </div>
-            <button className="cross-btn" type="button" aria-label="Закрыть попап" onClick={() => setIsVisible('') }>
-              <svg width={10} height={10} aria-hidden="true">
-                <use xlinkHref="#icon-close" />
-              </svg>
-            </button>
+              </div>
+              <div style={{color: 'red', textAlign: 'center'}}>{submitReviewStatus === LoadingStatus.Rejected && 'Ошибка. Сервер не отвечает.'} </div>
+              <button id="button-post" className="btn btn--purple form-review__btn" type="submit" disabled={submitReviewStatus === LoadingStatus.Pending} >Отправить отзыв
+              </button>
+            </form>
           </div>
+          <button className="cross-btn" type="button" aria-label="Закрыть попап" onClick={() => setIsVisible('') }>
+            <svg width={10} height={10} aria-hidden="true">
+              <use xlinkHref="#icon-close" />
+            </svg>
+          </button>
         </div>
       </div>
-    , modalContainer )
+    </div>
   );
 
 }

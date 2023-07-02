@@ -6,10 +6,10 @@ import StarsRating from '../stars-rating/stars-rating';
 type CardProductProps = {
     data: CardProductInfo;
     // передается в случае карточики с похожими товарами
-    reviewsBack?: () => void;
+    onReviewsBack?: () => void;
 }
 
-function CardProduct ({data, reviewsBack = () => void 0}: CardProductProps):JSX.Element {
+function CardProduct ({data, onReviewsBack = () => void 0}: CardProductProps):JSX.Element {
 
   const { id, name, price, type, previewImg, previewImg2x, previewImgWebp, previewImgWebp2x } = data;
 
@@ -40,7 +40,7 @@ function CardProduct ({data, reviewsBack = () => void 0}: CardProductProps):JSX.
       <div className="product-card__buttons">
         <button className="btn btn--purple product-card__btn" type="button">Купить
         </button>
-        <Link className="btn btn--transparent" to={`/catalog/${AppRoutes.Product}/${id}#description`} onClick={() => reviewsBack()}>Подробнее
+        <Link className="btn btn--transparent" to={`/catalog/${AppRoutes.Product}/${id}#description`} onClick={() => onReviewsBack()}>Подробнее
         </Link>
       </div>
     </div>
