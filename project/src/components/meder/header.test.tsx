@@ -12,6 +12,6 @@ describe('Header', () => {
         <Header/>
       </BrowserRouter>);
 
-    expect(screen.getByTestId('header-test')).toBeInTheDocument();
+    expect(screen.getByTestId('header-test')).toBeInTheDocument()
   });
 });

@@ -1,7 +1,7 @@
 import { Review, sendRewiew } from '../../../types/types';
 import ReviewItem from '../review-Item/review-item';
 import ReviewSucsessPopup from '../review-success-popup/review-sucsess-popup';
-import ReviewForm from '../../review/review-form/review-form';
+import ReviewForm from '../review-form/review-form';
 import { useState } from 'react';
 import { REVIEW_COUNT } from '../../../consts';
 

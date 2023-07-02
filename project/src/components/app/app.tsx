@@ -1,6 +1,6 @@
 import { Route, Routes, } from 'react-router-dom';
 import Catalog from '../../pages/catalog';
-import Header from '../header/header';
+import Header from '../meder/header';
 import { AppRoutes } from '../../consts';
 import Product from '../../pages/product';
 import NotFound from '../not-found/not-found';
