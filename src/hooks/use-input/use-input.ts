@@ -3,7 +3,7 @@ import { useState } from 'react';
 //'is-invalid'
 const useInput = (initialValue: string) => {
   const [value, setValue] = useState<string>(initialValue);
-  const [ isDurty, setIsDerty] = useState(false);
+  const [ isDirty, setIsDerty] = useState(false);
   const [isValid, setIsValid] = useState(false);
 
   const onChange = (data: string) => {
@@ -36,7 +36,7 @@ const useInput = (initialValue: string) => {
     onBlur,
     onChange,
     clearInput,
-    isDurty,
+    isDirty,
     setIsDerty
   };
 };

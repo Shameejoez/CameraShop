@@ -27,11 +27,11 @@ function ReviewForm ({ isVisible, setIsVisible, onSubmit, setIsVisibleSuccess, }
   const disadvantage = useInput('');
   const name = useInput('');
   const [review, setReview] = useState<string>('');
-  const [reviewDurty, setReviewDurty] = useState(false);
+  const [reviewDirty, setReviewDirty] = useState(false);
   const [reviewError, setReviewError] = useState(false);
   const [rating, setRating] = useState<number>(0);
   const [ratingError, setRatingError] = useState(false);
-  const [ratingDurty, setRatingDuty] = useState(false);
+  const [ratingDirty, setRatingDirty] = useState(false);
 
 
   useOutsideClick({elementRef: reviewFormRef, handler: setIsVisible, isVisible});
@@ -39,14 +39,14 @@ function ReviewForm ({ isVisible, setIsVisible, onSubmit, setIsVisibleSuccess, }
   useFocusLockModal({ref: reviewFormRef, isVisible});
 
 
-  const onDurtyRating = () => {
-    setRatingDuty(true);
-    chekValidRating(rating); // чтобы выдать ошибку нужны оба параметра( ratingError и ratingDurty)
+  const onDirtyRating = () => {
+    setRatingDirty(true);
+    chekValidRating(rating); // чтобы выдать ошибку нужны оба параметра( ratingError и ratingDirty)
 
   };
 
-  const onBlurisValidHandler = ( e: React.FocusEvent<HTMLTextAreaElement>) => {
-    setReviewDurty(true);
+  const onBlurIsValidHandler = ( e: React.FocusEvent<HTMLTextAreaElement>) => {
+    setReviewDirty(true);
     getReviewHandler(e);
   };
 
@@ -64,7 +64,7 @@ function ReviewForm ({ isVisible, setIsVisible, onSubmit, setIsVisibleSuccess, }
   };
 
   const isValidReview = () =>
-    !reviewDurty ? '' : reviewDurty && reviewError ? 'is-invalid' : 'is-valid';
+    !reviewDirty ? '' : reviewDirty && reviewError ? 'is-invalid' : 'is-valid';
 
 
   const getRatingHandler = (e: ChangeEvent<HTMLInputElement>) => {
@@ -111,8 +111,8 @@ function ReviewForm ({ isVisible, setIsVisible, onSubmit, setIsVisibleSuccess, }
   const renderStarsRating = () =>
     RatingStarCategories.map((categories, i) => (
       <Fragment key={categories}>
-        <input className="visually-hidden" id={`star-${STARS_COUNT - i}`} name="rate" type="radio" value={STARS_COUNT - i} checked={STARS_COUNT - i === rating} onChange={(e) => getRatingHandler(e)}
-          onBlur={() => onDurtyRating()}
+        <input className="visually-hidden" id={`star-${STARS_COUNT - i}`} name="rate" type="radio" value={STARS_COUNT - i} checked={STARS_COUNT - i === rating} onChange={getRatingHandler}
+          onBlur={onDirtyRating}
         />
         <label className="rate__label" htmlFor={`star-${STARS_COUNT - i}`} title={categories} />
       </Fragment>
@@ -124,7 +124,7 @@ function ReviewForm ({ isVisible, setIsVisible, onSubmit, setIsVisibleSuccess, }
     advantage.setIsDerty(true);
     disadvantage.setIsDerty(true);
     name.setIsDerty(true);
-    setReviewDurty(true);
+    setReviewDirty(true);
     setRatingError(true);
 
     if (review.length < 5) {
@@ -137,7 +137,7 @@ function ReviewForm ({ isVisible, setIsVisible, onSubmit, setIsVisibleSuccess, }
     advantage.setIsDerty(false);
     disadvantage.setIsDerty(false);
     name.setIsDerty(false);
-    setReviewDurty(false);
+    setReviewDirty(false);
     setRatingError(false);
     setReviewError(false);
 
@@ -173,7 +173,7 @@ function ReviewForm ({ isVisible, setIsVisible, onSubmit, setIsVisibleSuccess, }
   });
 
   const isValidOrNo = (inputName: string) =>
-    !getStateInputHandler(inputName)?.isDurty ? '' : getStateInputHandler(inputName)?.isValid && getStateInputHandler(inputName)?.isDurty ? 'is-valid' : 'is-invalid';
+    !getStateInputHandler(inputName)?.isDirty ? '' : getStateInputHandler(inputName)?.isValid && getStateInputHandler(inputName)?.isDirty ? 'is-valid' : 'is-invalid';
 
   const renderCustomInput = () =>
     ReviewCustomInputData.map(({ placeholder, labelSpan, errorMessage }) => (
@@ -203,7 +203,7 @@ function ReviewForm ({ isVisible, setIsVisible, onSubmit, setIsVisibleSuccess, }
           <div className="form-review">
             <form method="post" onSubmit={(e) => postReviewHandler(e)}>
               <div className="form-review__rate">
-                <fieldset className={`rate form-review__item ${ratingError && ratingDurty ? 'is-invalid' : ''}`}>
+                <fieldset className={`rate form-review__item ${ratingError && ratingDirty ? 'is-invalid' : ''}`}>
                   <legend className="rate__caption">Рейтинг
                     <svg width={9} height={9} aria-hidden="true">
                       <use xlinkHref="#icon-snowflake" />
@@ -227,7 +227,7 @@ function ReviewForm ({ isVisible, setIsVisible, onSubmit, setIsVisibleSuccess, }
                       </svg>
                     </span>
                     <textarea name="user-comment" minLength={5} placeholder="Поделитесь своим опытом покупки" value={review}
-                      onChange={getReviewHandler} onBlur={(e) => onBlurisValidHandler(e)}
+                      onChange={getReviewHandler} onBlur={onBlurIsValidHandler}
                     />
                   </label>
                   <div className="custom-textarea__error">Нужно добавить комментарий</div>

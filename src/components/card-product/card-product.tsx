@@ -17,7 +17,7 @@ function CardProduct ({data, onReviewsBack = () => void 0}: CardProductProps):JS
 
   const renderStarsRating = () =>
     Array.from({length: RAITING_COUNT}, (_, i) =>
-      <StarsRating key={i} count={ i + 1 <= rating ? 1 : 0 }/>
+      <StarsRating key={i} isActive={ i + 1 <= rating}/>
     );
 
   return (
@@ -40,7 +40,7 @@ function CardProduct ({data, onReviewsBack = () => void 0}: CardProductProps):JS
       <div className="product-card__buttons">
         <button className="btn btn--purple product-card__btn" type="button">Купить
         </button>
-        <Link className="btn btn--transparent" to={`/catalog/${AppRoutes.Product}/${id}#description`} onClick={() => onReviewsBack()}>Подробнее
+        <Link className="btn btn--transparent" to={`/catalog/${AppRoutes.Product}/${id}#description`} onClick={onReviewsBack}>Подробнее
         </Link>
       </div>
     </div>

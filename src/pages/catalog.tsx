@@ -7,11 +7,12 @@ import Pagination from '../components/pagination/pagination';
 import { useAppSelector } from '../hooks';
 import { takeCameras, takeGetCamerasStatus } from '../store/data-process/data-selectors';
 import { useState } from 'react';
-import { LoadingStatus } from '../consts';
+import { LoadingStatus, PRODUCTS_ON_PAGE } from '../consts';
 import ErrorConnectMessage from '../components/error-conntect-message/error-connect-message';
 
 
 function Catalog(): JSX.Element | null {
+  
   const products = useAppSelector(takeCameras);
   const [currentPage, setCurrentPage] = useState<number>(0);
   const getCamerasStatus = useAppSelector(takeGetCamerasStatus);
@@ -21,14 +22,14 @@ function Catalog(): JSX.Element | null {
 
   };
 
-  const catalogPageCount = Math.ceil(products.length / 9);
+  const catalogPageCount = Math.ceil(products.length / PRODUCTS_ON_PAGE);
 
   const renderCatalogBook = () => {
     const copyProducts = [...products];
 
     const catalogBook = [];
     for (let i = 0; i < catalogPageCount; i++) {
-      catalogBook.push(copyProducts.splice(0, 9));
+      catalogBook.push(copyProducts.splice(0, PRODUCTS_ON_PAGE));
     }
 
     return catalogBook;

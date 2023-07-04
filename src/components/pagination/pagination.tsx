@@ -9,7 +9,7 @@ type PaginationProps = {
 function Pagination ({ setActivePage, countPage, activePage}: PaginationProps): JSX.Element {
   // число передающееся в Каталог - это индекс массива
   // activePage - это индекс массива
-  const intForPageCount = 1;
+
 
   const [ pageUrl, setPageUrl ] = useSearchParams();
   const pageParam = pageUrl.get('page');
@@ -19,7 +19,7 @@ function Pagination ({ setActivePage, countPage, activePage}: PaginationProps): 
   }
 
   const onClickSetPageUrl = (idx: number) => {
-    setPageUrl({page: String(idx + intForPageCount)});
+    setPageUrl({page: String(idx + 1)});
   };
 
 
@@ -27,8 +27,8 @@ function Pagination ({ setActivePage, countPage, activePage}: PaginationProps): 
     Array.from({length: countPage }, (_, i) =>
       (
         <li key={i + 1} className="pagination__item" onClick={()=> onClickSetPageUrl(i)} data-testid={`${i + 1}-pag-test`}>
-          <Link className={`pagination__link pagination__link${activePage + intForPageCount === i + intForPageCount ? '--active' : ''}`} to="#" >
-            { i + intForPageCount }
+          <Link className={`pagination__link pagination__link${activePage === i ? '--active' : ''}`} to="#" >
+            { i + 1 }
           </Link>
         </li>
       ));
@@ -39,7 +39,7 @@ function Pagination ({ setActivePage, countPage, activePage}: PaginationProps): 
         {
           activePage > 0 &&
         <li className="pagination__item" onClick={()=> {
-          countPage && onClickSetPageUrl(activePage - intForPageCount);}}
+          countPage && onClickSetPageUrl(activePage - 1);}}
         >
           <Link className="pagination__link pagination__link" to="#">Назад</Link>
         </li>
@@ -48,7 +48,7 @@ function Pagination ({ setActivePage, countPage, activePage}: PaginationProps): 
         {
           activePage < 4 &&
       <li className="pagination__item" onClick={()=> {
-        onClickSetPageUrl(activePage + intForPageCount);}}
+        onClickSetPageUrl(activePage + 1);}}
       >
         <Link className="pagination__link pagination__link" to="#">Далее</Link>
       </li>

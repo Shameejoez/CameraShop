@@ -14,7 +14,7 @@ function ReviewItem ({dataReview}: ReviewItemProps): JSX.Element {
 
   const renderStarsRating = () =>
     Array.from({length: RAITING_COUNT}, (_, i) =>
-      <StarsRating key={i} count={ i + 1 <= rating ? 1 : 0 }/>
+      <StarsRating key={i} isActive={ i + 1 <= rating}/>
     );
 
   return (

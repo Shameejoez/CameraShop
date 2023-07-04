@@ -87,7 +87,7 @@ function Product(): JSX.Element {
 
   const renderStarsRating = () =>
     Array.from({ length: RAITING_COUNT }, (_, i) =>
-      <StarsRating key={i} count={i + 1 <= RATING ? 1 : 0} />
+      <StarsRating key={i} isActive={i + 1 <= RATING} />
     );
 
   return (

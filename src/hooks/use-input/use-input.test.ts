@@ -31,16 +31,16 @@ describe('useInput', () => {
     fireEvent.click(targetInput);
     fireEvent.blur(targetInput);
 
-    expect(result.current.isDurty).toBe(true);
+    expect(result.current.isDirty).toBe(true);
   });
 
-  it('should setIsDurty is work', () => {
+  it('should setIsDirty is work', () => {
     const {result} = renderHook(() => useInput(''));
 
     act(() =>
       result.current.setIsDerty(true));
 
-    expect(result.current.isDurty).toBe(true);
+    expect(result.current.isDirty).toBe(true);
   });
 
   it('should setIsValid !isValid if input is empty', () => {

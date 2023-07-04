@@ -5,7 +5,7 @@ import StarsRating from './stars-rating';
 describe('StarsRating', () => {
   it('should render rating', () => {
 
-    render(<StarsRating count={1}/>);
+    render(<StarsRating isActive={1 <= 5}/>);
 
     expect(screen.getByTestId('star-test')).toBeInTheDocument();
   });
