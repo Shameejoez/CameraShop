@@ -12,7 +12,6 @@ import ErrorConnectMessage from '../components/error-conntect-message/error-conn
 
 
 function Catalog(): JSX.Element | null {
-  
   const products = useAppSelector(takeCameras);
   const [currentPage, setCurrentPage] = useState<number>(0);
   const getCamerasStatus = useAppSelector(takeGetCamerasStatus);
