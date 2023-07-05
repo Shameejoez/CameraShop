@@ -6,8 +6,8 @@ dayjs.extend(updateLocal);
 
 dayjs.updateLocale('en', {
   months: [
-    'Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль',
-    'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'December'
+    'Января', 'Февралья', 'Марта', 'Апреля', 'Мая', 'Июня', 'Июля',
+    'Августа', 'Сентябрь', 'Октябрь', 'Ноября', 'Декабря'
   ]
 });
 export const renderData = (date: string, dateFormat: DateFormat) => dayjs(date).format(dateFormat);

@@ -60,7 +60,7 @@ function Catalog(): JSX.Element | null {
                     )
                   }
                 </div>
-                <Pagination setActivePage={currentPageHandler} countPage={catalogPageCount} activePage={currentPage }/>
+                <Pagination setActivePage={currentPageHandler} countPage={catalogPageCount} activePage={currentPage}/>
               </div>
             </div>
           </div>

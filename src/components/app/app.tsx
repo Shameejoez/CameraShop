@@ -15,7 +15,7 @@ function App(): JSX.Element {
           <Route index element={<Catalog/>}/>
           <Route path={`${AppRoutes.Product}/:id`} element={<Product/>}/>
         </Route>
-        <Route path={'/*'} element={<NotFound />} />
+        <Route path={'*'} element={<NotFound />} />
       </Routes>
     </HistoryRouter>
   );

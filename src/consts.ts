@@ -55,17 +55,16 @@ export enum ProductCharacteristic {
   vendorCode = 'Артикул'
 }
 
-
 export enum TypeProduct {
-    Collectible = 'Коллекционная',
-    Instant = 'Моментальная',
-    Digital = 'Цифровая',
-    Film = 'Плёночная',
+    Collectible = 'Цифровая',
+    Instant = 'Плёночная',
+    Digital = 'Моментальная',
+    Film = 'Коллекционная',
 }
 
 export enum CategoryProduct {
-    Camcorder = 'Видеокамера',
-    Camera = 'Фотоаппарат'
+    Camcorder = 'Фотокамера',
+    Camera = 'Видеокамера'
 }
 
 export enum Mastery {

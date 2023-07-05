@@ -39,7 +39,7 @@ function Pagination ({ setActivePage, countPage, activePage}: PaginationProps): 
         {
           activePage > 0 &&
         <li className="pagination__item" onClick={()=> {
-          countPage && onClickSetPageUrl(activePage - 1);}}
+          onClickSetPageUrl(activePage - 1);}}
         >
           <Link className="pagination__link pagination__link" to="#">Назад</Link>
         </li>
