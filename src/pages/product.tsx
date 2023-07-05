@@ -47,11 +47,11 @@ function Product(): JSX.Element {
   };
 
 
-  const onloadMoreReview = (numberPath: number) => {
+  const onLoadMoreReview = (numberPath: number) => {
     setVisibleArrayPathReviews((prev) => prev + numberPath );
   };
 
-  const onChangevisibleArrayPathReviewsRBack = () => {
+  const onClickVisibleArrayPathReviewsBack = () => {
     setVisibleArrayPathReviews(1);
   };
 
@@ -132,7 +132,7 @@ function Product(): JSX.Element {
                       {/* Похожие товары */}
                       {
                         similarProducts.map((product) => (
-                          <CardProduct data={product} key={product.id} onReviewsBack={onChangevisibleArrayPathReviewsRBack} />))
+                          <CardProduct data={product} key={product.id} onReviewsBack={onClickVisibleArrayPathReviewsBack} />))
                       }
                     </div>
                   </div>
@@ -156,7 +156,7 @@ function Product(): JSX.Element {
           </div>
           <div className="page-content__section">
             {/* Отзывы */}
-            <ReviewList dataReviews={reviews} onClick={onloadMoreReview} visibleArrayPath={visibleArrayPathReviews} onSubmit={onSubmitPostReview} />
+            <ReviewList dataReviews={reviews} onClick={onLoadMoreReview} visibleArrayPath={visibleArrayPathReviews} onSubmit={onSubmitPostReview} />
           </div>
         </div>
         <ErrorConnectMessage isVisible={getCameraStatus === LoadingStatus.Rejected ? 'is-active' : ''}/>

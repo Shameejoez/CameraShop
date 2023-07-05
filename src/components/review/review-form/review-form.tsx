@@ -39,18 +39,18 @@ function ReviewForm ({ isVisible, setIsVisible, onSubmit, setIsVisibleSuccess, }
   useFocusLockModal({ref: reviewFormRef, isVisible});
 
 
-  const onDirtyRating = () => {
+  const onBlurDirtyRating = () => {
     setRatingDirty(true);
     chekValidRating(rating); // чтобы выдать ошибку нужны оба параметра( ratingError и ratingDirty)
 
   };
 
-  const onBlurIsValidHandler = ( e: React.FocusEvent<HTMLTextAreaElement>) => {
+  const textAreaBlurHandler = ( e: React.FocusEvent<HTMLTextAreaElement>) => {
     setReviewDirty(true);
-    getReviewHandler(e);
+    textareaChanheHandler(e);
   };
 
-  const getReviewHandler = (e: ChangeEvent<HTMLTextAreaElement>) => {
+  const textareaChanheHandler = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setReview(e.target.value);
     checkReviewLengthHandler(e.target.value);
   };
@@ -67,7 +67,7 @@ function ReviewForm ({ isVisible, setIsVisible, onSubmit, setIsVisibleSuccess, }
     !reviewDirty ? '' : reviewDirty && reviewError ? 'is-invalid' : 'is-valid';
 
 
-  const getRatingHandler = (e: ChangeEvent<HTMLInputElement>) => {
+  const onChangeRating = (e: ChangeEvent<HTMLInputElement>) => {
     const currentRating = Number(e.target.value);
     setRating(currentRating);
     chekValidRating(currentRating);
@@ -77,7 +77,7 @@ function ReviewForm ({ isVisible, setIsVisible, onSubmit, setIsVisibleSuccess, }
     value === 0 ? setRatingError(true) : setRatingError(false);
 
 
-  const getStateInputHandler = (nameInput: string) => {
+  const getStateInput = (nameInput: string) => {
     switch (nameInput) {
       case 'Ваше имя':
         return name;
@@ -88,7 +88,7 @@ function ReviewForm ({ isVisible, setIsVisible, onSubmit, setIsVisibleSuccess, }
     }
   };
 
-  const setStateInputHandler = (nameInput: string, e: ChangeEvent<HTMLInputElement>) => {
+  const onChangeInput = (nameInput: string, e: ChangeEvent<HTMLInputElement>) => {
     switch (nameInput) {
       case 'Ваше имя':
         return name.onChange(e.target.value);
@@ -111,8 +111,8 @@ function ReviewForm ({ isVisible, setIsVisible, onSubmit, setIsVisibleSuccess, }
   const renderStarsRating = () =>
     RatingStarCategories.map((categories, i) => (
       <Fragment key={categories}>
-        <input className="visually-hidden" id={`star-${STARS_COUNT - i}`} name="rate" type="radio" value={STARS_COUNT - i} checked={STARS_COUNT - i === rating} onChange={getRatingHandler}
-          onBlur={onDirtyRating}
+        <input className="visually-hidden" id={`star-${STARS_COUNT - i}`} name="rate" type="radio" value={STARS_COUNT - i} checked={STARS_COUNT - i === rating} onChange={onChangeRating}
+          onBlur={onBlurDirtyRating}
         />
         <label className="rate__label" htmlFor={`star-${STARS_COUNT - i}`} title={categories} />
       </Fragment>
@@ -173,7 +173,7 @@ function ReviewForm ({ isVisible, setIsVisible, onSubmit, setIsVisibleSuccess, }
   });
 
   const isValidOrNo = (inputName: string) =>
-    !getStateInputHandler(inputName)?.isDirty ? '' : getStateInputHandler(inputName)?.isValid && getStateInputHandler(inputName)?.isDirty ? 'is-valid' : 'is-invalid';
+    !getStateInput(inputName)?.isDirty ? '' : getStateInput(inputName)?.isValid && getStateInput(inputName)?.isDirty ? 'is-valid' : 'is-invalid';
 
   const renderCustomInput = () =>
     ReviewCustomInputData.map(({ placeholder, labelSpan, errorMessage }) => (
@@ -186,8 +186,8 @@ function ReviewForm ({ isVisible, setIsVisible, onSubmit, setIsVisibleSuccess, }
               <use xlinkHref="#icon-snowflake" />
             </svg>
           </span>
-          <input type="text" name={labelSpan} placeholder={placeholder} value={getStateInputHandler(labelSpan)?.value}
-            onChange={(e) => setStateInputHandler(labelSpan, e)} onBlur={(e) => getStateInputHandler(labelSpan)?.onBlur(e.target.value)}
+          <input type="text" name={labelSpan} placeholder={placeholder} value={getStateInput(labelSpan)?.value}
+            onChange={(e) => onChangeInput(labelSpan, e)} onBlur={(e) => getStateInput(labelSpan)?.onBlur(e.target.value)}
           />
         </label>
         <p className="custom-input__error">{errorMessage}</p>
@@ -227,7 +227,7 @@ function ReviewForm ({ isVisible, setIsVisible, onSubmit, setIsVisibleSuccess, }
                       </svg>
                     </span>
                     <textarea name="user-comment" minLength={5} placeholder="Поделитесь своим опытом покупки" value={review}
-                      onChange={getReviewHandler} onBlur={onBlurIsValidHandler}
+                      onChange={textareaChanheHandler} onBlur={textAreaBlurHandler}
                     />
                   </label>
                   <div className="custom-textarea__error">Нужно добавить комментарий</div>
