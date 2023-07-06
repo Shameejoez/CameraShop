@@ -1,4 +1,5 @@
-import { Link, useSearchParams } from 'react-router-dom';
+import { Link, useSearchParams, } from 'react-router-dom';
+import {useEffect} from 'react';
 
 type PaginationProps = {
   setActivePage: (page: number) => void;
@@ -14,9 +15,12 @@ function Pagination ({ setActivePage, countPage, activePage}: PaginationProps): 
   const [ pageUrl, setPageUrl ] = useSearchParams();
   const pageParam = pageUrl.get('page');
 
-  if (pageParam) {
-    setActivePage(Number(pageParam) - 1);
-  }
+  useEffect(() => {
+    if (pageParam) {
+      setActivePage(Number(pageParam) - 1);
+    }
+  }, [setActivePage, pageParam]);
+
 
   const onClickSetPageUrl = (idx: number) => {
     setPageUrl({page: String(idx + 1)});

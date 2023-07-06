@@ -31,8 +31,9 @@ export const getCameras = createAsyncThunk<CardProductInfo[], undefined, {extra:
       return data;
 
     } catch(e) {
+      const axiosError = e as AxiosError;
 
-      return [];
+      return Promise.reject(axiosError);
     }
   }
 );
@@ -48,7 +49,12 @@ export const getCamera = createAsyncThunk<CardProductInfo, CardProductInfo['id']
       return data;
     } catch (e) {
       const axiosError = e as AxiosError;
-      //window.location.replace('/404');
+
+      if(axiosError.response?.status === 404) {
+        window.location.replace('/404');
+      }
+
+
       return Promise.reject(axiosError);
     }
 

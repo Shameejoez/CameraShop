@@ -68,9 +68,7 @@ function Catalog(): JSX.Element | null {
       </div>
       <ErrorConnectMessage isVisible={getCamerasStatus === LoadingStatus.Rejected ? 'is-active' : ''}/>
     </main>
-
   );
 }
-
 
 export default Catalog;

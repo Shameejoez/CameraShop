@@ -45,8 +45,10 @@ export const dataSlicer = createSlice({
       .addCase(getCamera.pending, (state) => {
         state.getCameraStatus = LoadingStatus.Pending;
       })
-      .addCase(getCamera.rejected, (state) => {
-        state.getCameraStatus = LoadingStatus.Rejected;
+      .addCase(getCamera.rejected, (state, action) => {
+        if (action.error.code !== 'ERR_BAD_REQUEST'){
+          state.getCameraStatus = LoadingStatus.Rejected;
+        }
       })
     // массив похожих продуктов
       .addCase(getSimilarCameras.fulfilled, (state, action) => {

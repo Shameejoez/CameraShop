@@ -230,7 +230,7 @@ function ReviewForm ({ isVisible, setIsVisible, onSubmit, setIsVisibleSuccess, }
                       onChange={textareaChanheHandler} onBlur={textAreaBlurHandler}
                     />
                   </label>
-                  <div className="custom-textarea__error">Нужно добавить комментарий</div>
+                  <div className="custom-textarea__error">{review.length >= 1 ? 'Хотя бы 5 символов' : 'Нужно добавить комментарий'}</div>
                 </div>
               </div>
               <div style={{color: 'red', textAlign: 'center'}}>{submitReviewStatus === LoadingStatus.Rejected && 'Ошибка. Сервер не отвечает.'} </div>
