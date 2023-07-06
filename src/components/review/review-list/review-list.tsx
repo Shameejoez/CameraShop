@@ -4,6 +4,7 @@ import ReviewForm from '../review-form/review-form';
 import { useState } from 'react';
 import { REVIEW_COUNT } from '../../../consts';
 import ReviewSucsessPopup from '../review-success-popup/review-sucsess-popup';
+import { sortReview } from '../../../utils';
 
 type ReviewListProps = {
     dataReviews: Review[];
@@ -19,6 +20,7 @@ function ReviewList ({dataReviews, onClick = () => void 0, visibleArrayPath, onS
   const [modalVisible, setModalVisible] = useState<string>('');
   const [successVisible, setSuccessVisible] = useState<string>('');
 
+
   const handleSetModalVisible = (mode: string) => {
     setModalVisible(mode);
   };
@@ -27,7 +29,7 @@ function ReviewList ({dataReviews, onClick = () => void 0, visibleArrayPath, onS
     setSuccessVisible(mode);
   };
 
-  const renderMoreReviews = () => copyDataReviwes.reverse().splice(0, REVIEW_COUNT * visibleArrayPath).map((review) => <ReviewItem key={review.id} dataReview={review}/> );
+  const renderMoreReviews = () => sortReview(copyDataReviwes).splice(0, REVIEW_COUNT * visibleArrayPath).map((review) => <ReviewItem key={review.id} dataReview={review}/> );
 
   return (
     <>
