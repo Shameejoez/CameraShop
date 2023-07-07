@@ -23,7 +23,7 @@ function Product(): JSX.Element {
   const FIRST_REVIEWS_PATH = 1;
   const [visibleArrayPathReviews, setVisibleArrayPathReviews] = useState(FIRST_REVIEWS_PATH);
   const getCameraStatus = useAppSelector(takeGetCameraStatus);
-  const rating = Math.ceil(useAppSelector(takeRatings).filter((el) => el.id === currentProduct?.id )[0].currentRating);
+  const rating = Math.ceil(useAppSelector(takeRatings).filter((el) => el.id === currentProduct?.id )[0]?.currentRating);
 
   useEffect(() => {
     if (id) {
