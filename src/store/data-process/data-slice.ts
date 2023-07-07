@@ -2,7 +2,7 @@ import {PayloadAction, createSlice} from '@reduxjs/toolkit';
 import { LoadingStatus, SlicerName } from '../../consts';
 import { getCamera, getCameras, getPromo, getReviews, getSimilarCameras, postReview } from '../action';
 import { DataStore } from '../../types/state';
-
+import { setMainRating } from '../../utils';
 
 const initialState: DataStore = {
   cameras: [],
@@ -12,9 +12,9 @@ const initialState: DataStore = {
   promo: null,
   reviewSubmitStatus: LoadingStatus.Unknown,
   getCamerasStatus: LoadingStatus.Unknown,
-  getCameraStatus: LoadingStatus.Unknown
+  getCameraStatus: LoadingStatus.Unknown,
+  ratingArray: []
 };
-
 
 export const dataSlicer = createSlice({
   name: SlicerName.DataProcess,
@@ -56,6 +56,14 @@ export const dataSlicer = createSlice({
       })
     // массив отзывов
       .addCase(getReviews.fulfilled, (state, action) => {
+        const rating = {
+          id: action.payload[0].cameraId,
+          currentRating: setMainRating(action.payload.map((el) => el.rating))
+        };
+
+        const sameId = state.ratingArray.findIndex((el) => el.id === rating.id);
+        sameId === -1 ? state.ratingArray.push(rating) : state.ratingArray[sameId] = rating;
+
         state.reviews = action.payload;
       })
     // промо продукт

@@ -1,6 +1,6 @@
 import { LoadingStatus } from '../consts';
 import { store} from '../store';
-import { CardProductInfo, PromoProduct, Review } from './types';
+import { CardProductInfo, ProductRating, PromoProduct, Review } from './types';
 
 
 export type State = ReturnType <typeof store.getState>;
@@ -15,4 +15,5 @@ export type DataStore = {
     reviewSubmitStatus: LoadingStatus;
     getCamerasStatus: LoadingStatus;
     getCameraStatus: LoadingStatus;
+    ratingArray: ProductRating[];
 }

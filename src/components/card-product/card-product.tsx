@@ -2,6 +2,8 @@ import { Link } from 'react-router-dom';
 import { AppRoutes, RAITING_COUNT } from '../../consts';
 import { CardProductInfo } from '../../types/types';
 import StarsRating from '../stars-rating/stars-rating';
+import { useAppSelector } from '../../hooks';
+import { takeRatings } from '../../store/data-process/data-selectors';
 
 type CardProductProps = {
     data: CardProductInfo;
@@ -13,11 +15,11 @@ function CardProduct ({data, onReviewsBack = () => void 0}: CardProductProps):JS
 
   const { id, name, price, type, previewImg, previewImg2x, previewImgWebp, previewImgWebp2x, reviewCount } = data;
 
-  const rating = 3;
+  const rating = useAppSelector(takeRatings).filter((el) => el.id === id )[0]?.currentRating;
 
   const renderStarsRating = () =>
     Array.from({length: RAITING_COUNT}, (_, i) =>
-      <StarsRating key={i} isActive={ i + 1 <= rating}/>
+      <StarsRating key={i} isActive={ i + 1 <= Math.ceil(rating)}/>
     );
 
   return (

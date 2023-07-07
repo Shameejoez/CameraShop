@@ -14,6 +14,12 @@ export type CardProductInfo = {
     previewImg2x: string;
     previewImgWebp: string;
     previewImgWebp2x: string;
+    rating?: null | number;
+}
+
+export type ProductRating = {
+    id: number;
+    currentRating: number;
 }
 
 export type Review = {

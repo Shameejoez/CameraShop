@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import { DateFormat } from './consts';
 import updateLocal from 'dayjs/plugin/updateLocale';
-import { Review } from './types/types';
+import { CardProductInfo, Review } from './types/types';
 
 dayjs.extend(updateLocal);
 
@@ -21,3 +21,16 @@ export const sortReview = (data: Review[]) => {
 
   return sortedArray;
 };
+
+
+export const setMainRating = (dataRatings: number []) => {
+  const quantityElem = dataRatings.length;
+  const initialRatting = dataRatings.reduce((acc, curr) => acc + curr) / quantityElem;
+
+  return initialRatting;
+
+};
+
+// массив айди товаров
+export const parseProductsId = (products : CardProductInfo[]) => products.map((el) => el.id);
+

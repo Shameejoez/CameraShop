@@ -1,4 +1,4 @@
-import type { CardProductInfo, PromoProduct, Review } from '../../types/types';
+import type { CardProductInfo, ProductRating, PromoProduct, Review } from '../../types/types';
 import { LoadingStatus, SlicerName } from '../../consts';
 import { State } from '../../types/state';
 
@@ -11,3 +11,4 @@ export const takePromo = ({[SlicerName.DataProcess]: SITE_DATA}: State): PromoPr
 export const takeReviewSubmitStatus = ({[SlicerName.DataProcess]: SITE_DATA}: State): LoadingStatus => SITE_DATA.reviewSubmitStatus;
 export const takeGetCamerasStatus = ({[SlicerName.DataProcess]: SITE_DATA}: State): LoadingStatus => SITE_DATA.getCamerasStatus;
 export const takeGetCameraStatus = ({[SlicerName.DataProcess]: SITE_DATA}: State): LoadingStatus => SITE_DATA.getCameraStatus;
+export const takeRatings = ({[SlicerName.DataProcess]: SITE_DATA}: State): ProductRating[] => SITE_DATA.ratingArray;

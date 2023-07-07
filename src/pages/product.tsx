@@ -3,7 +3,7 @@ import { COUNT_SLIDER_VISIBLE_ELEMENT, LoadingStatus, RAITING_COUNT, SLIDER_STEP
 import StarsRating from '../components/stars-rating/stars-rating';
 import CardProduct from '../components/card-product/card-product';
 import { useAppDispatch, useAppSelector } from '../hooks';
-import { takeCamera, takeGetCameraStatus, takeReviews, takeSimilar } from '../store/data-process/data-selectors';
+import { takeCamera, takeGetCameraStatus, takeRatings, takeReviews, takeSimilar } from '../store/data-process/data-selectors';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { getCamera, getReviews, getSimilarCameras, postReview } from '../store/action';
@@ -23,6 +23,7 @@ function Product(): JSX.Element {
   const FIRST_REVIEWS_PATH = 1;
   const [visibleArrayPathReviews, setVisibleArrayPathReviews] = useState(FIRST_REVIEWS_PATH);
   const getCameraStatus = useAppSelector(takeGetCameraStatus);
+  const rating = Math.ceil(useAppSelector(takeRatings).filter((el) => el.id === currentProduct?.id )[0].currentRating);
 
   useEffect(() => {
     if (id) {
@@ -66,7 +67,6 @@ function Product(): JSX.Element {
     setSliderPosition((prev) => prev + SLIDER_STEP);
   };
 
-
   if (!currentProduct) {
     return <ErrorConnectMessage isVisible={getCameraStatus === LoadingStatus.Rejected ? 'is-active' : ''}/>;
   }
@@ -82,12 +82,9 @@ function Product(): JSX.Element {
     vendorCode: vendorCode
   };
 
-  // рейтинг заглушка
-  const RATING = 3;
-
   const renderStarsRating = () =>
     Array.from({ length: RAITING_COUNT }, (_, i) =>
-      <StarsRating key={i} isActive={i + 1 <= RATING} />
+      <StarsRating key={i} isActive={i + 1 <= rating} />
     );
 
   return (
@@ -108,7 +105,7 @@ function Product(): JSX.Element {
                   <h1 className="title title--h3" >{name}</h1>
                   <div className="rate product__rate">
                     {renderStarsRating()}
-                    <p className="visually-hidden">Рейтинг: {RATING}</p>
+                    <p className="visually-hidden">Рейтинг: {rating}</p>
                     <p className="rate__count"><span className="visually-hidden" >Всего оценок:</span>{reviewCount}</p>
                   </div>
                   <p className="product__price"><span className="visually-hidden">Цена:</span>{price.toLocaleString('ru-Ru')} ₽</p>

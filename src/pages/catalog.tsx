@@ -4,17 +4,31 @@ import Breadcrumb from '../components/breadcrumbs/breadcrumbs';
 import CatalogSort from '../components/catalog-sort/catalog-sort';
 import CatalogFilter from '../components/catalog-filter/catalog-filter';
 import Pagination from '../components/pagination/pagination';
-import { useAppSelector } from '../hooks';
+import { useAppDispatch, useAppSelector } from '../hooks';
 import { takeCameras, takeGetCamerasStatus } from '../store/data-process/data-selectors';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { LoadingStatus, PRODUCTS_ON_PAGE } from '../consts';
 import ErrorConnectMessage from '../components/error-conntect-message/error-connect-message';
+import { parseProductsId } from '../utils';
+import { getReviews } from '../store/action';
 
 
 function Catalog(): JSX.Element | null {
+  const dispatch = useAppDispatch();
   const products = useAppSelector(takeCameras);
   const [currentPage, setCurrentPage] = useState<number>(0);
   const getCamerasStatus = useAppSelector(takeGetCamerasStatus);
+
+  useEffect(() => {
+    parseProductsId(products).forEach((el) => {
+      try {
+        dispatch(getReviews(el));
+      } catch (e) {
+        return e;
+      } });
+
+  }, [dispatch, products]);
+
 
   const currentPageHandler = (pageNumber: number) => {
     setCurrentPage(pageNumber);

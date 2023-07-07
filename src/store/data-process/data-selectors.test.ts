@@ -53,6 +53,7 @@ describe('Reduser: data-slicer', () => {
       reviewSubmitStatus: LoadingStatus.Unknown,
       getCameraStatus: LoadingStatus.Unknown,
       getCamerasStatus: LoadingStatus.Unknown,
+      ratingArray: []
     };
     expect(dataSlicer.reducer(state, {type: getCameras.fulfilled.type, payload: productCards}))
       .toEqual({...state,
@@ -82,6 +83,7 @@ describe('Reduser: data-slicer', () => {
       reviewSubmitStatus: LoadingStatus.Unknown,
       getCameraStatus: LoadingStatus.Unknown,
       getCamerasStatus: LoadingStatus.Unknown,
+      ratingArray: [],
     };
 
     expect(dataSlicer.reducer(state, {type: getCamera.fulfilled.type, payload: productCards[0]}))
@@ -111,6 +113,7 @@ describe('Reduser: data-slicer', () => {
       reviewSubmitStatus: LoadingStatus.Unknown,
       getCameraStatus: LoadingStatus.Unknown,
       getCamerasStatus: LoadingStatus.Unknown,
+      ratingArray: [],
     };
 
     expect(dataSlicer.reducer(state, {type: getSimilarCameras.fulfilled.type, payload: productCards}))
@@ -129,6 +132,7 @@ describe('Reduser: data-slicer', () => {
       reviewSubmitStatus: LoadingStatus.Unknown,
       getCameraStatus: LoadingStatus.Unknown,
       getCamerasStatus: LoadingStatus.Unknown,
+      ratingArray: [],
     };
 
     expect(dataSlicer.reducer(state, {type: getPromo.fulfilled.type, payload: promo}))
@@ -147,6 +151,7 @@ describe('Reduser: data-slicer', () => {
       reviewSubmitStatus: LoadingStatus.Unknown,
       getCameraStatus: LoadingStatus.Unknown,
       getCamerasStatus: LoadingStatus.Unknown,
+      ratingArray: [],
     };
 
     expect(dataSlicer.reducer(state, {type:getReviews.fulfilled.type, payload: review}))
@@ -165,9 +170,10 @@ describe('Reduser: data-slicer', () => {
       reviewSubmitStatus: LoadingStatus.Unknown,
       getCameraStatus: LoadingStatus.Unknown,
       getCamerasStatus: LoadingStatus.Unknown,
+      ratingArray: [],
     };
 
-    expect(dataSlicer.reducer(state, {type: postReview.fulfilled.type, payload: review[0], }))
+    expect(dataSlicer.reducer(state, {type: postReview.fulfilled.type, payload: review[0]}))
       .toEqual({...state,
         reviews: [review[0]],
         reviewSubmitStatus: LoadingStatus.Fullfield,
