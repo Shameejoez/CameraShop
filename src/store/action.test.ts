@@ -133,7 +133,7 @@ describe('fetch products data', () => {
 
       const response = await store.dispatch(getCameras());
 
-      expect(response.payload).toEqual([]);
+      expect(response.type).toEqual('get/cameras/rejected');
     });
 
   });

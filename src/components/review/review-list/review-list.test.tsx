@@ -78,7 +78,11 @@ const store = mockStore({
     cameras: productArray,
     similar: productArray,
     reviews: newReview,
-    camera: productArray[0]
+    camera: productArray[0],
+    ratingArray: [{
+      id: 1,
+      currentRating: 3
+    }],
   }
 });
 

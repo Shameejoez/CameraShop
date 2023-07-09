@@ -1,15 +1,13 @@
-import { screen, render } from '@testing-library/react';
-import 'react-router-dom';
-import { CardProductInfo } from '../../types/types';
-import { AppRoutes, CategoryProduct, Mastery, SlicerName, TypeProduct } from '../../consts';
-import { createAPI } from '../../services/api';
+import { render, screen } from '@testing-library/react';
+import { CardProductInfo } from '../../../types/types';
+import { AppRoutes, CategoryProduct, Mastery, SlicerName, TypeProduct } from '../../../consts';
+import { createAPI } from '../../../services/api';
 import MockAdapter from 'axios-mock-adapter';
 import thunk from 'redux-thunk';
 import { configureMockStore } from '@jedmao/redux-mock-store';
 import { Provider } from 'react-redux';
-import App from '../app/app';
-import browserHistory from '../../browser-history';
-
+import App from '../../app/app';
+import browserHistory from '../../../browser-history';
 
 const productArray: CardProductInfo [] = [
   {
@@ -33,6 +31,7 @@ const productArray: CardProductInfo [] = [
   }
 ];
 
+
 const api = createAPI();
 const mockApi = new MockAdapter(api);
 const middlewares = [thunk.withExtraArgument(api)];
@@ -40,6 +39,7 @@ const middlewares = [thunk.withExtraArgument(api)];
 mockApi
   .onGet(`${AppRoutes.Catalog}`)
   .reply(200, productArray);
+
 
 const mockStore = configureMockStore(middlewares);
 
@@ -64,11 +64,40 @@ const fakeApp = (
   </Provider>
 );
 
-describe('Header', () => {
-  it('should render header', () => {
-    browserHistory.push('/catalog');
+
+describe(('SearchBar'), () => {
+  it('should sould search-list is render', () => {
+
+    browserHistory.push('catalog');
     render(fakeApp);
 
-    expect(screen.getByTestId('header-test')).toBeInTheDocument();
+    screen.getByTestId('search-bar-test');
   });
 });
+
+
+/* const api = createAPI();
+const mockApi = new MockAdapter(api);
+const middlewares = [thunk.withExtraArgument(api)];
+
+mockApi
+  .onGet(`${AppRoutes.Catalog}${AppRoutes.Product}/1`)
+  .reply(200, productArray[0]);
+
+
+const store = mockStore({
+  [SlicerName.DataProcess]: {
+    cameras: productArray,
+    camera: productArray[0],
+    similar: productArray,
+    reviews: [],
+    promo: promo
+  }
+});
+
+
+const fakeApp = (
+  <Provider store={store}>
+    <App />
+  </Provider>
+); */

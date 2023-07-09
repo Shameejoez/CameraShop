@@ -1,17 +1,22 @@
 import { screen, render } from '@testing-library/react';
-import SimilarSlider from './similar-slider';
 import { CardProductInfo } from '../../types/types';
-import { CategoryProduct, Mastery, TypeProduct } from '../../consts';
-import { BrowserRouter } from 'react-router-dom';
+import { AppRoutes, CategoryProduct, Mastery, SlicerName, TypeProduct } from '../../consts';
+import { Provider } from 'react-redux';
+import { createAPI } from '../../services/api';
+import MockAdapter from 'axios-mock-adapter';
+import thunk from 'redux-thunk';
+import { configureMockStore } from '@jedmao/redux-mock-store';
+import App from '../app/app';
+import browserHistory from '../../browser-history';
 
 const productArray: CardProductInfo [] = [
   {
     category: CategoryProduct.Camcorder,
     description: `Немецкий концерн BRW разработал видеокамеру Das Auge IV в начале 80-х годов, однако она 
-        до сих пор пользуется популярностью среди коллекционеров 
-        и яростных почитателей старинной техники. Вы тоже можете прикоснуться 
-        к волшебству аналоговой съёмки, заказав этот чудо-аппарат. Кто знает, может с Das Auge IV начнётся ваш путь к
-        наградам всех престижных кинофестивалей.`,
+      до сих пор пользуется популярностью среди коллекционеров 
+      и яростных почитателей старинной техники. Вы тоже можете прикоснуться 
+      к волшебству аналоговой съёмки, заказав этот чудо-аппарат. Кто знает, может с Das Auge IV начнётся ваш путь к
+      наградам всех престижных кинофестивалей.`,
     id: 1,
     level: Mastery.Amateur,
     name: 'Ретрокамера Dus Auge lV',
@@ -26,15 +31,44 @@ const productArray: CardProductInfo [] = [
   }
 ];
 
+const api = createAPI();
+const mockApi = new MockAdapter(api);
+const middlewares = [thunk.withExtraArgument(api)];
+mockApi
+  .onGet(`${AppRoutes.Catalog}${AppRoutes.Product}/1`)
+  .reply(200, productArray[0]);
+
+
+const mockStore = configureMockStore(middlewares);
+
+
+const store = mockStore({
+  [SlicerName.DataProcess]: {
+    cameras: productArray,
+    camera: productArray[0],
+    similar: productArray,
+    reviews: [],
+    promo: null,
+    ratingArray: [{
+      id: 1,
+      currentRating: 3
+    }]
+  }
+});
+
+
+const fakeApp = (
+  <Provider store={store}>
+    <App />
+  </Provider>
+);
 
 describe('Similar-slider', () => {
   it('should render similar slider', () => {
-    render(
-      <BrowserRouter>
-        <SimilarSlider data={productArray}/>
-      </BrowserRouter>
-    );
+    browserHistory.push('/catalog/product/1');
+    render(fakeApp);
 
+    expect(screen.getByText('Похожие товары')).toBeInTheDocument();
     expect(screen.getAllByTestId('product-card-test')).toBeTruthy();
   });
 });
