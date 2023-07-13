@@ -1,6 +1,6 @@
 import { DateFormat, RAITING_COUNT } from '../../../consts';
 import { Review } from '../../../types/types';
-import { renderData } from '../../../utils';
+import { renderData } from '../../../utils/utils';
 import StarsRating from '../../stars-rating/stars-rating';
 
 type ReviewItemProps = {

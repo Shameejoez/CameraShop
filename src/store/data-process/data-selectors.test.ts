@@ -53,7 +53,7 @@ describe('Reduser: data-slicer', () => {
       reviewSubmitStatus: LoadingStatus.Unknown,
       getCameraStatus: LoadingStatus.Unknown,
       getCamerasStatus: LoadingStatus.Unknown,
-      ratingArray: []
+      ratingArray: [],
     };
     expect(dataSlicer.reducer(state, {type: getCameras.fulfilled.type, payload: productCards}))
       .toEqual({...state,
@@ -84,6 +84,7 @@ describe('Reduser: data-slicer', () => {
       getCameraStatus: LoadingStatus.Unknown,
       getCamerasStatus: LoadingStatus.Unknown,
       ratingArray: [],
+      zzzzz: []
     };
 
     expect(dataSlicer.reducer(state, {type: getCamera.fulfilled.type, payload: productCards[0]}))

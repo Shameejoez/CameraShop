@@ -4,7 +4,7 @@ import ReviewForm from '../review-form/review-form';
 import { useState } from 'react';
 import { REVIEW_COUNT } from '../../../consts';
 import ReviewSucsessPopup from '../review-success-popup/review-sucsess-popup';
-import { sortReview } from '../../../utils';
+import { sortReview } from '../../../utils/utils';
 
 type ReviewListProps = {
     dataReviews: Review[];

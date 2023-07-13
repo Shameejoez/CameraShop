@@ -6,14 +6,14 @@ import { useAppSelector } from '../../hooks';
 import { takeRatings } from '../../store/data-process/data-selectors';
 
 type CardProductProps = {
-    data: CardProductInfo;
+  camera: CardProductInfo;
     // передается в случае карточики с похожими товарами
     onReviewsBack?: () => void;
 }
 
-function CardProduct ({data, onReviewsBack = () => void 0}: CardProductProps):JSX.Element {
+function CardProduct ({camera, onReviewsBack = () => void 0}: CardProductProps):JSX.Element {
 
-  const { id, name, price, type, previewImg, previewImg2x, previewImgWebp, previewImgWebp2x, reviewCount } = data;
+  const { id, name, price, type, previewImg, previewImg2x, previewImgWebp, previewImgWebp2x, reviewCount } = camera;
 
   const rating = useAppSelector(takeRatings).filter((el) => el.id === id )[0]?.currentRating;
 

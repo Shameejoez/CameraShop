@@ -2,7 +2,9 @@ import {PayloadAction, createSlice} from '@reduxjs/toolkit';
 import { LoadingStatus, SlicerName } from '../../consts';
 import { getCamera, getCameras, getPromo, getReviews, getSimilarCameras, postReview } from '../action';
 import { DataStore } from '../../types/state';
-import { setMainRating } from '../../utils';
+import { setMainRating } from '../../utils/utils';
+import { CardProductInfo } from '../../types/types';
+
 
 const initialState: DataStore = {
   cameras: [],
@@ -13,7 +15,7 @@ const initialState: DataStore = {
   reviewSubmitStatus: LoadingStatus.Unknown,
   getCamerasStatus: LoadingStatus.Unknown,
   getCameraStatus: LoadingStatus.Unknown,
-  ratingArray: []
+  ratingArray: [],
 };
 
 export const dataSlicer = createSlice({
@@ -22,6 +24,9 @@ export const dataSlicer = createSlice({
   reducers: {
     setSubmitReviewStatus(state, action: PayloadAction<LoadingStatus>) {
       state.reviewSubmitStatus = action.payload;
+    },
+    setSetSet(state, action: PayloadAction<CardProductInfo []>) {
+      state.cameras = action.payload;
     }
   },
   extraReducers: (builder) => {
@@ -56,11 +61,11 @@ export const dataSlicer = createSlice({
       })
     // массив отзывов
       .addCase(getReviews.fulfilled, (state, action) => {
+
         const rating = {
           id: action.payload[0].cameraId,
           currentRating: setMainRating(action.payload.map((el) => el.rating))
         };
-
         const sameId = state.ratingArray.findIndex((el) => el.id === rating.id);
         sameId === -1 ? state.ratingArray.push(rating) : state.ratingArray[sameId] = rating;
 
@@ -86,4 +91,4 @@ export const dataSlicer = createSlice({
 });
 
 
-export const {setSubmitReviewStatus} = dataSlicer.actions;
+export const {setSubmitReviewStatus, setSetSet} = dataSlicer.actions;

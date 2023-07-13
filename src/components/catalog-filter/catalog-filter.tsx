@@ -3,7 +3,7 @@ import { CategoryProduct, FilterCategoryName, Mastery, TypeProduct } from '../..
 function CatalogFilter (): JSX.Element {
 
   const renderFilterCategory = (filterName: FilterCategoryName, categories: string[]): JSX.Element => (
-    <fieldset className="catalog-filter__block">
+    <fieldset className="catalog-filter__block" >
       <legend className="title title--h5">{filterName}</legend>
       {
         categories.map((category) => (
@@ -14,8 +14,6 @@ function CatalogFilter (): JSX.Element {
           </div>
         ))
       }
-
-
     </fieldset>
   );
 
@@ -47,6 +45,5 @@ function CatalogFilter (): JSX.Element {
     </div>
   );
 }
-
 
 export default CatalogFilter;

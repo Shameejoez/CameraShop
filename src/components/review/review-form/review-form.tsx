@@ -195,7 +195,7 @@ function ReviewForm ({ isVisible, setIsVisible, onSubmit, setIsVisibleSuccess, }
     ));
 
   return (
-    <div className={`modal ${isVisible}`} data-testid="review-form-test" style={isVisible === 'is-active' ? {width: 'calc(100% - 18.8px)'} : undefined}>
+    <div className={`modal ${isVisible}`} data-testid="review-form-test" style={isVisible === 'is-active' ? {width: 'calc(100% - 16.8px)'} : undefined}>
       <div className="modal__wrapper">
         <div className="modal__overlay" />
         <div className="modal__content" ref={reviewFormRef} >

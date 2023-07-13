@@ -5,7 +5,7 @@ export type CardProductInfo = {
     name: string;
     vendorCode: string;
     type: TypeProduct;
-    category: CategoryProduct ;
+    category: CategoryProduct | 'Фотоаппарат'; // для отрисовки чекбокса и значения данного ключа используется общий тип. С сервера приходит 'Фотоаппарат',  а в разметке 'Фотокамера'
     description: string;
     level: Mastery ;
     price: number;

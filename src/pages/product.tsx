@@ -3,7 +3,7 @@ import { COUNT_SLIDER_VISIBLE_ELEMENT, LoadingStatus, RAITING_COUNT, SLIDER_STEP
 import StarsRating from '../components/stars-rating/stars-rating';
 import CardProduct from '../components/card-product/card-product';
 import { useAppDispatch, useAppSelector } from '../hooks';
-import { takeCamera, takeGetCameraStatus, takeReviews, takeSimilar } from '../store/data-process/data-selectors';
+import { camerasSelector, takeCamera, takeGetCameraStatus, takeRatings, takeReviews, takeSimilar } from '../store/data-process/data-selectors';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { getCamera, getReviews, getSimilarCameras, postReview } from '../store/action';
@@ -12,6 +12,8 @@ import ReviewList from '../components/review/review-list/review-list';
 import { sendRewiew } from '../types/types';
 import ErrorConnectMessage from '../components/error-conntect-message/error-connect-message';
 import ButtonScrollUp from '../components/button-scroll-up/button-scroll-up';
+import { setSetSet } from '../store/data-process/data-slice';
+
 
 function Product(): JSX.Element {
   const { id } = useParams();
@@ -22,6 +24,7 @@ function Product(): JSX.Element {
   const FIRST_REVIEWS_PATH = 1;
   const [visibleArrayPathReviews, setVisibleArrayPathReviews] = useState(FIRST_REVIEWS_PATH);
   const getCameraStatus = useAppSelector(takeGetCameraStatus);
+  const ggg = useAppSelector(camerasSelector)
 
   useEffect(() => {
     if (id) {
@@ -30,6 +33,7 @@ function Product(): JSX.Element {
       dispatch(getSimilarCameras(parseId));
       dispatch(getReviews(parseId));
       window.scrollTo(0,0);
+ 
     }
 
   }, [dispatch, id]);
@@ -126,8 +130,8 @@ function Product(): JSX.Element {
                     <div className="product-similar__slider-list" style={{ left: sliderPosition }} >
                       {/* Похожие товары */}
                       {
-                        similarProducts.map((product) => (
-                          <CardProduct data={product} key={product.id} onReviewsBack={onClickVisibleArrayPathReviewsBack} />))
+                        similarProducts.map((camera) => (
+                          <CardProduct camera={camera} key={camera.id} onReviewsBack={onClickVisibleArrayPathReviewsBack} />))
                       }
                     </div>
                   </div>

@@ -7,23 +7,24 @@ import NotFound from '../not-found/not-found';
 import HistoryRouter from '../history-router.tsx/history-router';
 import browserHistory from '../../browser-history';
 import { useEffect } from 'react';
-import { parseProductsId } from '../../utils';
+import { parseProductsId } from '../../utils/utils';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { takeCameras } from '../../store/data-process/data-selectors';
 import { getReviews } from '../../store/action';
 
 function App(): JSX.Element {
   const dispatch = useAppDispatch();
-  const products = useAppSelector(takeCameras);
+  const cameras = useAppSelector(takeCameras);
 
+  const parseIds = parseProductsId(cameras);
   useEffect(() => {
-    parseProductsId(products).forEach((el) => {
-      try {
+    if (parseIds) {
+      parseIds.forEach((el) => {
         dispatch(getReviews(el));
-      } catch (e) {
-        return e;
-      } });
-  }, [products, dispatch]);
+      });
+    }
+
+  }, [cameras, dispatch]);
 
   return(
     <HistoryRouter history={browserHistory}>

@@ -12,7 +12,7 @@ const useFocusLockModal = ( {ref, isVisible}: useFocusLockProps) => {
     // отключаем скролл и отыгрываем его ширину, чтобы экран не дергался
     if(isVisible) {
       document.documentElement.style.overflow = 'hidden';
-      document.documentElement.style.width = 'calc(100% - 18.8px)';
+      document.documentElement.style.width = 'calc(100% - 16.8px)';
     }
     else {
       document.documentElement.style.overflow = '';

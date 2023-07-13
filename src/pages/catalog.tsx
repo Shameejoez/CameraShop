@@ -4,27 +4,37 @@ import Breadcrumb from '../components/breadcrumbs/breadcrumbs';
 import CatalogSort from '../components/catalog-sort/catalog-sort';
 import CatalogFilter from '../components/catalog-filter/catalog-filter';
 import Pagination from '../components/pagination/pagination';
-import { useAppSelector } from '../hooks';
-import { takeCameras, takeGetCamerasStatus } from '../store/data-process/data-selectors';
-import { useState } from 'react';
+import { useAppDispatch, useAppSelector } from '../hooks';
+import { camerasSelector, takeGetCamerasStatus, takeRatings } from '../store/data-process/data-selectors';
+import { useEffect, useState } from 'react';
 import { LoadingStatus, PRODUCTS_ON_PAGE } from '../consts';
 import ErrorConnectMessage from '../components/error-conntect-message/error-connect-message';
+import { setSetSet } from '../store/data-process/data-slice';
 
-function Catalog(): JSX.Element | null {
-  const products = useAppSelector(takeCameras);
+function Catalog(): JSX.Element {
+  const dispatch = useAppDispatch();
+  const cameras = useAppSelector(camerasSelector);
   const [currentPage, setCurrentPage] = useState<number>(0);
   const getCamerasStatus = useAppSelector(takeGetCamerasStatus);
+  const getRatings = useAppSelector(takeRatings);
+  const newArr = cameras.map((camera) => ({...camera, rating: Math.ceil(getRatings.filter((el) => el.id === camera.id)[0]?.currentRating)}));
 
+  useEffect(() => {
+    if(getRatings.length === 40) {
+      dispatch(setSetSet(newArr));
+
+    }
+  }, [getRatings.length]);
 
   const currentPageHandler = (pageNumber: number) => {
     setCurrentPage(pageNumber);
 
   };
 
-  const catalogPageCount = Math.ceil(products.length / PRODUCTS_ON_PAGE);
+  const catalogPageCount = Math.ceil(cameras.length / PRODUCTS_ON_PAGE);
 
   const renderCatalogBook = () => {
-    const copyProducts = [...products];
+    const copyProducts = [...cameras];
 
     const catalogBook = [];
     for (let i = 0; i < catalogPageCount; i++) {
@@ -46,7 +56,7 @@ function Catalog(): JSX.Element | null {
         <Breadcrumb />
         <section className="catalog">
           <div className="container">
-            <h1 className="title title--h2">Каталог фото- и видеотехники</h1>
+            <h1 className="title title--h2" onClick={() => dispatch(setSetSet(newArr))}>Каталог фото- и видеотехники</h1>
             <div className="page-content__columns">
               <div className="catalog__aside">
                 <CatalogFilter/>
@@ -55,8 +65,8 @@ function Catalog(): JSX.Element | null {
                 <CatalogSort/>
                 <div className="cards catalog__cards">
                   {
-                    renderCatalogBook()[currentPage].map((product) =>
-                      <CardProduct data={product} key={product.id}/>
+                    renderCatalogBook()[currentPage].map((camera) =>
+                      <CardProduct camera={camera} key={camera.id}/>
                     )
                   }
                 </div>

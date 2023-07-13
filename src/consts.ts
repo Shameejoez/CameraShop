@@ -9,6 +9,18 @@ export enum DateFormat {
   commentFormat = 'D MMMM'
 }
 
+export enum SortName {
+  Price = 'price',
+  Rating = 'rating',
+  Unknown = 'unknown'
+}
+
+export enum SortMode {
+  Increase = 'Increase',
+  Decrease = 'Decrease',
+}
+
+
 export enum LoadingStatus {
   Pending = 'pending',
   Rejected = 'rejected',
@@ -61,6 +73,9 @@ export enum TypeProduct {
     Digital = 'Моментальная',
     Film = 'Коллекционная',
 }
+
+export enum Unknown {
+  Unknown = 'unknow'}
 
 export enum CategoryProduct {
     Camcorder = 'Фотокамера',

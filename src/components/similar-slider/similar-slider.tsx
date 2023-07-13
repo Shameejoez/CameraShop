@@ -2,16 +2,16 @@ import { CardProductInfo } from '../../types/types';
 import CardProduct from '../card-product/card-product';
 
 type SimilarSliderProps = {
-    data: CardProductInfo[];
+  cameras: CardProductInfo[];
 }
 
-function SimilarSlider ({data}: SimilarSliderProps): JSX.Element {
+function SimilarSlider ({cameras}: SimilarSliderProps): JSX.Element {
   return (
     <div className="product-similar__slider">
       <div className="product-similar__slider-list">
         {/* Похожие товары */}
         {
-          data.map((product) => <CardProduct data={product} key={product.id} />)
+          cameras.map((camera) => <CardProduct camera={camera} key={camera.id} />)
         }
       </div>
       <button className="slider-controls slider-controls--prev" type="button" aria-label="Предыдущий слайд" disabled>
