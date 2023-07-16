@@ -22,6 +22,11 @@ export type ProductRating = {
     currentRating: number;
 }
 
+export type SetFilter = {
+    action: 'push' | 'unshift';
+    filterType: CategoryProduct | TypeProduct | Mastery | string;
+}
+
 export type Review = {
     id: string;
     createAt: string;

@@ -26,6 +26,7 @@ function Catalog(): JSX.Element {
     }
   }, [getRatings.length]);
 
+
   const currentPageHandler = (pageNumber: number) => {
     setCurrentPage(pageNumber);
 
@@ -34,8 +35,8 @@ function Catalog(): JSX.Element {
   const catalogPageCount = Math.ceil(cameras.length / PRODUCTS_ON_PAGE);
 
   const renderCatalogBook = () => {
-    const copyProducts = [...cameras];
 
+    const copyProducts = [...cameras];
     const catalogBook = [];
     for (let i = 0; i < catalogPageCount; i++) {
       catalogBook.push(copyProducts.splice(0, PRODUCTS_ON_PAGE));
@@ -56,10 +57,10 @@ function Catalog(): JSX.Element {
         <Breadcrumb />
         <section className="catalog">
           <div className="container">
-            <h1 className="title title--h2" onClick={() => dispatch(setSetSet(newArr))}>Каталог фото- и видеотехники</h1>
+            <h1 className="title title--h2" >Каталог фото- и видеотехники</h1>
             <div className="page-content__columns">
               <div className="catalog__aside">
-                <CatalogFilter/>
+                <CatalogFilter resetPage={currentPageHandler}/>
               </div>
               <div className="catalog__content">
                 <CatalogSort/>

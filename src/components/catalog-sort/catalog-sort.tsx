@@ -1,12 +1,28 @@
-import { ChangeEvent } from 'react';
+/* eslint-disable no-nested-ternary */
+import { ChangeEvent, useEffect } from 'react';
 import { useAppDispatch } from '../../hooks';
 import { setMode, setSort } from '../../store/site-process/site-slice';
 import { SortMode, SortName } from '../../consts';
+import useSearchParamsCustom from '../../hooks/use-search-params-custom/use-search-params-custom';
 
 function CatalogSort (): JSX.Element {
   const dispatch = useAppDispatch();
+  const { setSortTypeParams, sortType } = useSearchParamsCustom({initialSortType: null});
+  const { setSortOrderParams, sortOrder } = useSearchParamsCustom({initialSortOrder: null});
+
+  useEffect(() => {
+    sortType === 'sortPrice' ? dispatch(setSort(SortName.Price)) :
+      sortType === 'sortPopular' ? dispatch(setSort(SortName.Rating)) :
+        dispatch(setSort(SortName.Unknown));
+
+    sortOrder === 'down' ? dispatch(setMode(SortMode.Decrease)) : dispatch(setMode(SortMode.Increase));
+  }, [sortOrder, sortType, dispatch]);
+
+  const onChangeSetSearchParams = (e: ChangeEvent<HTMLInputElement>) =>
+    (e.target.id === 'up' || e.target.id === 'down') ? setSortOrderParams(e) : setSortTypeParams(e);
 
   const onSortButtonChange = (e: ChangeEvent<HTMLInputElement>) => {
+    onChangeSetSearchParams(e);
     switch (e.target.id) {
       case 'sortPrice':
         return dispatch(setSort(SortName.Price));
@@ -18,7 +34,6 @@ function CatalogSort (): JSX.Element {
         return dispatch(setMode(SortMode.Decrease));
     }
   };
-
 
   return (
     <div className="catalog-sort">

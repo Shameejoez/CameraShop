@@ -2,8 +2,9 @@ import type { CardProductInfo, ProductRating, PromoProduct, Review } from '../..
 import { LoadingStatus, SlicerName } from '../../consts';
 import { State } from '../../types/state';
 import { createSelector } from '@reduxjs/toolkit';
-import { takeSortMode, takeSortName } from '../site-process/site-selectors';
+import { takeCategory, takeLavel, takeSortMode, takeSortName, takeTypes } from '../site-process/site-selectors';
 import { sortingsMethods } from '../../utils/utils';
+import { filterCategory, filterLevel, filterTypes } from '../../utils/filters';
 
 
 export const takeCameras = ({[SlicerName.DataProcess]: SITE_DATA}: State): CardProductInfo[] => SITE_DATA.cameras;
@@ -18,6 +19,7 @@ export const takeRatings = ({[SlicerName.DataProcess]: SITE_DATA}: State): Produ
 
 
 export const camerasSelector = createSelector(
-  [takeCameras, takeSortName, takeSortMode],
-  (cameras, sortName, sortMode) => [...cameras].sort(sortingsMethods[(String(sortName + sortMode))])
+  [takeCameras, takeSortName, takeSortMode, takeCategory, takeTypes, takeLavel],
+  (cameras, sortName, sortMode, category, types, levels) =>
+    filterLevel(filterTypes(filterCategory([...cameras], category), types), levels).sort(sortingsMethods[(String(sortName + sortMode))])
 );

@@ -5,7 +5,6 @@ import { DataStore } from '../../types/state';
 import { setMainRating } from '../../utils/utils';
 import { CardProductInfo } from '../../types/types';
 
-
 const initialState: DataStore = {
   cameras: [],
   camera: null,
@@ -89,6 +88,5 @@ export const dataSlicer = createSlice({
       });
   }
 });
-
 
 export const {setSubmitReviewStatus, setSetSet} = dataSlicer.actions;

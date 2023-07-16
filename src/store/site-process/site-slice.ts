@@ -1,6 +1,7 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { SlicerName, SortMode, SortName } from '../../consts';
+import { CategoryProduct, Mastery, SlicerName, SortMode, SortName, TypeProduct } from '../../consts';
 import { siteStore } from '../../types/state';
+import { SetFilter } from '../../types/types';
 
 const initialState: siteStore = {
   currentSort: {
@@ -14,7 +15,6 @@ const initialState: siteStore = {
   }
 };
 
-
 export const siteSlicer = createSlice({
   name: SlicerName.SiteProcces,
   initialState,
@@ -25,9 +25,31 @@ export const siteSlicer = createSlice({
     setMode(state, action: PayloadAction<SortMode>) {
       state.currentSort.mode = action.payload;
     },
+    setCategory(state, action: PayloadAction<CategoryProduct | null>) {
+      state.filter.category = action.payload;
+    },
+    setLevel(state, action: PayloadAction<SetFilter>) {
+      let newLevels = [];
+      if (action.payload.action === 'push') {
+        state.filter.level.push(action.payload.filterType as Mastery);
+      }
+      if (action.payload.action === 'unshift') {
+        newLevels = state.filter.level.filter((el) => el !== action.payload.filterType);
+        state.filter.level = newLevels;
+      }
+    },
+    setType(state, action: PayloadAction<SetFilter>) {
+      let newTypes = [];
+      if (action.payload.action === 'push') {
+        state.filter.type.push(action.payload.filterType as TypeProduct);
+      }
+      if (action.payload.action === 'unshift') {
+        newTypes = state.filter.type.filter((el) => el !== action.payload.filterType);
+        state.filter.type = newTypes;
+      }
+    },
   }
 });
 
-
-export const { setSort, setMode } = siteSlicer.actions;
+export const {setSort, setMode, setLevel, setType, setCategory} = siteSlicer.actions;
 
