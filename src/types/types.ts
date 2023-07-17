@@ -24,7 +24,7 @@ export type ProductRating = {
 
 export type SetFilter = {
     action: 'push' | 'unshift';
-    filterType: CategoryProduct | TypeProduct | Mastery | string;
+    filterType: string;
 }
 
 export type Review = {

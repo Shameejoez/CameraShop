@@ -4,28 +4,16 @@ import Breadcrumb from '../components/breadcrumbs/breadcrumbs';
 import CatalogSort from '../components/catalog-sort/catalog-sort';
 import CatalogFilter from '../components/catalog-filter/catalog-filter';
 import Pagination from '../components/pagination/pagination';
-import { useAppDispatch, useAppSelector } from '../hooks';
-import { camerasSelector, takeGetCamerasStatus, takeRatings } from '../store/data-process/data-selectors';
-import { useEffect, useState } from 'react';
+import { useAppSelector } from '../hooks';
+import { camerasSelector, takeGetCamerasStatus } from '../store/data-process/data-selectors';
+import { useState } from 'react';
 import { LoadingStatus, PRODUCTS_ON_PAGE } from '../consts';
 import ErrorConnectMessage from '../components/error-conntect-message/error-connect-message';
-import { setSetSet } from '../store/data-process/data-slice';
 
 function Catalog(): JSX.Element {
-  const dispatch = useAppDispatch();
   const cameras = useAppSelector(camerasSelector);
   const [currentPage, setCurrentPage] = useState<number>(0);
   const getCamerasStatus = useAppSelector(takeGetCamerasStatus);
-  const getRatings = useAppSelector(takeRatings);
-  const newArr = cameras.map((camera) => ({...camera, rating: Math.ceil(getRatings.filter((el) => el.id === camera.id)[0]?.currentRating)}));
-
-  useEffect(() => {
-    if(getRatings.length === 40) {
-      dispatch(setSetSet(newArr));
-
-    }
-  }, [getRatings.length]);
-
 
   const currentPageHandler = (pageNumber: number) => {
     setCurrentPage(pageNumber);
@@ -71,7 +59,10 @@ function Catalog(): JSX.Element {
                     )
                   }
                 </div>
-                <Pagination setActivePage={currentPageHandler} countPage={catalogPageCount} activePage={currentPage}/>
+                {
+                  catalogPageCount >= 2 &&
+                      <Pagination setActivePage={currentPageHandler} countPage={catalogPageCount} activePage={currentPage}/>
+                }
               </div>
             </div>
           </div>

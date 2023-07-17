@@ -20,7 +20,7 @@ function Pagination ({ setActivePage, countPage, activePage}: PaginationProps): 
     if (page) {
       setActivePage(Number(page) - 1);
     }
-  }, [setActivePage, page]);
+  }, [page]);
 
 
   const onClickSetPageUrl = (idx: number) => {

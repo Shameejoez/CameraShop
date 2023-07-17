@@ -6,7 +6,6 @@ import { takeCategory, takeLavel, takeSortMode, takeSortName, takeTypes } from '
 import { sortingsMethods } from '../../utils/utils';
 import { filterCategory, filterLevel, filterTypes } from '../../utils/filters';
 
-
 export const takeCameras = ({[SlicerName.DataProcess]: SITE_DATA}: State): CardProductInfo[] => SITE_DATA.cameras;
 export const takeCamera = ({[SlicerName.DataProcess]: SITE_DATA}: State): CardProductInfo | null => SITE_DATA.camera;
 export const takeSimilar = ({[SlicerName.DataProcess]: SITE_DATA}: State): CardProductInfo[] => SITE_DATA.similar;
@@ -17,9 +16,11 @@ export const takeGetCamerasStatus = ({[SlicerName.DataProcess]: SITE_DATA}: Stat
 export const takeGetCameraStatus = ({[SlicerName.DataProcess]: SITE_DATA}: State): LoadingStatus => SITE_DATA.getCameraStatus;
 export const takeRatings = ({[SlicerName.DataProcess]: SITE_DATA}: State): ProductRating[] => SITE_DATA.ratingArray;
 
-
 export const camerasSelector = createSelector(
-  [takeCameras, takeSortName, takeSortMode, takeCategory, takeTypes, takeLavel],
-  (cameras, sortName, sortMode, category, types, levels) =>
-    filterLevel(filterTypes(filterCategory([...cameras], category), types), levels).sort(sortingsMethods[(String(sortName + sortMode))])
+  [takeCameras, takeRatings, takeSortName, takeSortMode, takeCategory, takeTypes, takeLavel],
+  (cameras, ratings, sortName, sortMode, category, types, levels) => {
+    const newCameras = cameras.map((camera) => ({...camera, rating: Math.ceil(ratings.filter((el) => el.id === camera.id)[0]?.currentRating)}));
+
+    return filterLevel(filterTypes(filterCategory([...newCameras], category), types), levels).sort(sortingsMethods[(String(sortName + sortMode))]);
+  }
 );

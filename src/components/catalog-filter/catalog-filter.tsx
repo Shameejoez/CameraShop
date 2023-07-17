@@ -1,8 +1,8 @@
+/* eslint-disable no-nested-ternary */
 import { ChangeEvent } from 'react';
 import { CategoryProduct, FilterCategoryName, Mastery, TypeProduct } from '../../consts';
 import { useAppDispatch } from '../../hooks';
 import { setCategory, setLevel, setType } from '../../store/site-process/site-slice';
-import { useSearchParams } from 'react-router-dom';
 import { useEffect } from 'react';
 import useSearchParamsCustom from '../../hooks/use-search-params-custom/use-search-params-custom';
 
@@ -12,37 +12,42 @@ type CatalogFilterProps = {
 
 function CatalogFilter ({resetPage}: CatalogFilterProps): JSX.Element {
   const {setFilterParams, filters} = useSearchParamsCustom({initialFilter: null});
-  const currentCategory = filters?.filter((filter) => filter === 'Видеокамера' || filter === 'Фотокамера');
-  const currentTypes = filters?.filter((filter) => filter === String(Object.values(TypeProduct).filter((value) => value === filter)));
-  const currentLevel = filters?.filter((filter) => filter === String(Object.values(Mastery).filter((mastery) => mastery === filter)));
 
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-  });
+    /*  if ((filters as string[])?.length >= 1) {
+      filters?.forEach((el) => onChangePushFilters(el));
+    } */
 
- 
+  }, [filters]);
+
   const onChangePushFilters = (filterName: string) => {
     switch(filterName) {
       case 'Видеокамера':
+        onClickRemoveFilters(['Плёночная', 'Моментальная']);
         return dispatch(setCategory(CategoryProduct.Camera));
       case 'Фотокамера' :
         return dispatch(setCategory(CategoryProduct.Camcorder));
       case 'Цифровая' :
-        return dispatch(setType({action: 'push', filterType: TypeProduct.Collectible}));
+        return dispatch(setType({action: 'push', filterType: filterName}));
       case 'Плёночная' :
-        return dispatch(setType({action: 'push', filterType: TypeProduct.Instant}));
+        return dispatch(setType({action: 'push', filterType: filterName}));
       case 'Моментальная' :
-        return dispatch(setType({action: 'push', filterType: TypeProduct.Digital}));
+        return dispatch(setType({action: 'push', filterType: filterName}));
       case 'Коллекционная' :
-        return dispatch(setType({action: 'push', filterType: TypeProduct.Film}));
+        return dispatch(setType({action: 'push', filterType: filterName}));
       case 'Нулевой' :
-        return dispatch(setLevel({action: 'push', filterType: Mastery.Null}));
+        return dispatch(setLevel({action: 'push', filterType: filterName}));
       case 'Любительский' :
-        return dispatch(setLevel({action: 'push', filterType: Mastery.Amateur}));
+        return dispatch(setLevel({action: 'push', filterType: filterName}));
       case 'Профессиональный' :
-        return dispatch(setLevel({action: 'push', filterType: Mastery.Professional}));
+        return dispatch(setLevel({action: 'push', filterType: filterName}));
     }
+  };
+
+  const onClickRemoveFilters = (filterName: string[]) => {
+    filterName.forEach((filter) => onChangeUnshiftFilters(filter));
   };
 
   const onChangeUnshiftFilters = (filterName: string) => {
@@ -70,11 +75,23 @@ function CatalogFilter ({resetPage}: CatalogFilterProps): JSX.Element {
 
   const onChangeSetFilters = (e: ChangeEvent<HTMLInputElement>) => {
     setFilterParams(e);
-    //setSearchParamsHandler(e);
     if(e.target.checked) {
       onChangePushFilters(e.target.name);
     } else {
       onChangeUnshiftFilters(e.target.name);
+    }
+  };
+
+  const setDisabled = (filterName: string) => {
+    switch(filterName) {
+      case 'Видеокамера':
+        return !!filters?.includes('Фотокамера');
+      case 'Фотокамера' :
+        return !!filters?.includes('Видеокамера');
+      case 'Плёночная' :
+        return !!filters?.includes('Видеокамера');
+      case 'Моментальная' :
+        return !!filters?.includes('Видеокамера');
     }
   };
 
@@ -86,7 +103,7 @@ function CatalogFilter ({resetPage}: CatalogFilterProps): JSX.Element {
           <div key={category} className="custom-checkbox catalog-filter__item">
             <label>
               <input type="checkbox" key={`${category}-input`} id={category} name={category} onChange={onChangeSetFilters}
-                defaultChecked={(filters as string[])?.includes(category)}
+                checked={filters?.includes(category)} disabled={setDisabled(category)}
               /><span className="custom-checkbox__icon" />
               <span className="custom-checkbox__label">{category}</span>
             </label>

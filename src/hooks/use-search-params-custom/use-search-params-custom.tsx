@@ -1,5 +1,6 @@
 import { useSearchParams } from 'react-router-dom';
 import {useState, ChangeEvent, useEffect} from 'react';
+import { TypeProduct } from '../../consts';
 
 type useSearchParamsCustomProps = {
     initialPage?: number;
@@ -24,6 +25,10 @@ const useSearchParamsCustom = ({initialPage, initialFilter, initialSortType, ini
     const currenFilter = e.target.id;
     let filterParams = search.get('filters')?.split(',') ?? [];
 
+    if (e.target.checked && e.target.id === 'Видеокамера') {
+      filterParams = filterParams.filter((filter) => (filter !== TypeProduct.Instant && filter !== TypeProduct.Digital));
+    }
+
     if(e.target.checked) {
       filterParams.push(currenFilter);
     } else {
@@ -37,6 +42,7 @@ const useSearchParamsCustom = ({initialPage, initialFilter, initialSortType, ini
     }
 
     setSearch(search);
+
     setFilters([...(String(search.get('filters'))).split(',')]);
   };
   // Название сортировки
