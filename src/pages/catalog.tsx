@@ -14,7 +14,6 @@ function Catalog(): JSX.Element {
   const cameras = useAppSelector(camerasSelector);
   const getCamerasStatus = useAppSelector(takeGetCamerasStatus);
   const {page, setPageParams} = useSearchParamsCustom({initialPage: 1});
-  console.log(cameras);
   const currentPageHandler = (pageNumber: number) => {
     setPageParams(pageNumber);
   };
