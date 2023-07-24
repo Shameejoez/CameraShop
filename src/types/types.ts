@@ -27,6 +27,12 @@ export type SetFilter = {
     filterType: string;
 }
 
+export type RangePrice = {
+    min: number | null;
+    max: number | null;
+
+}
+
 export type Review = {
     id: string;
     createAt: string;

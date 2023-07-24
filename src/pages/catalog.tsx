@@ -6,18 +6,17 @@ import CatalogFilter from '../components/catalog-filter/catalog-filter';
 import Pagination from '../components/pagination/pagination';
 import { useAppSelector } from '../hooks';
 import { camerasSelector, takeGetCamerasStatus } from '../store/data-process/data-selectors';
-import { useState } from 'react';
 import { LoadingStatus, PRODUCTS_ON_PAGE } from '../consts';
 import ErrorConnectMessage from '../components/error-conntect-message/error-connect-message';
+import useSearchParamsCustom from '../hooks/use-search-params-custom/use-search-params-custom';
 
 function Catalog(): JSX.Element {
   const cameras = useAppSelector(camerasSelector);
-  const [currentPage, setCurrentPage] = useState<number>(0);
   const getCamerasStatus = useAppSelector(takeGetCamerasStatus);
-
+  const {page, setPageParams} = useSearchParamsCustom({initialPage: 1});
+  console.log(cameras);
   const currentPageHandler = (pageNumber: number) => {
-    setCurrentPage(pageNumber);
-
+    setPageParams(pageNumber);
   };
 
   const catalogPageCount = Math.ceil(cameras.length / PRODUCTS_ON_PAGE);
@@ -29,14 +28,8 @@ function Catalog(): JSX.Element {
     for (let i = 0; i < catalogPageCount; i++) {
       catalogBook.push(copyProducts.splice(0, PRODUCTS_ON_PAGE));
     }
-
     return catalogBook;
   };
-
-
-  if(renderCatalogBook().length === 0) {
-    return <ErrorConnectMessage isVisible={getCamerasStatus === LoadingStatus.Rejected ? 'is-active' : ''}/>;
-  }
 
   return (
     <main>
@@ -48,20 +41,20 @@ function Catalog(): JSX.Element {
             <h1 className="title title--h2" >Каталог фото- и видеотехники</h1>
             <div className="page-content__columns">
               <div className="catalog__aside">
-                <CatalogFilter resetPage={currentPageHandler}/>
+                <CatalogFilter onResetPage={currentPageHandler}/>
               </div>
               <div className="catalog__content">
                 <CatalogSort/>
                 <div className="cards catalog__cards">
-                  {
-                    renderCatalogBook()[currentPage].map((camera) =>
+
+                  { cameras.length === 0 ? 'Ничего не найдено' :
+                    renderCatalogBook()[(page as number)].map((camera) =>
                       <CardProduct camera={camera} key={camera.id}/>
-                    )
-                  }
+                    )}
                 </div>
                 {
                   catalogPageCount >= 2 &&
-                      <Pagination setActivePage={currentPageHandler} countPage={catalogPageCount} activePage={currentPage}/>
+                      <Pagination setActivePage={currentPageHandler} countPage={catalogPageCount} activePage={page as number}/>
                 }
               </div>
             </div>

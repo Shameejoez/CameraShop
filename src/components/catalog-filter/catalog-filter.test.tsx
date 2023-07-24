@@ -6,7 +6,7 @@ describe('Catalog-filter', () => {
   const resetPage = jest.fn;
   it('should render catalog-filter', () => {
 
-    render(<CatalogFilter resetPage={resetPage}/>);
+    render(<CatalogFilter onResetPage={resetPage}/>);
 
     const chekOne = screen.getByRole('checkbox', {name: 'Коллекционная'});
     const chekTwo = screen.getByRole('checkbox', {name: 'Моментальная'});

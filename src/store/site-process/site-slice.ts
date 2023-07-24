@@ -1,7 +1,7 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { CategoryProduct, Mastery, SlicerName, SortMode, SortName, TypeProduct } from '../../consts';
+import { CategoryProduct, Mastery, PriceRange, SlicerName, SortMode, SortName, TypeProduct } from '../../consts';
 import { siteStore } from '../../types/state';
-import { SetFilter } from '../../types/types';
+import { RangePrice, SetFilter } from '../../types/types';
 
 const initialState: siteStore = {
   currentSort: {
@@ -12,6 +12,10 @@ const initialState: siteStore = {
     category: null,
     level: [],
     type: []
+  },
+  rangePrice: {
+    min: PriceRange.Min,
+    max: PriceRange.Max,
   }
 };
 
@@ -30,7 +34,7 @@ export const siteSlicer = createSlice({
     },
     setLevel(state, action: PayloadAction<SetFilter>) {
       let newLevels = [];
-      if (action.payload.action === 'push') {
+      if (action.payload.action === 'push' && !state.filter.level.includes(action.payload.filterType as Mastery)) {
         state.filter.level.push(action.payload.filterType as Mastery);
       }
       if (action.payload.action === 'unshift') {
@@ -40,7 +44,7 @@ export const siteSlicer = createSlice({
     },
     setType(state, action: PayloadAction<SetFilter>) {
       let newTypes = [];
-      if (action.payload.action === 'push') {
+      if (action.payload.action === 'push' && !state.filter.type.includes(action.payload.filterType as TypeProduct)) {
         state.filter.type.push(action.payload.filterType as TypeProduct);
       }
       if (action.payload.action === 'unshift') {
@@ -48,8 +52,12 @@ export const siteSlicer = createSlice({
         state.filter.type = newTypes;
       }
     },
+    setRangePrice(state, action: PayloadAction<RangePrice>) {
+      state.rangePrice.min = action.payload.min;
+      state.rangePrice.max = action.payload.max;
+    }
   }
 });
 
-export const {setSort, setMode, setLevel, setType, setCategory} = siteSlicer.actions;
+export const {setSort, setMode, setLevel, setType, setCategory, setRangePrice} = siteSlicer.actions;
 

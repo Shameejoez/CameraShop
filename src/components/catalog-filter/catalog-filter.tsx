@@ -1,31 +1,39 @@
 /* eslint-disable no-nested-ternary */
-import { ChangeEvent } from 'react';
+import { ChangeEvent, useEffect } from 'react';
 import { CategoryProduct, FilterCategoryName, Mastery, TypeProduct } from '../../consts';
-import { useAppDispatch } from '../../hooks';
-import { setCategory, setLevel, setType } from '../../store/site-process/site-slice';
-import { useEffect } from 'react';
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import { setCategory, setLevel, setRangePrice, setType } from '../../store/site-process/site-slice';
 import useSearchParamsCustom from '../../hooks/use-search-params-custom/use-search-params-custom';
+import { camerasSelector } from '../../store/data-process/data-selectors';
 
 type CatalogFilterProps = {
-  resetPage: (page: number) => void;
+  onResetPage: (page: number) => void;
 }
 
-function CatalogFilter ({resetPage}: CatalogFilterProps): JSX.Element {
-  const {setFilterParams, filters} = useSearchParamsCustom({initialFilter: null});
-
+function CatalogFilter ({onResetPage}: CatalogFilterProps): JSX.Element {
+  const {setFilterParams, filters, deleteFilterParams, setPriceUpParams, setPriceDownParams, prices, setPageParams} = useSearchParamsCustom({initialFilter: null, initialPrice: { min: null, max: null}});
   const dispatch = useAppDispatch();
+  const camerasPrices = useAppSelector(camerasSelector).map((camera) => camera.price);
+  const camerasPricesMin = Math.min.apply(null, camerasPrices);
+  const camerasPricesMax = Math.max.apply(null, camerasPrices);
 
   useEffect(() => {
-    /*  if ((filters as string[])?.length >= 1) {
-      filters?.forEach((el) => onChangePushFilters(el));
-    } */
 
-  }, [filters]);
+    dispatch(setRangePrice({
+      min : prices.min,
+      max:  prices.max === 0 ? 199000 : prices.max
+    }));
+
+    if ((filters as string[])?.length >= 1) {
+      filters?.forEach((el) => onChangePushFilters(el));
+    }
+
+  }, [filters, prices]);
 
   const onChangePushFilters = (filterName: string) => {
     switch(filterName) {
       case 'Видеокамера':
-        onClickRemoveFilters(['Плёночная', 'Моментальная']);
+        ['Плёночная', 'Моментальная'].forEach((filter) => onChangeUnshiftFilters(filter));
         return dispatch(setCategory(CategoryProduct.Camera));
       case 'Фотокамера' :
         return dispatch(setCategory(CategoryProduct.Camcorder));
@@ -46,8 +54,19 @@ function CatalogFilter ({resetPage}: CatalogFilterProps): JSX.Element {
     }
   };
 
-  const onClickRemoveFilters = (filterName: string[]) => {
-    filterName.forEach((filter) => onChangeUnshiftFilters(filter));
+  const onChangeSetPriceParams = (e: ChangeEvent<HTMLInputElement>) => {
+    onResetPage(0);
+    setPageParams(0);
+    e.target.id === 'priceMax' ? setPriceUpParams(e) : setPriceDownParams(e);
+  };
+
+
+  const onClickRemoveFilters = () => {
+    onResetPage(0);
+    setPageParams(0);
+    filters?.forEach((el) =>onChangeUnshiftFilters(el));
+    deleteFilterParams();
+
   };
 
   const onChangeUnshiftFilters = (filterName: string) => {
@@ -74,7 +93,9 @@ function CatalogFilter ({resetPage}: CatalogFilterProps): JSX.Element {
   };
 
   const onChangeSetFilters = (e: ChangeEvent<HTMLInputElement>) => {
+    onResetPage(0);
     setFilterParams(e);
+    setPageParams(0);
     if(e.target.checked) {
       onChangePushFilters(e.target.name);
     } else {
@@ -122,12 +143,12 @@ function CatalogFilter ({resetPage}: CatalogFilterProps): JSX.Element {
           <div className="catalog-filter__price-range">
             <div className="custom-input">
               <label>
-                <input type="number" name="price" placeholder="от" />
+                <input type="number" name="priceDown" id='priceMin' placeholder={String(camerasPricesMin)} onChange={onChangeSetPriceParams}/>
               </label>
             </div>
             <div className="custom-input">
               <label>
-                <input type="number" name="priceUp" placeholder="до" />
+                <input type="number" name="priceUp" id='priceMax' placeholder={String(camerasPricesMax)} onChange={onChangeSetPriceParams} />
               </label>
             </div>
           </div>
@@ -135,7 +156,7 @@ function CatalogFilter ({resetPage}: CatalogFilterProps): JSX.Element {
         {renderFilterCategory(FilterCategoryName.Category, Object.values(CategoryProduct))}
         {renderFilterCategory(FilterCategoryName.Type, Object.values(TypeProduct))}
         {renderFilterCategory(FilterCategoryName.Mastery, Object.values(Mastery))}
-        <button className="btn catalog-filter__reset-btn" type="reset" onClick={() => dispatch(setLevel({action: 'unshift', filterType: Mastery.Null}))}>Сбросить фильтры
+        <button className="btn catalog-filter__reset-btn" type="reset" onClick={onClickRemoveFilters}>Сбросить фильтры
         </button>
       </form>
     </div>

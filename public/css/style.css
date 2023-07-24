@@ -699,6 +699,11 @@ button,
   height: 36px;
 }
 
+.header__label__spinner svg {
+  width: 500px;
+  height: 400px;
+}
+
 .header__main-nav {
   margin-left: 40px;
 }
@@ -1651,7 +1656,7 @@ button,
   position: absolute;
   top: 0;
   right: 0;
-  display: none;
+  visibility: hidden;
   -webkit-box-pack: center;
   -ms-flex-pack: center;
   justify-content: center;

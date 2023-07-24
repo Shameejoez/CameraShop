@@ -1,6 +1,4 @@
 import { Link } from 'react-router-dom';
-import {useEffect} from 'react';
-import useSearchParamsCustom from '../../hooks/use-search-params-custom/use-search-params-custom';
 
 type PaginationProps = {
   setActivePage: (page: number) => void;
@@ -9,22 +7,9 @@ type PaginationProps = {
 }
 
 function Pagination ({ setActivePage, countPage, activePage}: PaginationProps): JSX.Element {
-  // число передающееся в Каталог - это индекс массива
-  // activePage - это индекс массива
-
-  const setPageParams = useSearchParamsCustom({initialPage: 1});
-  const page = setPageParams.page;
-
-
-  useEffect(() => {
-    if (page) {
-      setActivePage(Number(page) - 1);
-    }
-  }, [page]);
-
 
   const onClickSetPageUrl = (idx: number) => {
-    setPageParams.setPageParams(idx + 1);
+    setActivePage(idx);
   };
 
 
@@ -51,7 +36,7 @@ function Pagination ({ setActivePage, countPage, activePage}: PaginationProps): 
         }
         { renderPaginationLi()}
         {
-          activePage < 4 &&
+          activePage + 1 < countPage &&
       <li className="pagination__item" onClick={()=> {
         onClickSetPageUrl(activePage + 1);}}
       >

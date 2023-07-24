@@ -47,3 +47,9 @@ export const filterLevel = (cameras: CardProductInfo[], filtersName: ('Нуле�
 
   return finalCameras;
 };
+
+// по ценовому диапазону
+export const filterRangePrice = (cameras: CardProductInfo[], min: number | null, max: number | null) =>
+  cameras.filter((camera) => camera.price >= (min === null ? 1990 : min) && camera.price <= (max === null ? 199000 : max));
+
+

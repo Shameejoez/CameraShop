@@ -27,4 +27,8 @@ export type siteStore = {
         type: TypeProduct[];
         level: Mastery[];
     };
+    rangePrice: {
+        min: number | null;
+        max: number | null;
+    };
 }

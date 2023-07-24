@@ -2,9 +2,9 @@ import type { CardProductInfo, ProductRating, PromoProduct, Review } from '../..
 import { LoadingStatus, SlicerName } from '../../consts';
 import { State } from '../../types/state';
 import { createSelector } from '@reduxjs/toolkit';
-import { takeCategory, takeLavel, takeSortMode, takeSortName, takeTypes } from '../site-process/site-selectors';
+import { takeCategory, takeLavel, takeRangePrice, takeSortMode, takeSortName, takeTypes } from '../site-process/site-selectors';
 import { sortingsMethods } from '../../utils/utils';
-import { filterCategory, filterLevel, filterTypes } from '../../utils/filters';
+import { filterCategory, filterLevel, filterTypes, filterRangePrice } from '../../utils/filters';
 
 export const takeCameras = ({[SlicerName.DataProcess]: SITE_DATA}: State): CardProductInfo[] => SITE_DATA.cameras;
 export const takeCamera = ({[SlicerName.DataProcess]: SITE_DATA}: State): CardProductInfo | null => SITE_DATA.camera;
@@ -17,10 +17,13 @@ export const takeGetCameraStatus = ({[SlicerName.DataProcess]: SITE_DATA}: State
 export const takeRatings = ({[SlicerName.DataProcess]: SITE_DATA}: State): ProductRating[] => SITE_DATA.ratingArray;
 
 export const camerasSelector = createSelector(
-  [takeCameras, takeRatings, takeSortName, takeSortMode, takeCategory, takeTypes, takeLavel],
-  (cameras, ratings, sortName, sortMode, category, types, levels) => {
+  [takeCameras, takeRatings, takeSortName, takeSortMode, takeCategory, takeTypes, takeLavel, takeRangePrice],
+  (cameras, ratings, sortName, sortMode, category, types, levels, rangePrice) => {
     const newCameras = cameras.map((camera) => ({...camera, rating: Math.ceil(ratings.filter((el) => el.id === camera.id)[0]?.currentRating)}));
 
-    return filterLevel(filterTypes(filterCategory([...newCameras], category), types), levels).sort(sortingsMethods[(String(sortName + sortMode))]);
+
+    return filterRangePrice(filterLevel(filterTypes(filterCategory([...newCameras], category), types), levels), rangePrice.min, rangePrice.max)
+      .sort(sortingsMethods[(String(sortName + sortMode))]);
+
   }
 );

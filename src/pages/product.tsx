@@ -12,9 +12,11 @@ import ReviewList from '../components/review/review-list/review-list';
 import { sendRewiew } from '../types/types';
 import ErrorConnectMessage from '../components/error-conntect-message/error-connect-message';
 import ButtonScrollUp from '../components/button-scroll-up/button-scroll-up';
+import Spinner from '../components/spinner/spinner';
 
 
 function Product(): JSX.Element {
+  const [loading, setLoading] = useState<boolean>(false);
   const { id } = useParams();
   const dispatch = useAppDispatch();
   const currentProduct = useAppSelector(takeCamera);
@@ -25,6 +27,10 @@ function Product(): JSX.Element {
   const getCameraStatus = useAppSelector(takeGetCameraStatus);
 
   useEffect(() => {
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+    }, 1000);
     if (id) {
       const parseId = Number(id);
       dispatch(getCamera(parseId));
@@ -65,6 +71,10 @@ function Product(): JSX.Element {
   const onPrevSliderPosition = () => {
     setSliderPosition((prev) => prev + SLIDER_STEP);
   };
+
+  if ( loading || getCameraStatus === LoadingStatus.Pending) {
+    return <Spinner/>;
+  }
 
   if (!currentProduct) {
     return <ErrorConnectMessage isVisible={getCameraStatus === LoadingStatus.Rejected ? 'is-active' : ''}/>;
