@@ -1,13 +1,13 @@
-import { render, screen } from '@testing-library/react';
-import { CardProductInfo, PromoProduct } from '../../types/types';
-import { AppRoutes, CategoryProduct, Mastery, SlicerName, TypeProduct } from '../../consts';
-import { createAPI } from '../../services/api';
-import MockAdapter from 'axios-mock-adapter';
-import { configureMockStore } from '@jedmao/redux-mock-store';
-import thunk from 'redux-thunk';
 import { Provider } from 'react-redux';
-import App from '../app/app';
+import {render, screen} from '@testing-library/react';
+import { configureMockStore } from '@jedmao/redux-mock-store';
+import MockAdapter from 'axios-mock-adapter';
+import thunk from 'redux-thunk';
+import { createAPI } from '../../services/api';
+import { AppRoutes, CategoryProduct, Mastery, PriceRange, SlicerName, SortMode, SortName, TypeProduct } from '../../consts';
 import browserHistory from '../../browser-history';
+import { CardProductInfo, PromoProduct } from '../../types/types';
+import App from '../app/app';
 
 const promo: PromoProduct = {
   id: 1,
@@ -22,10 +22,10 @@ const productArray: CardProductInfo [] = [
   {
     category: CategoryProduct.Camcorder,
     description: `Немецкий концерн BRW разработал видеокамеру Das Auge IV в начале 80-х годов, однако она 
-          до сих пор пользуется популярностью среди коллекционеров 
-          и яростных почитателей старинной техники. Вы тоже можете прикоснуться 
-          к волшебству аналоговой съёмки, заказав этот чудо-аппарат. Кто знает, может с Das Auge IV начнётся ваш путь к
-          наградам всех престижных кинофестивалей.`,
+      до сих пор пользуется популярностью среди коллекционеров 
+      и яростных почитателей старинной техники. Вы тоже можете прикоснуться 
+      к волшебству аналоговой съёмки, заказав этот чудо-аппарат. Кто знает, может с Das Auge IV начнётся ваш путь к
+      наградам всех престижных кинофестивалей.`,
     id: 1,
     level: Mastery.Amateur,
     name: 'Ретрокамера Dus Auge lV',
@@ -40,6 +40,7 @@ const productArray: CardProductInfo [] = [
   }
 ];
 
+global.scrollTo = jest.fn();
 const api = createAPI();
 const mockApi = new MockAdapter(api);
 const middlewares = [thunk.withExtraArgument(api)];
@@ -51,26 +52,48 @@ mockApi
 
 const mockStore = configureMockStore(middlewares);
 
+
 const store = mockStore({
   [SlicerName.DataProcess]: {
     cameras: productArray,
     camera: productArray[0],
     similar: productArray,
     reviews: [],
-    promo: promo
+    promo: promo,
+    ratingArray: [{
+      id: 1,
+      currentRating: 3
+    }]
+  },
+  [SlicerName.FilterProcces]: {
+    currentSort: {
+      name: SortName.Unknown,
+      mode: SortMode.Increase
+    },
+    filter: {
+      category: null,
+      level: [],
+      type: []
+    },
+    rangePrice: {
+      min: PriceRange.Min,
+      max: PriceRange.Max,
+    }
   }
 });
 
+
 const fakeApp = (
+
   <Provider store={store}>
     <App />
   </Provider>
-);
 
+);
 describe('Card-product', () => {
-  it('should render CardProduct', () => {
+  it('should render CardProduct', async() => {
     browserHistory.push(AppRoutes.Catalog);
     render(fakeApp);
-    expect(screen.getAllByTestId('product-card-test')).toBeTruthy();
+    await screen.findAllByTestId('product-card-test', {} , {timeout: 2000});
   });
 });

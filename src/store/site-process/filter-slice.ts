@@ -19,8 +19,8 @@ const initialState: siteStore = {
   }
 };
 
-export const siteSlicer = createSlice({
-  name: SlicerName.SiteProcces,
+export const filterSlicer = createSlice({
+  name: SlicerName.FilterProcces,
   initialState,
   reducers: {
     setSort(state, action: PayloadAction<SortName>) {
@@ -59,5 +59,5 @@ export const siteSlicer = createSlice({
   }
 });
 
-export const {setSort, setMode, setLevel, setType, setCategory, setRangePrice} = siteSlicer.actions;
+export const {setSort, setMode, setLevel, setType, setCategory, setRangePrice} = filterSlicer.actions;
 

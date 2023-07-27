@@ -1,5 +1,5 @@
 import { Provider } from 'react-redux';
-import {render, screen} from '@testing-library/react';
+import { render, screen, waitFor} from '@testing-library/react';
 import { configureMockStore } from '@jedmao/redux-mock-store';
 import MockAdapter from 'axios-mock-adapter';
 import thunk from 'redux-thunk';
@@ -7,7 +7,8 @@ import { createAPI } from '../../services/api';
 import { AppRoutes, CategoryProduct, Mastery, PriceRange, SlicerName, SortMode, SortName, TypeProduct } from '../../consts';
 import browserHistory from '../../browser-history';
 import { CardProductInfo, PromoProduct } from '../../types/types';
-import App from '../app/app';
+import userEvent from '@testing-library/user-event';
+import App from '../../components/app/app';
 
 const promo: PromoProduct = {
   id: 1,
@@ -17,6 +18,10 @@ const promo: PromoProduct = {
   previewImgWebp: 'img/content/das-auge.webp',
   previewImgWebp2x: 'img/content/das-auge@2x.webp',
 };
+
+const changeId = (mockProducts: CardProductInfo []) =>
+  mockProducts.map((el, i) => ({...el, id: i}));
+
 
 const productArray: CardProductInfo [] = [
   {
@@ -40,6 +45,10 @@ const productArray: CardProductInfo [] = [
   }
 ];
 
+const cameras: CardProductInfo [] = changeId([productArray[0], productArray[0], productArray[0], productArray[0], productArray[0]
+  , productArray[0], productArray[0], productArray[0], productArray[0], productArray[0], productArray[0], productArray[0], productArray[0]]);
+
+
 global.scrollTo = jest.fn();
 const api = createAPI();
 const mockApi = new MockAdapter(api);
@@ -55,7 +64,7 @@ const mockStore = configureMockStore(middlewares);
 
 const store = mockStore({
   [SlicerName.DataProcess]: {
-    cameras: productArray,
+    cameras: cameras,
     camera: productArray[0],
     similar: productArray,
     reviews: [],
@@ -82,21 +91,70 @@ const store = mockStore({
   }
 });
 
-
 const fakeApp = (
-
   <Provider store={store}>
     <App />
   </Provider>
 
 );
 
-describe('Similar-slider', () => {
-  it('should render similar slider', async() => {
-    browserHistory.push('/catalog/product/1');
-    render(fakeApp);
+describe('useSearchParamsCustom', () => {
 
-    await screen.findByText('Похожие товары');
-    await screen.findAllByTestId('product-card-test');
+  describe('filterParams', () => {
+    it('shold filterParams is works', async() => {
+      browserHistory.replace('/catalog');
+      render(fakeApp);
+
+      const chekOne = await screen.findByText('Коллекционная', {}, {timeout: 2000});
+      await userEvent.click(chekOne);
+      await waitFor(() => expect(browserHistory.location.search).toBe('?filters=%D0%9A%D0%BE%D0%BB%D0%BB%D0%B5%D0%BA%D1%86%D0%B8%D0%BE%D0%BD%D0%BD%D0%B0%D1%8F&page=1'));
+
+    });
+  });
+  describe('setPageParams', () => {
+    it('should pageParams is works', async() => {
+      browserHistory.replace('/catalog');
+      render(fakeApp);
+
+      const activeButton = await screen.findByTestId('2-pag-test', {}, {timeout: 2000});
+
+      await userEvent.click(activeButton);
+      expect(browserHistory.location.search).toBe('?page=2');
+
+    });
+  });
+
+  describe('setPriceParams', () => {
+    it('should render priceParams', async() => {
+      browserHistory.replace(AppRoutes.Catalog);
+      render(fakeApp);
+
+      const minPrice = await screen.findByTestId('priceDown-test', {}, {timeout: 2000});
+
+      userEvent.type(minPrice , '1990');
+      await waitFor(() => expect(browserHistory.location.search).toBe('?page=1&priceMin=1990'), {timeout: 2000});
+    });
+  });
+
+  describe('setSortParams', () => {
+    it('should render sortTypeParams', async() => {
+      browserHistory.replace(AppRoutes.Catalog);
+      render(fakeApp);
+      const sortRating = await screen.findByText(/по популярности/i , {}, {timeout: 2000});
+
+      userEvent.click(sortRating);
+      await waitFor(() => expect(browserHistory.location.search).toBe('?sort=sortPopular'), {timeout: 2000} );
+    });
+
+  });
+
+  describe('sortModeParams', () => {
+    it('should render sortModeParams', async() => {
+      browserHistory.replace(AppRoutes.Catalog);
+      render(fakeApp);
+      const modeUp = await screen.findByTestId('down-test', {}, {timeout: 2000});
+      userEvent.click(modeUp);
+      await waitFor(() => expect(browserHistory.location.search).toBe('?sortOrder=down'), {timeout: 2000} );
+    });
   });
 });

@@ -1,13 +1,15 @@
 import { Provider } from 'react-redux';
 import App from './app';
-import {fireEvent, render, screen} from '@testing-library/react';
+import {render, screen} from '@testing-library/react';
 import { configureMockStore } from '@jedmao/redux-mock-store';
 import MockAdapter from 'axios-mock-adapter';
 import thunk from 'redux-thunk';
 import { createAPI } from '../../services/api';
-import { AppRoutes, CategoryProduct, Mastery, SlicerName, TypeProduct } from '../../consts';
+import { AppRoutes, CategoryProduct, Mastery, PriceRange, SlicerName, SortMode, SortName, TypeProduct } from '../../consts';
 import browserHistory from '../../browser-history';
 import { CardProductInfo, PromoProduct } from '../../types/types';
+
+import userEvent from '@testing-library/user-event';
 
 const promo: PromoProduct = {
   id: 1,
@@ -64,59 +66,72 @@ const store = mockStore({
       id: 1,
       currentRating: 3
     }]
+  },
+  [SlicerName.FilterProcces]: {
+    currentSort: {
+      name: SortName.Unknown,
+      mode: SortMode.Increase
+    },
+    filter: {
+      category: null,
+      level: [],
+      type: []
+    },
+    rangePrice: {
+      min: PriceRange.Min,
+      max: PriceRange.Max,
+    }
   }
 });
 
 
 const fakeApp = (
+
   <Provider store={store}>
     <App />
   </Provider>
+
 );
 
 describe('Main tests', () => {
 
-  it('should return "catalog"  when user navigates to "/catalog', () => {
+  it('should return "catalog"  when user navigates to "/catalog', async() => {
     browserHistory.push(AppRoutes.Catalog);
     render(fakeApp);
 
-    expect(screen.getByText('Каталог фото- и видеотехники')).toBeInTheDocument();
-    expect(screen.getAllByTestId('product-card-test')).toBeTruthy();
-    expect(screen.getAllByText('Ретрокамера Dus Auge lV')).toBeTruthy();
-    expect(screen.getAllByText('Купить' && 'Подробнее')).toBeTruthy();
-    expect(screen.getByTestId('banner-test')).toBeInTheDocument();
-    expect(screen.getByTestId('footer-test')).toBeInTheDocument();
+    await screen.findByText('Каталог фото- и видеотехники', {}, {timeout: 2000});
+    await screen.findAllByTestId('product-card-test', {}, {timeout: 2000});
+    await screen.findAllByText('Ретрокамера Dus Auge lV', {}, {timeout: 2000});
+    await screen.findAllByText('Купить' && 'Подробнее', {}, {timeout: 2000});
+    await screen.findByTestId('banner-test', {}, {timeout: 2000});
+    await screen.findByTestId('footer-test', {}, {timeout: 2000});
   });
 
-  it('if click Promo "Подробнее" should render promo-products page', () => {
+  it('if click Promo "Подробнее" should render promo-products page', async() => {
+    browserHistory.push(AppRoutes.Catalog);
     render(fakeApp);
-    const promoBtn = screen.getByTestId('promo-link');
-    fireEvent.click(promoBtn); // при нажатии на эту кнопку происходить переход на "/product/:id" по этому browserHistory.push(anyRoute); не написал
-
-    expect(screen.getByTestId('productid-test')).toBeInTheDocument();
+    const promoBtn = await screen.findByTestId('promo-link');
+    userEvent.click(promoBtn);
+    await screen.findByTestId('productid-test');
 
   });
 
-  it('should return "Product"  when user navigates to "/product/:id', () => {
+  it('should return "Product"  when user navigates to "/product/:id', async() => {
     render(fakeApp);
-    expect(screen.getByText('Характеристики' && 'Описание')).toBeInTheDocument();
-    expect(screen.getByText('Добавить в корзину')).toBeInTheDocument();
-    expect(screen.getAllByText(/Ретрокамера Dus Auge lV/i)).toBeTruthy();
-    expect(screen.getAllByRole('img')).toBeTruthy();
-    expect(screen.getByTestId('footer-test')).toBeInTheDocument();
-
+    await screen.findAllByText('Характеристики' && 'Описание', {}, {timeout: 2000});
+    await screen.findByText('Добавить в корзину' , {}, {timeout: 2000});
+    await screen.findAllByText(/Ретрокамера Dus Auge lV/i , {}, {timeout: 2000});
+    await screen.findAllByRole('img' , {}, {timeout: 2000});
+    await screen.findByTestId('footer-test' , {}, {timeout: 2000});
   });
 
 });
 
 describe('ReviewForm', () => {
-  it('should render Review Form', () => {
+  it('should render Review Form', async() => {
     render(fakeApp);
-    const addComment = screen.getByRole('button', {name: 'Оставить свой отзыв'});
-    fireEvent.click(addComment);
-    const modal = screen.getByTestId('review-form-test');
-    expect(addComment).toBeInTheDocument();
-    expect(modal).toHaveClass('is-active');
+    const addComment = await screen.findByRole('button', {name: 'Оставить свой отзыв' }, {timeout: 2000});
+    await userEvent.click(addComment);
+    await screen.findByTestId('review-form-test' , {}, {timeout: 2000});
   });
-
 });

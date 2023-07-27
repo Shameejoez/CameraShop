@@ -50,7 +50,7 @@ export const dataSlicer = createSlice({
         state.getCameraStatus = LoadingStatus.Pending;
       })
       .addCase(getCamera.rejected, (state, action) => {
-        if (action.error.code !== 'ERR_BAD_REQUEST'){
+        if (action.error?.code !== 'ERR_BAD_REQUEST'){
           state.getCameraStatus = LoadingStatus.Rejected;
         }
       })

@@ -1,7 +1,7 @@
 /* eslint-disable no-nested-ternary */
 import { ChangeEvent, useEffect } from 'react';
 import { useAppDispatch } from '../../hooks';
-import { setMode, setSort } from '../../store/site-process/site-slice';
+import { setMode, setSort } from '../../store/site-process/filter-slice';
 import { SortMode, SortName } from '../../consts';
 import useSearchParamsCustom from '../../hooks/use-search-params-custom/use-search-params-custom';
 
@@ -52,7 +52,7 @@ function CatalogSort (): JSX.Element {
           </div>
           <div className="catalog-sort__order">
             <div className="catalog-sort__btn catalog-sort__btn--up">
-              <input type="radio" id="up" name="sort-icon" defaultChecked aria-label="По возрастанию" onChange={(e)=> onSortButtonChange(e)}/>
+              <input type="radio" id="up" name="sort-icon" defaultChecked aria-label="По возрастанию" onChange={(e)=> onSortButtonChange(e)} data-testid={'up-test'}/>
               <label htmlFor="up">
                 <svg width={16} height={14} aria-hidden="true">
                   <use xlinkHref="#icon-sort" />
@@ -60,7 +60,7 @@ function CatalogSort (): JSX.Element {
               </label>
             </div>
             <div className="catalog-sort__btn catalog-sort__btn--down">
-              <input type="radio" id="down" name="sort-icon" aria-label="По убыванию" onChange={(e)=> onSortButtonChange(e)}/>
+              <input type="radio" id="down" name="sort-icon" aria-label="По убыванию" onChange={(e)=> onSortButtonChange(e)} data-testid={'down-test'}/>
               <label htmlFor="down">
                 <svg width={16} height={14} aria-hidden="true">
                   <use xlinkHref="#icon-sort" />

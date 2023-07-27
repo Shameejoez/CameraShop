@@ -157,7 +157,10 @@ describe('Reduser: data-slicer', () => {
 
     expect(dataSlicer.reducer(state, {type:getReviews.fulfilled.type, payload: review}))
       .toEqual({...state,
-        reviews: review
+        reviews: review,
+        ratingArray: [{
+          id: 88,
+          currentRating: 4,}]
       });
   });
   // опубликовать комментарий

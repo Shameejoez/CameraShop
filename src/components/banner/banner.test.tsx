@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 import { createAPI } from '../../services/api';
 import MockAdapter from 'axios-mock-adapter';
 import thunk from 'redux-thunk';
-import { AppRoutes, CategoryProduct, Mastery, SlicerName, TypeProduct } from '../../consts';
+import { AppRoutes, CategoryProduct, Mastery, PriceRange, SlicerName, SortMode, SortName, TypeProduct } from '../../consts';
 import { configureMockStore } from '@jedmao/redux-mock-store';
 import { Provider } from 'react-redux';
 import App from '../app/app';
@@ -23,10 +23,10 @@ const productArray: CardProductInfo [] = [
   {
     category: CategoryProduct.Camcorder,
     description: `Немецкий концерн BRW разработал видеокамеру Das Auge IV в начале 80-х годов, однако она 
-        до сих пор пользуется популярностью среди коллекционеров 
-        и яростных почитателей старинной техники. Вы тоже можете прикоснуться 
-        к волшебству аналоговой съёмки, заказав этот чудо-аппарат. Кто знает, может с Das Auge IV начнётся ваш путь к
-        наградам всех престижных кинофестивалей.`,
+      до сих пор пользуется популярностью среди коллекционеров 
+      и яростных почитателей старинной техники. Вы тоже можете прикоснуться 
+      к волшебству аналоговой съёмки, заказав этот чудо-аппарат. Кто знает, может с Das Auge IV начнётся ваш путь к
+      наградам всех престижных кинофестивалей.`,
     id: 1,
     level: Mastery.Amateur,
     name: 'Ретрокамера Dus Auge lV',
@@ -41,6 +41,7 @@ const productArray: CardProductInfo [] = [
   }
 ];
 
+global.scrollTo = jest.fn();
 const api = createAPI();
 const mockApi = new MockAdapter(api);
 const middlewares = [thunk.withExtraArgument(api)];
@@ -59,24 +60,45 @@ const store = mockStore({
     camera: productArray[0],
     similar: productArray,
     reviews: [],
-    promo: promo
+    promo: promo,
+    ratingArray: [{
+      id: 1,
+      currentRating: 3
+    }]
+  },
+  [SlicerName.FilterProcces]: {
+    currentSort: {
+      name: SortName.Unknown,
+      mode: SortMode.Increase
+    },
+    filter: {
+      category: null,
+      level: [],
+      type: []
+    },
+    rangePrice: {
+      min: PriceRange.Min,
+      max: PriceRange.Max,
+    }
   }
 });
 
 
 const fakeApp = (
+
   <Provider store={store}>
     <App />
   </Provider>
+
 );
 
 
 describe('Banner', () => {
-  it('should render banner', () => {
+  it('should render banner', async() => {
     browserHistory.push(AppRoutes.Catalog);
     render(fakeApp);
 
-    expect(screen.getByTestId('banner-test')).toBeInTheDocument();
+    await screen.findByTestId('banner-test' , {}, {timeout: 2000});
 
   });
 });

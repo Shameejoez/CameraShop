@@ -96,6 +96,7 @@ export enum SlicerName {
     DataProcess = 'DATA-PROCESS',
     SiteProcces = 'SITE-PROCESS',
     UserProcess = 'USER-PROCESS',
+    FilterProcces = 'FILTER-PROCESS',
 }
 
 export enum ApiRoutes {

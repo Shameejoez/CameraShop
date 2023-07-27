@@ -1,7 +1,7 @@
 import { Route, Routes, } from 'react-router-dom';
 import Catalog from '../../pages/catalog';
 import Header from '../header/header';
-import { AppRoutes, LoadingStatus } from '../../consts';
+import { AppRoutes, LoadingStatus} from '../../consts';
 import Product from '../../pages/product';
 import NotFound from '../not-found/not-found';
 import HistoryRouter from '../history-router.tsx/history-router';
@@ -34,12 +34,10 @@ function App(): JSX.Element {
 
   }, [cameras, dispatch]);
 
-
   if (loading || getCamerasStatus === LoadingStatus.Pending) {
     return (
       <Spinner/>
     );
-
   }
 
   return(
@@ -49,11 +47,10 @@ function App(): JSX.Element {
           <Route index element={<Catalog/>}/>
           <Route path={`${AppRoutes.Product}/:id`} element={<Product/>}/>
         </Route>
-        <Route path={'*'} element={<NotFound />} />
+        <Route path={'*'} element={<NotFound />}/>
       </Routes>
     </HistoryRouter>
   );
 }
-
 
 export default App;

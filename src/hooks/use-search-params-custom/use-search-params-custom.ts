@@ -4,7 +4,7 @@ import { TypeProduct } from '../../consts';
 import { RangePrice } from '../../types/types';
 
 type useSearchParamsCustomProps = {
-    initialPage?: number | null;
+    initialPage?: number;
     initialFilter?: string[] | null;
     initialSortType?: string | null;
     initialSortOrder?: string | null;
@@ -16,7 +16,7 @@ type useSearchParamsCustomProps = {
 
 const useSearchParamsCustom = ({initialPage, initialFilter, initialSortType, initialSortOrder, initialPrice}: useSearchParamsCustomProps) => {
   const [search, setSearch] = useSearchParams();
-  const [page, setPage] = useState<number | null>(initialPage ?? null);
+  const [page, setPage] = useState<number>(initialPage ?? 0);
   const [filters, setFilters] = useState<string[] | null>(initialFilter ?? null);
   const [sortType, setSortType] = useState<string | null>(initialSortType ?? null);
   const [sortOrder, setSortOrder] = useState<string | null>(initialSortOrder ?? null);

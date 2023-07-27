@@ -2,7 +2,7 @@
 import { ChangeEvent, useEffect } from 'react';
 import { CategoryProduct, FilterCategoryName, Mastery, TypeProduct } from '../../consts';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { setCategory, setLevel, setRangePrice, setType } from '../../store/site-process/site-slice';
+import { setCategory, setLevel, setRangePrice, setType } from '../../store/site-process/filter-slice';
 import useSearchParamsCustom from '../../hooks/use-search-params-custom/use-search-params-custom';
 import { camerasSelector } from '../../store/data-process/data-selectors';
 
@@ -11,7 +11,7 @@ type CatalogFilterProps = {
 }
 
 function CatalogFilter ({onResetPage}: CatalogFilterProps): JSX.Element {
-  const {setFilterParams, filters, deleteFilterParams, setPriceUpParams, setPriceDownParams, prices, setPageParams} = useSearchParamsCustom({initialFilter: null, initialPrice: { min: null, max: null}});
+  const {setFilterParams, filters, deleteFilterParams, setPriceUpParams, setPriceDownParams, prices, setPageParams} = useSearchParamsCustom({initialFilter: [], initialPrice: { min: null, max: null}});
   const dispatch = useAppDispatch();
   const camerasPrices = useAppSelector(camerasSelector).map((camera) => camera.price);
   const camerasPricesMin = Math.min.apply(null, camerasPrices);
@@ -93,6 +93,7 @@ function CatalogFilter ({onResetPage}: CatalogFilterProps): JSX.Element {
   };
 
   const onChangeSetFilters = (e: ChangeEvent<HTMLInputElement>) => {
+
     onResetPage(0);
     setFilterParams(e);
     setPageParams(0);
@@ -143,12 +144,12 @@ function CatalogFilter ({onResetPage}: CatalogFilterProps): JSX.Element {
           <div className="catalog-filter__price-range">
             <div className="custom-input">
               <label>
-                <input type="number" name="priceDown" id='priceMin' placeholder={String(camerasPricesMin)} onChange={onChangeSetPriceParams}/>
+                <input type="number" name="priceDowm" id='priceMin' placeholder={String(camerasPricesMin)} onChange={onChangeSetPriceParams} data-testid={'priceDown-test'}/>
               </label>
             </div>
             <div className="custom-input">
               <label>
-                <input type="number" name="priceUp" id='priceMax' placeholder={String(camerasPricesMax)} onChange={onChangeSetPriceParams} />
+                <input type="number" name="priceUp" id='priceMax' placeholder={String(camerasPricesMax)} onChange={onChangeSetPriceParams} data-testid={'priceUp-test'}/>
               </label>
             </div>
           </div>

@@ -85,16 +85,6 @@ export const getReviews = createAsyncThunk<Review[], CardProductInfo['id'], {ext
   }
 );
 
-export const getReviewssss = createAsyncThunk<Review[], CardProductInfo['id'], {extra: Extra}>(
-  Action.GET_REVIEWS,
-  async(id, {extra}) => {
-    const {api} = extra;
-    const {data} = await api.get<Review[]>(`${ApiRoutes.cameras}/${id}${ApiRoutes.reviews}`);
-
-    return data;
-
-  }
-);
 // оставить комментарий
 export const postReview = createAsyncThunk<Review, sendRewiew, {extra: Extra}>(
   Action.POST_REVIEW,

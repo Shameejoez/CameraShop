@@ -1,11 +1,11 @@
 import { combineReducers} from '@reduxjs/toolkit';
 import { SlicerName } from '../consts';
 import { dataSlicer } from './data-process/data-slice';
-import { siteSlicer } from './site-process/site-slice';
+import { filterSlicer } from './site-process/filter-slice';
 
 
 export const rootReducer = combineReducers({
   [SlicerName.DataProcess]: dataSlicer.reducer,
-  [SlicerName.SiteProcces]: siteSlicer.reducer,
+  [SlicerName.FilterProcces]: filterSlicer.reducer,
 
 });

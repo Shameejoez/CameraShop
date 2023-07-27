@@ -2,7 +2,7 @@ import type { CardProductInfo, ProductRating, PromoProduct, Review } from '../..
 import { LoadingStatus, SlicerName } from '../../consts';
 import { State } from '../../types/state';
 import { createSelector } from '@reduxjs/toolkit';
-import { takeCategory, takeLavel, takeRangePrice, takeSortMode, takeSortName, takeTypes } from '../site-process/site-selectors';
+import { takeCategory, takeLavel, takeRangePrice, takeSortMode, takeSortName, takeTypes } from '../site-process/filter-selectors';
 import { sortingsMethods } from '../../utils/utils';
 import { filterCategory, filterLevel, filterTypes, filterRangePrice } from '../../utils/filters';
 

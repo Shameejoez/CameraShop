@@ -1,6 +1,6 @@
 import { Provider } from 'react-redux';
 import App from '../../app/app';
-import { fireEvent, render, screen} from '@testing-library/react';
+import { fireEvent, render, screen, waitFor} from '@testing-library/react';
 import { configureMockStore } from '@jedmao/redux-mock-store';
 import MockAdapter from 'axios-mock-adapter';
 import thunk, { ThunkDispatch } from 'redux-thunk';
@@ -98,11 +98,12 @@ describe('RevieList', () => {
     browserHistory.push(`${AppRoutes.Catalog}/${AppRoutes.Product}/1`);
     render(fakeApp);
 
-    const addComment = screen.getByRole('button', {name: 'Оставить свой отзыв'});
+    const addComment = await screen.findByRole('button', {name: 'Оставить свой отзыв'} , {timeout: 2000});
+    const reviewForm = await screen.findByTestId('review-form-test', {} , {timeout: 2000});
     fireEvent.click(addComment);
-    const reviewForm = screen.getByTestId('review-form-test');
-    expect(reviewForm).toHaveClass('is-active');
-    const submitReview = screen.getByRole('button', {name: 'Отправить отзыв'});
+
+    await waitFor(() => expect(reviewForm).toHaveClass('is-active'));
+    const submitReview = await screen.findByRole('button', {name: 'Отправить отзыв'} , {timeout: 2000});
 
     mockApi
       .onPost(ApiRoutes.reviews, commentToSend)
@@ -111,7 +112,7 @@ describe('RevieList', () => {
     await store.dispatch(postReview(commentToSend));
     fireEvent.click(submitReview);
 
-    expect(screen.getByText('Ну ни че так' && 'Ва ва ваааууууу' && 'фу фу фиииии' && 'Зина')).toBeInTheDocument();
+    await screen.findByText('Ну ни че так' && 'Ва ва ваааууууу' && 'фу фу фиииии' && 'Зина', {} , {timeout: 2000});
   });
 });
 

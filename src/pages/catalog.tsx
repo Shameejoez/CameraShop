@@ -13,7 +13,7 @@ import useSearchParamsCustom from '../hooks/use-search-params-custom/use-search-
 function Catalog(): JSX.Element {
   const cameras = useAppSelector(camerasSelector);
   const getCamerasStatus = useAppSelector(takeGetCamerasStatus);
-  const {page, setPageParams} = useSearchParamsCustom({initialPage: 1});
+  const {page, setPageParams} = useSearchParamsCustom({initialPage: 0});
   const currentPageHandler = (pageNumber: number) => {
     setPageParams(pageNumber);
   };
@@ -47,13 +47,13 @@ function Catalog(): JSX.Element {
                 <div className="cards catalog__cards">
 
                   { cameras.length === 0 ? 'Ничего не найдено' :
-                    renderCatalogBook()[(page as number)].map((camera) =>
+                    renderCatalogBook()[page].map((camera) =>
                       <CardProduct camera={camera} key={camera.id}/>
                     )}
                 </div>
                 {
                   catalogPageCount >= 2 &&
-                      <Pagination setActivePage={currentPageHandler} countPage={catalogPageCount} activePage={page as number}/>
+                      <Pagination setActivePage={currentPageHandler} countPage={catalogPageCount} activePage={page}/>
                 }
               </div>
             </div>

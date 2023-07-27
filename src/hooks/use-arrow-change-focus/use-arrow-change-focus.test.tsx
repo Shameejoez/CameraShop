@@ -1,16 +1,14 @@
-import { render, screen } from '@testing-library/react';
-import { CardProductInfo, PromoProduct } from '../../types/types';
-import { AppRoutes, CategoryProduct, Mastery, PriceRange, SlicerName, SortMode, SortName, TypeProduct } from '../../consts';
-import { createAPI } from '../../services/api';
+import { Provider } from 'react-redux';
+import { render, screen} from '@testing-library/react';
+import { configureMockStore } from '@jedmao/redux-mock-store';
 import MockAdapter from 'axios-mock-adapter';
 import thunk from 'redux-thunk';
-import { configureMockStore } from '@jedmao/redux-mock-store';
-import { Provider } from 'react-redux';
-import App from '../app/app';
+import { createAPI } from '../../services/api';
+import { AppRoutes, CategoryProduct, Mastery, PriceRange, SlicerName, SortMode, SortName, TypeProduct } from '../../consts';
 import browserHistory from '../../browser-history';
-import { act } from 'react-dom/test-utils';
+import { CardProductInfo, PromoProduct } from '../../types/types';
 import userEvent from '@testing-library/user-event';
-
+import App from '../../components/app/app';
 
 const promo: PromoProduct = {
   id: 1,
@@ -85,34 +83,46 @@ const store = mockStore({
   }
 });
 
-
 const fakeApp = (
-
   <Provider store={store}>
     <App />
   </Provider>
 
 );
 
-
-describe('Breadcrumbs', () => {
-
-  it('should breadcrumbs link is added', async() => {
-    browserHistory.push(`${AppRoutes.Catalog}/${AppRoutes.Product}/${productArray[0].id}`);
+describe('useArrowChangeFocus', () => {
+  it('should useArrowChangeFocus is works if push ArrowDown', async() => {
+    browserHistory.push(AppRoutes.Catalog);
     render(fakeApp);
-    await screen.findByTestId('1-test');
+
+    const searchInput = await screen.findByPlaceholderText('Поиск по сайту');
+
+    userEvent.type(searchInput, 'Ретрокамера');
+
+
+    const lowerElement = await screen.findByTestId('1');
+
+    await userEvent.keyboard('[ArrowDown]');
+    await userEvent.keyboard('[ArrowDown]');
+    expect(lowerElement).toHaveFocus();
+    await userEvent.keyboard('[ArrowDown]');
+    expect(searchInput).toHaveFocus();
   });
 
-  it('should crumb is deleted', async () => {
+  it('should useArrowChangeFocus is works', async() => {
+    browserHistory.replace(AppRoutes.Catalog);
     render(fakeApp);
 
-    userEvent.click(await screen.findByTestId('catalog-test', {}, {timeout: 2000}));
-    act (() => {
-      browserHistory.replace('/catalog');
-    });
+    const searchInput = await screen.findByPlaceholderText('Поиск по сайту');
 
-    render(fakeApp);
+    userEvent.type(searchInput, 'bbb');
 
-    expect(screen.queryByTestId(`${productArray[0].id}-test`)).not.toBeInTheDocument();
+    const lowerElement = await screen.findByTestId('no-similar', {}, {timeout: 2000});
+    searchInput.focus();
+    await userEvent.keyboard('[Key38]');
+    await userEvent.keyboard('[ArrowUp]');
+
+    expect(lowerElement).toHaveFocus();
+
   });
 });

@@ -2,7 +2,7 @@ import { useAppSelector } from '../../../hooks';
 import { takeCameras } from '../../../store/data-process/data-selectors';
 import { useState, ChangeEvent, useRef, useEffect } from 'react';
 import browserHistory from '../../../browser-history';
-import useArrowChangeFocus from '../../../hooks/useArrowChangeFocus/useArrowChangeFocus';
+import useArrowChangeFocus from '../../../hooks/use-arrow-change-focus/use-arrow-change-focus';
 
 function SearchBar (): JSX.Element {
   const productNames = useAppSelector(takeCameras).map((el) => ({id:el.id ,name:el.name}));
@@ -56,11 +56,11 @@ function SearchBar (): JSX.Element {
 
   const renderSearchItem = () => {
     if ( searchProducts.length === 0 ) {
-      return <li className="form-search__select-item" tabIndex={0} >Не найдено</li>;
+      return <li className="form-search__select-item" data-testid={'no-similar'} tabIndex={0} >Не найдено</li>;
     }
     if (searchProducts.length > 0) {
       return searchProducts.map((el) =>(
-        <li key={el.name} className="form-search__select-item"
+        <li key={el.name} className="form-search__select-item" data-testid={el.id}
           tabIndex={0} onClick={() => onClickRedirectProduct(el.id)}
         >{el.name}
         </li>));
