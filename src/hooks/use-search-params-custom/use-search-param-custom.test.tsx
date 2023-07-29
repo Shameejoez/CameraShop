@@ -20,7 +20,22 @@ const promo: PromoProduct = {
 };
 
 const changeId = (mockProducts: CardProductInfo []) =>
-  mockProducts.map((el, i) => ({...el, id: i}));
+  mockProducts.map((el, i) => ({
+    ...el,
+    category: CategoryProduct.Camcorder,
+    description: `${i}.`,
+    id: i,
+    level: Mastery.Amateur,
+    name: `${i}.`,
+    previewImg: 'img/content/das-auge.jpg',
+    previewImg2x: 'img/content/das-auge@2x.jpg',
+    previewImgWebp: 'img/content/das-auge.webp',
+    previewImgWebp2x: 'img/content/das-auge@2x.webp',
+    price: 73450,
+    reviewCount: 5,
+    type: TypeProduct.Collectible,
+    vendorCode: 'DA4IU67AD5',
+  }));
 
 
 const productArray: CardProductInfo [] = [

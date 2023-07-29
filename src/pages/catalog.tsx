@@ -9,10 +9,14 @@ import { camerasSelector, takeGetCamerasStatus } from '../store/data-process/dat
 import { LoadingStatus, PRODUCTS_ON_PAGE } from '../consts';
 import ErrorConnectMessage from '../components/error-conntect-message/error-connect-message';
 import useSearchParamsCustom from '../hooks/use-search-params-custom/use-search-params-custom';
+import { filterRangePrice } from '../utils/filters';
+import { takeRangePrice } from '../store/site-process/filter-selectors';
 
 function Catalog(): JSX.Element {
-  const cameras = useAppSelector(camerasSelector);
+  const rangePrice = useAppSelector(takeRangePrice);
+  const cameras = filterRangePrice(useAppSelector(camerasSelector), rangePrice.min, rangePrice.max);
   const getCamerasStatus = useAppSelector(takeGetCamerasStatus);
+
   const {page, setPageParams} = useSearchParamsCustom({initialPage: 0});
   const currentPageHandler = (pageNumber: number) => {
     setPageParams(pageNumber);
@@ -60,7 +64,10 @@ function Catalog(): JSX.Element {
           </div>
         </section>
       </div>
-      <ErrorConnectMessage isVisible={getCamerasStatus === LoadingStatus.Rejected ? 'is-active' : ''}/>
+      {
+        getCamerasStatus === LoadingStatus.Rejected &&
+     <ErrorConnectMessage isVisible={getCamerasStatus === LoadingStatus.Rejected ? 'is-active' : ''}/>
+      }
     </main>
   );
 }

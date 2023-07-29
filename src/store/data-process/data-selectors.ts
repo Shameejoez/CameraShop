@@ -4,7 +4,7 @@ import { State } from '../../types/state';
 import { createSelector } from '@reduxjs/toolkit';
 import { takeCategory, takeLavel, takeRangePrice, takeSortMode, takeSortName, takeTypes } from '../site-process/filter-selectors';
 import { sortingsMethods } from '../../utils/utils';
-import { filterCategory, filterLevel, filterTypes, filterRangePrice } from '../../utils/filters';
+import { filterCategory, filterLevel, filterTypes } from '../../utils/filters';
 
 export const takeCameras = ({[SlicerName.DataProcess]: SITE_DATA}: State): CardProductInfo[] => SITE_DATA.cameras;
 export const takeCamera = ({[SlicerName.DataProcess]: SITE_DATA}: State): CardProductInfo | null => SITE_DATA.camera;
@@ -18,11 +18,11 @@ export const takeRatings = ({[SlicerName.DataProcess]: SITE_DATA}: State): Produ
 
 export const camerasSelector = createSelector(
   [takeCameras, takeRatings, takeSortName, takeSortMode, takeCategory, takeTypes, takeLavel, takeRangePrice],
-  (cameras, ratings, sortName, sortMode, category, types, levels, rangePrice) => {
+  (cameras, ratings, sortName, sortMode, category, types, levels) => {
     const newCameras = cameras.map((camera) => ({...camera, rating: Math.ceil(ratings.filter((el) => el.id === camera.id)[0]?.currentRating)}));
 
 
-    return filterRangePrice(filterLevel(filterTypes(filterCategory([...newCameras], category), types), levels), rangePrice.min, rangePrice.max)
+    return filterLevel(filterTypes(filterCategory([...newCameras], category), types), levels)
       .sort(sortingsMethods[(String(sortName + sortMode))]);
 
   }

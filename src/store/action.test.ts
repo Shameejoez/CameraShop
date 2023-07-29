@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { AxiosInstance } from 'axios';
 import { CardProductInfo, PromoProduct, Review, sendRewiew } from '../types/types';
 import { getCameras, getCamera, getSimilarCameras, getReviews, getPromo, postReview } from './action';
@@ -8,6 +9,8 @@ import { createAPI } from '../services/api';
 import thunk, {ThunkDispatch} from 'redux-thunk';
 import { State } from '../types/state';
 import {Action} from 'redux';
+
+window.open = jest.fn();
 
 const commentToSend: sendRewiew = {
   advantage: 'Ва ва ваааууууу',
@@ -91,6 +94,15 @@ const productArray: CardProductInfo [] = [
   }
 ];
 
+global.window = Object.create(window);
+const url = 'http://localhost';
+Object.defineProperty(window, 'location', {
+  value: {
+    href: url,
+  },
+  writable: true,
+});
+
 describe('fetch products data', () => {
 
   const api = createAPI();
@@ -113,7 +125,6 @@ describe('fetch products data', () => {
 
   describe('getCameras', () => {
     it('should return 200 and array as CardProductInfo[]', async() => {
-
       mockAPI
         .onGet(ApiRoutes.cameras)
         .reply(200, productArray);

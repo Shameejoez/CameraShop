@@ -1,7 +1,8 @@
+import { CategoryProduct, Mastery, TypeProduct } from '../consts';
 import { CardProductInfo } from '../types/types';
 
 // фильтр категорий
-export const filterCategory = (cameras: CardProductInfo[], filterName: ('Видеокамера' | 'Фотокамера' | null)) => {
+export const filterCategory = (cameras: CardProductInfo[], filterName: CategoryProduct | null) => {
   if (filterName === 'Видеокамера') {
     return cameras.filter((camera) => camera.category === 'Видеокамера');
   }
@@ -14,7 +15,7 @@ export const filterCategory = (cameras: CardProductInfo[], filterName: ('Вид�
 
 // фильтр типов;
 export const filterTypes = (
-  cameras: CardProductInfo[], filtersName: ('Цифровая' | 'Плёночная' | 'Моментальная' | 'Коллекционная')[]
+  cameras: CardProductInfo[], filtersName: TypeProduct[]
 ) => {
   const filteredCameras: CardProductInfo[][] = [];
   filtersName?.forEach((el) => {
@@ -32,7 +33,7 @@ export const filterTypes = (
 };
 
 // фильтр по уровню мастерства
-export const filterLevel = (cameras: CardProductInfo[], filtersName: ('Нулевой' | 'Любительский' | 'Профессиональный')[]) => {
+export const filterLevel = (cameras: CardProductInfo[], filtersName: Mastery[]) => {
   const filteredCameras: CardProductInfo[][] = [];
   filtersName?.forEach((el) => {
     const currentFilter = el;

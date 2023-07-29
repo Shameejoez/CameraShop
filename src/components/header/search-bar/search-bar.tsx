@@ -8,14 +8,14 @@ function SearchBar (): JSX.Element {
   const productNames = useAppSelector(takeCameras).map((el) => ({id:el.id ,name:el.name}));
   const [inputValue, setInputValue] = useState<string>('');
   const barRef = useRef<HTMLDivElement | null>(null);
-  const [xx, xxxx] = useState<number | null>(null);
+  const [inFocus, setInFocus] = useState<number | null>(null);
   const focusedEllement = productNames.filter((el) => el.name === document.activeElement?.textContent);
 
   useEffect(() => {
     if (document.activeElement?.textContent !== focusedEllement[0]?.name) {
       return;
     }
-    xxxx(focusedEllement[0].id);
+    setInFocus(focusedEllement[0].id);
     document.addEventListener('keydown', onKeyDownEnterRedirectProduct);
 
     return () => document.removeEventListener('keydown', onKeyDownEnterRedirectProduct);
@@ -38,12 +38,12 @@ function SearchBar (): JSX.Element {
 
   const onKeyDownEnterRedirectProduct = (e: KeyboardEvent) => {
 
-    if(e.code === 'Enter' && xx) {
+    if(e.code === 'Enter' && inFocus) {
 
       setInputValue('');
-      browserHistory.push(`/catalog/product/${xx}#description`);
+      browserHistory.push(`/catalog/product/${inFocus}#description`);
     }
-    xxxx(null);
+    setInFocus(null);
     window.blur();
   };
 

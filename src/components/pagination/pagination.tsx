@@ -12,7 +12,6 @@ function Pagination ({ setActivePage, countPage, activePage}: PaginationProps): 
     setActivePage(idx);
   };
 
-
   const renderPaginationLi = () =>
     Array.from({length: countPage }, (_, i) =>
       (

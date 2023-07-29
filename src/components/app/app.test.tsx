@@ -1,6 +1,6 @@
 import { Provider } from 'react-redux';
 import App from './app';
-import {render, screen} from '@testing-library/react';
+import {render, screen, waitFor} from '@testing-library/react';
 import { configureMockStore } from '@jedmao/redux-mock-store';
 import MockAdapter from 'axios-mock-adapter';
 import thunk from 'redux-thunk';
@@ -99,12 +99,14 @@ describe('Main tests', () => {
     browserHistory.push(AppRoutes.Catalog);
     render(fakeApp);
 
-    await screen.findByText('Каталог фото- и видеотехники', {}, {timeout: 2000});
-    await screen.findAllByTestId('product-card-test', {}, {timeout: 2000});
-    await screen.findAllByText('Ретрокамера Dus Auge lV', {}, {timeout: 2000});
-    await screen.findAllByText('Купить' && 'Подробнее', {}, {timeout: 2000});
-    await screen.findByTestId('banner-test', {}, {timeout: 2000});
-    await screen.findByTestId('footer-test', {}, {timeout: 2000});
+    await waitFor(() => {
+      screen.getByText('Каталог фото- и видеотехники');
+      screen.getAllByTestId('product-card-test');
+      screen.getAllByText('Ретрокамера Dus Auge lV');
+      screen.getAllByText('Купить' && 'Подробнее');
+      screen.getByTestId('banner-test');
+      screen.getByTestId('footer-test');
+    });
   });
 
   it('if click Promo "Подробнее" should render promo-products page', async() => {

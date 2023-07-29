@@ -14,11 +14,10 @@ function CatalogFilter ({onResetPage}: CatalogFilterProps): JSX.Element {
   const {setFilterParams, filters, deleteFilterParams, setPriceUpParams, setPriceDownParams, prices, setPageParams} = useSearchParamsCustom({initialFilter: [], initialPrice: { min: null, max: null}});
   const dispatch = useAppDispatch();
   const camerasPrices = useAppSelector(camerasSelector).map((camera) => camera.price);
-  const camerasPricesMin = Math.min.apply(null, camerasPrices);
-  const camerasPricesMax = Math.max.apply(null, camerasPrices);
+  const camerasPricesMin = Math.min(...camerasPrices);
+  const camerasPricesMax = Math.max(...camerasPrices);
 
   useEffect(() => {
-
     dispatch(setRangePrice({
       min : prices.min,
       max:  prices.max === 0 ? 199000 : prices.max
@@ -29,6 +28,7 @@ function CatalogFilter ({onResetPage}: CatalogFilterProps): JSX.Element {
     }
 
   }, [filters, prices]);
+
 
   const onChangePushFilters = (filterName: string) => {
     switch(filterName) {
@@ -54,19 +54,48 @@ function CatalogFilter ({onResetPage}: CatalogFilterProps): JSX.Element {
     }
   };
 
-  const onChangeSetPriceParams = (e: ChangeEvent<HTMLInputElement>) => {
+  const onChangeSetPriceMin = (e: ChangeEvent<HTMLInputElement>) =>{
     onResetPage(0);
     setPageParams(0);
-    e.target.id === 'priceMax' ? setPriceUpParams(e) : setPriceDownParams(e);
+    setPriceDownParams(e.target.value);
   };
 
+  const onBlurSetPriceMin = (e: ChangeEvent<HTMLInputElement>) => {
+    onResetPage(0);
+    setPageParams(0);
+    if (e.target.value === '') {
+      return;
+    }
+    if(Number(e.target.value) < camerasPricesMin) {
+      e.target.value = String(camerasPricesMin);
+      setPriceDownParams(String(camerasPricesMin));
+    }
+    if(Number(e.target.value) > camerasPricesMax) {
+      e.target.value = String(camerasPricesMax);
+      setPriceDownParams(String(camerasPricesMax));
+    }
+  };
+
+  const onChangeSetPriceMax = (e: ChangeEvent<HTMLInputElement>) =>{
+    onResetPage(0);
+    setPageParams(0);
+
+    if (Number(e.target.value) > camerasPricesMax) {
+
+      e.target.value = String(camerasPricesMax);
+      setPriceUpParams(String(camerasPricesMax));
+    } else {
+      setPriceUpParams(e.target.value);
+    }
+  };
 
   const onClickRemoveFilters = () => {
     onResetPage(0);
     setPageParams(0);
-    filters?.forEach((el) =>onChangeUnshiftFilters(el));
+    filters?.forEach((el) => onChangeUnshiftFilters(el));
     deleteFilterParams();
-
+    setPriceUpParams('');
+    setPriceDownParams('');
   };
 
   const onChangeUnshiftFilters = (filterName: string) => {
@@ -93,7 +122,6 @@ function CatalogFilter ({onResetPage}: CatalogFilterProps): JSX.Element {
   };
 
   const onChangeSetFilters = (e: ChangeEvent<HTMLInputElement>) => {
-
     onResetPage(0);
     setFilterParams(e);
     setPageParams(0);
@@ -144,12 +172,14 @@ function CatalogFilter ({onResetPage}: CatalogFilterProps): JSX.Element {
           <div className="catalog-filter__price-range">
             <div className="custom-input">
               <label>
-                <input type="number" name="priceDowm" id='priceMin' placeholder={String(camerasPricesMin)} onChange={onChangeSetPriceParams} data-testid={'priceDown-test'}/>
+                <input type="number" name="priceDowm" id='priceMin' placeholder={String(camerasPricesMin)} onChange={onChangeSetPriceMin}
+                  onBlur={onBlurSetPriceMin} data-testid={'priceDown-test'}
+                />
               </label>
             </div>
             <div className="custom-input">
               <label>
-                <input type="number" name="priceUp" id='priceMax' placeholder={String(camerasPricesMax)} onChange={onChangeSetPriceParams} data-testid={'priceUp-test'}/>
+                <input type="number" name="priceUp" id='priceMax' placeholder={String(camerasPricesMax)} onChange={onChangeSetPriceMax} data-testid={'priceUp-test'}/>
               </label>
             </div>
           </div>

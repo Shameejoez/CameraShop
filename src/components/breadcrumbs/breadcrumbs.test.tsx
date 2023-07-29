@@ -100,7 +100,7 @@ describe('Breadcrumbs', () => {
   it('should breadcrumbs link is added', async() => {
     browserHistory.push(`${AppRoutes.Catalog}/${AppRoutes.Product}/${productArray[0].id}`);
     render(fakeApp);
-    await screen.findByTestId('1-test');
+    await screen.findByTestId('1-test' , {}, {timeout: 2000});
   });
 
   it('should crumb is deleted', async () => {

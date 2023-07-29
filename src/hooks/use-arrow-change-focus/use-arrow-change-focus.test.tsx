@@ -41,6 +41,7 @@ const productArray: CardProductInfo [] = [
   }
 ];
 
+window.blur = jest.fn();
 global.scrollTo = jest.fn();
 const api = createAPI();
 const mockApi = new MockAdapter(api);
@@ -99,9 +100,8 @@ describe('useArrowChangeFocus', () => {
 
     userEvent.type(searchInput, 'Ретрокамера');
 
-
     const lowerElement = await screen.findByTestId('1');
-
+    searchInput.focus();
     await userEvent.keyboard('[ArrowDown]');
     await userEvent.keyboard('[ArrowDown]');
     expect(lowerElement).toHaveFocus();
@@ -113,16 +113,14 @@ describe('useArrowChangeFocus', () => {
     browserHistory.replace(AppRoutes.Catalog);
     render(fakeApp);
 
-    const searchInput = await screen.findByPlaceholderText('Поиск по сайту');
-
+    const searchInput = await screen.findByPlaceholderText('Поиск по сайту', {}, {timeout: 2000});
     userEvent.type(searchInput, 'bbb');
 
     const lowerElement = await screen.findByTestId('no-similar', {}, {timeout: 2000});
-    searchInput.focus();
-    await userEvent.keyboard('[Key38]');
     await userEvent.keyboard('[ArrowUp]');
 
-    expect(lowerElement).toHaveFocus();
 
+    expect(lowerElement).toHaveFocus();
   });
 });
+

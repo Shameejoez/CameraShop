@@ -32,14 +32,16 @@ const useSearchParamsCustom = ({initialPage, initialFilter, initialSortType, ini
 
   /// Фильтры
   const setFilterParams = (e: ChangeEvent<HTMLInputElement>) => {
-    const currenFilter = e.target.id;
+    const {id, checked } = e.target;
+    const currenFilter = id;
+
     let filterParams = search.get('filters')?.split(',') ?? [];
 
-    if (e.target.checked && e.target.id === 'Видеокамера') {
+    if (checked && currenFilter === 'Видеокамера') {
       filterParams = filterParams.filter((filter) => (filter !== TypeProduct.Instant && filter !== TypeProduct.Digital));
     }
 
-    if(e.target.checked) {
+    if(checked) {
       filterParams.push(currenFilter);
     } else {
       filterParams = filterParams.filter((filter) => filter !== currenFilter);
@@ -63,12 +65,12 @@ const useSearchParamsCustom = ({initialPage, initialFilter, initialSortType, ini
   };
 
   // Цена
-  const setPriceUpParams = (e: ChangeEvent<HTMLInputElement>) => {
-    if (e.target.id === 'priceMax' && e.target.value.length > 0) {
-      search.set(e.target.id, e.target.value);
-      setPrices((prev) => ({...prev, max: Number(e.target.value)}));
+  const setPriceUpParams = (value: string) => {
+    if ( value.length > 0) {
+      search.set('priceMax', value);
+      setPrices((prev) => ({...prev, max: Number(value)}));
     } else {
-      search.delete(e.target.id);
+      search.delete('priceMax');
       setPrices((prev) => ({...prev, max: null}));
     }
 
@@ -76,12 +78,12 @@ const useSearchParamsCustom = ({initialPage, initialFilter, initialSortType, ini
 
   };
 
-  const setPriceDownParams = (e: ChangeEvent<HTMLInputElement>) => {
-    if (e.target.id === 'priceMin' && e.target.value.length > 0) {
-      search.set(e.target.id, e.target.value);
-      setPrices((prev) => ({...prev, min: Number(e.target.value)}));
+  const setPriceDownParams = (value: string) => {
+    if (value.length > 0) {
+      search.set('priceMin', value);
+      setPrices((prev) => ({...prev, min: Number(value)}));
     } else {
-      search.delete(e.target.id);
+      search.delete('priceMin');
       setPrices((prev) => ({...prev, min: null}));
     }
     setSearch(search);
@@ -93,7 +95,7 @@ const useSearchParamsCustom = ({initialPage, initialFilter, initialSortType, ini
     search.set('sort', currenSort);
 
     setSearch(search);
-    setSortType(e.target.id);
+    setSortType(currenSort);
   };
   // порядок сортировки
   const setSortOrderParams = (e: ChangeEvent<HTMLInputElement>) => {
@@ -101,7 +103,7 @@ const useSearchParamsCustom = ({initialPage, initialFilter, initialSortType, ini
     search.set('sortOrder', currentOrder);
 
     setSearch(search);
-    setSortOrder(e.target.id);
+    setSortOrder(currentOrder);
   };
   // Для настройки фильтров и сортировок по параметрам;
   const setAllParams = () => {
