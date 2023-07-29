@@ -57,7 +57,11 @@ function CatalogFilter ({onResetPage}: CatalogFilterProps): JSX.Element {
   const onChangeSetPriceMin = (e: ChangeEvent<HTMLInputElement>) =>{
     onResetPage(0);
     setPageParams(0);
+    if (e.target.value.includes('-')) {
+      e.target.value = '';
+    }
     setPriceDownParams(e.target.value);
+
   };
 
   const onBlurSetPriceMin = (e: ChangeEvent<HTMLInputElement>) => {
@@ -66,6 +70,7 @@ function CatalogFilter ({onResetPage}: CatalogFilterProps): JSX.Element {
     if (e.target.value === '') {
       return;
     }
+
     if(Number(e.target.value) < camerasPricesMin) {
       e.target.value = String(camerasPricesMin);
       setPriceDownParams(String(camerasPricesMin));
@@ -79,13 +84,24 @@ function CatalogFilter ({onResetPage}: CatalogFilterProps): JSX.Element {
   const onChangeSetPriceMax = (e: ChangeEvent<HTMLInputElement>) =>{
     onResetPage(0);
     setPageParams(0);
-
+    if (e.target.value.includes('-')) {
+      e.target.value = '';
+    }
     if (Number(e.target.value) > camerasPricesMax) {
-
       e.target.value = String(camerasPricesMax);
       setPriceUpParams(String(camerasPricesMax));
-    } else {
+    }
+    else {
       setPriceUpParams(e.target.value);
+    }
+  };
+
+  const onBlurSetPriceMax = (e: ChangeEvent<HTMLInputElement>) => {
+    onResetPage(0);
+    setPageParams(0);
+    if (Number(e.target.value) < camerasPricesMin) {
+      e.target.value = String(camerasPricesMin);
+      setPriceUpParams(String(camerasPricesMin));
     }
   };
 
@@ -179,7 +195,9 @@ function CatalogFilter ({onResetPage}: CatalogFilterProps): JSX.Element {
             </div>
             <div className="custom-input">
               <label>
-                <input type="number" name="priceUp" id='priceMax' placeholder={String(camerasPricesMax)} onChange={onChangeSetPriceMax} data-testid={'priceUp-test'}/>
+                <input type="number" name="priceUp" id='priceMax' placeholder={String(camerasPricesMax)} onChange={onChangeSetPriceMax}
+                  onBlur={onBlurSetPriceMax} data-testid={'priceUp-test'}
+                />
               </label>
             </div>
           </div>
