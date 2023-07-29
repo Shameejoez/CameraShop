@@ -99,6 +99,10 @@ function CatalogFilter ({onResetPage}: CatalogFilterProps): JSX.Element {
   const onBlurSetPriceMax = (e: ChangeEvent<HTMLInputElement>) => {
     onResetPage(0);
     setPageParams(0);
+    if (e.target.value === '') {
+      return;
+    }
+
     if (Number(e.target.value) < camerasPricesMin) {
       e.target.value = String(camerasPricesMin);
       setPriceUpParams(String(camerasPricesMin));
