@@ -1,4 +1,3 @@
-/* eslint-disable no-nested-ternary */
 import { LoadingStatus, RatingStarCategories, ReviewCustomInputData, STARS_COUNT } from '../../../consts';
 import { ChangeEvent, FormEvent, Fragment, useEffect, useRef, useState } from 'react';
 import type { sendRewiew } from '../../../types/types';
@@ -64,6 +63,7 @@ function ReviewForm ({ isVisible, setIsVisible, onSubmit, setIsVisibleSuccess, }
   };
 
   const isValidReview = () =>
+    // eslint-disable-next-line no-nested-ternary
     !reviewDirty ? '' : reviewDirty && reviewError ? 'is-invalid' : 'is-valid';
 
 
@@ -168,11 +168,12 @@ function ReviewForm ({ isVisible, setIsVisible, onSubmit, setIsVisibleSuccess, }
       setIsVisible('');
       removeAllFields();
       setIsVisibleSuccess('is-active');
-      dispatch(setSubmitReviewStatus(LoadingStatus.Unknown));// возвращает статус unknown
+      dispatch(setSubmitReviewStatus(LoadingStatus.Unknown));
     }
   });
 
   const isValidOrNo = (inputName: string) =>
+    // eslint-disable-next-line no-nested-ternary
     !getStateInput(inputName)?.isDirty ? '' : getStateInput(inputName)?.isValid && getStateInput(inputName)?.isDirty ? 'is-valid' : 'is-invalid';
 
   const renderCustomInput = () =>

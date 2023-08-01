@@ -4,9 +4,9 @@ import { BrowserRouter } from 'react-router-dom';
 
 
 describe('Pagination', () => {
-  const countPage = 8;// Тут используется как раз useState о котором я говорил
-  const setActivePage = jest.fn(); // это setState
-  const activePage = 1; //  state
+  const countPage = 8;
+  const setActivePage = jest.fn();
+  const activePage = 1;
 
   it('should clicks on numbers work and Pagination randered', () => {
     render (
@@ -19,7 +19,7 @@ describe('Pagination', () => {
 
     const activeButton = screen.getByRole('link', {name: '5'});
 
-    fireEvent.click(activeButton); // после этого клика должен смениться активны класс, но он не меняется
+    fireEvent.click(activeButton);
 
     expect(setActivePage).toBeCalled();
   });

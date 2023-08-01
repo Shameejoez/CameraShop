@@ -30,7 +30,7 @@ function Product(): JSX.Element {
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
-    }, 1000);
+    }, 500);
     if (id) {
       const parseId = Number(id);
       dispatch(getCamera(parseId));

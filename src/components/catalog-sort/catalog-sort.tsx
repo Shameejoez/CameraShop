@@ -1,8 +1,7 @@
-/* eslint-disable no-nested-ternary */
 import { ChangeEvent, useEffect } from 'react';
 import { useAppDispatch } from '../../hooks';
 import { setMode, setSort } from '../../store/site-process/filter-slice';
-import { SortMode, SortName } from '../../consts';
+import { SortMode, SortName, SortTypeId } from '../../consts';
 import useSearchParamsCustom from '../../hooks/use-search-params-custom/use-search-params-custom';
 
 function CatalogSort (): JSX.Element {
@@ -11,26 +10,27 @@ function CatalogSort (): JSX.Element {
   const { setSortOrderParams, sortOrder } = useSearchParamsCustom({initialSortOrder: null});
 
   useEffect(() => {
-    sortType === 'sortPrice' ? dispatch(setSort(SortName.Price)) :
-      sortType === 'sortPopular' ? dispatch(setSort(SortName.Rating)) :
+    // eslint-disable-next-line no-nested-ternary
+    sortType === SortTypeId.SortPrice ? dispatch(setSort(SortName.Price)) :
+      sortType === SortTypeId.SortPopular ? dispatch(setSort(SortName.Rating)) :
         dispatch(setSort(SortName.Unknown));
 
-    sortOrder === 'down' ? dispatch(setMode(SortMode.Decrease)) : dispatch(setMode(SortMode.Increase));
+    sortOrder === SortTypeId.SortDecrease ? dispatch(setMode(SortMode.Decrease)) : dispatch(setMode(SortMode.Increase));
   }, [sortOrder, sortType, dispatch]);
 
   const onChangeSetSearchParams = (e: ChangeEvent<HTMLInputElement>) =>
-    (e.target.id === 'up' || e.target.id === 'down') ? setSortOrderParams(e) : setSortTypeParams(e);
+    (e.target.id === SortTypeId.SortIncrease || e.target.id === SortTypeId.SortDecrease) ? setSortOrderParams(e) : setSortTypeParams(e);
 
   const onSortButtonChange = (e: ChangeEvent<HTMLInputElement>) => {
     onChangeSetSearchParams(e);
     switch (e.target.id) {
-      case 'sortPrice':
+      case SortTypeId.SortPrice:
         return dispatch(setSort(SortName.Price));
-      case 'sortPopular':
+      case SortTypeId.SortPopular:
         return dispatch(setSort(SortName.Rating));
-      case 'up':
+      case SortTypeId.SortIncrease:
         return dispatch(setMode(SortMode.Increase));
-      case 'down':
+      case SortTypeId.SortDecrease:
         return dispatch(setMode(SortMode.Decrease));
     }
   };

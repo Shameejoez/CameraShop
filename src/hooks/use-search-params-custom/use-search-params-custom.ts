@@ -1,6 +1,6 @@
 import { useSearchParams } from 'react-router-dom';
 import {useState, ChangeEvent, useEffect} from 'react';
-import { TypeProduct } from '../../consts';
+import { PriceRange, TypeProduct } from '../../consts';
 import { RangePrice } from '../../types/types';
 
 type useSearchParamsCustomProps = {
@@ -22,7 +22,7 @@ const useSearchParamsCustom = ({initialPage, initialFilter, initialSortType, ini
   const [sortOrder, setSortOrder] = useState<string | null>(initialSortOrder ?? null);
   const [prices, setPrices] = useState<RangePrice>({
     min: initialPrice?.min ?? 0,
-    max: initialPrice?.max ?? 199000,
+    max: initialPrice?.max ?? PriceRange.Max,
   });
 
   useEffect(() => {
@@ -32,8 +32,8 @@ const useSearchParamsCustom = ({initialPage, initialFilter, initialSortType, ini
 
   /// Фильтры
   const setFilterParams = (e: ChangeEvent<HTMLInputElement>) => {
-    const {id, checked } = e.target;
-    const currenFilter = id;
+    const { id: currenFilter, checked } = e.target;
+
 
     let filterParams = search.get('filters')?.split(',') ?? [];
 

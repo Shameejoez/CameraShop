@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { AxiosInstance } from 'axios';
 import { CardProductInfo, PromoProduct, Review, sendRewiew } from '../types/types';
 import { getCameras, getCamera, getSimilarCameras, getReviews, getPromo, postReview } from './action';
@@ -94,6 +93,7 @@ const productArray: CardProductInfo [] = [
   }
 ];
 
+// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 global.window = Object.create(window);
 const url = 'http://localhost';
 Object.defineProperty(window, 'location', {

@@ -1,6 +1,5 @@
-/* eslint-disable no-nested-ternary */
 import { ChangeEvent, useEffect } from 'react';
-import { CategoryProduct, FilterCategoryName, Mastery, TypeProduct } from '../../consts';
+import { CategoryProduct, FilterCategoryName, Mastery, PriceRange, SetFilterMode, TypeProduct } from '../../consts';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { setCategory, setLevel, setRangePrice, setType } from '../../store/site-process/filter-slice';
 import useSearchParamsCustom from '../../hooks/use-search-params-custom/use-search-params-custom';
@@ -20,7 +19,7 @@ function CatalogFilter ({onResetPage}: CatalogFilterProps): JSX.Element {
   useEffect(() => {
     dispatch(setRangePrice({
       min : prices.min,
-      max:  prices.max === 0 ? 199000 : prices.max
+      max:  prices.max === 0 ? PriceRange.Max : prices.max
     }));
 
     if ((filters as string[])?.length >= 1) {
@@ -32,25 +31,25 @@ function CatalogFilter ({onResetPage}: CatalogFilterProps): JSX.Element {
 
   const onChangePushFilters = (filterName: string) => {
     switch(filterName) {
-      case 'Видеокамера':
-        ['Плёночная', 'Моментальная'].forEach((filter) => onChangeUnshiftFilters(filter));
+      case CategoryProduct.Camera:
+        [TypeProduct.Instant, TypeProduct.Digital].forEach((filter) => onChangeUnshiftFilters(filter));
         return dispatch(setCategory(CategoryProduct.Camera));
-      case 'Фотокамера' :
+      case CategoryProduct.Camcorder :
         return dispatch(setCategory(CategoryProduct.Camcorder));
-      case 'Цифровая' :
-        return dispatch(setType({action: 'push', filterType: filterName}));
-      case 'Плёночная' :
-        return dispatch(setType({action: 'push', filterType: filterName}));
-      case 'Моментальная' :
-        return dispatch(setType({action: 'push', filterType: filterName}));
-      case 'Коллекционная' :
-        return dispatch(setType({action: 'push', filterType: filterName}));
-      case 'Нулевой' :
-        return dispatch(setLevel({action: 'push', filterType: filterName}));
-      case 'Любительский' :
-        return dispatch(setLevel({action: 'push', filterType: filterName}));
-      case 'Профессиональный' :
-        return dispatch(setLevel({action: 'push', filterType: filterName}));
+      case TypeProduct.Collectible :
+        return dispatch(setType({action: SetFilterMode.Push, filterType: filterName}));
+      case TypeProduct.Instant :
+        return dispatch(setType({action: SetFilterMode.Push, filterType: filterName}));
+      case TypeProduct.Digital :
+        return dispatch(setType({action: SetFilterMode.Push, filterType: filterName}));
+      case TypeProduct.Film :
+        return dispatch(setType({action: SetFilterMode.Push, filterType: filterName}));
+      case Mastery.Null :
+        return dispatch(setLevel({action: SetFilterMode.Push, filterType: filterName}));
+      case Mastery.Amateur :
+        return dispatch(setLevel({action: SetFilterMode.Push, filterType: filterName}));
+      case Mastery.Professional :
+        return dispatch(setLevel({action: SetFilterMode.Push, filterType: filterName}));
     }
   };
 
@@ -104,8 +103,8 @@ function CatalogFilter ({onResetPage}: CatalogFilterProps): JSX.Element {
     }
 
     if (Number(e.target.value) < camerasPricesMin) {
-      e.target.value = String(camerasPricesMin);
-      setPriceUpParams(String(camerasPricesMin));
+      e.target.value = String(prices.min === 0 ? PriceRange.Min : prices.min);
+      setPriceUpParams(String(prices.min === 0 ? PriceRange.Min : prices.min));
     }
   };
 
@@ -120,24 +119,24 @@ function CatalogFilter ({onResetPage}: CatalogFilterProps): JSX.Element {
 
   const onChangeUnshiftFilters = (filterName: string) => {
     switch(filterName) {
-      case 'Видеокамера':
+      case CategoryProduct.Camera :
         return dispatch(setCategory(null));
-      case 'Фотокамера' :
+      case CategoryProduct.Camcorder :
         return dispatch(setCategory(null));
-      case 'Цифровая' :
-        return dispatch(setType({action: 'unshift', filterType: TypeProduct.Collectible}));
-      case 'Плёночная' :
-        return dispatch(setType({action: 'unshift', filterType: TypeProduct.Instant}));
-      case 'Моментальная' :
-        return dispatch(setType({action: 'unshift', filterType: TypeProduct.Digital}));
-      case 'Коллекционная' :
-        return dispatch(setType({action: 'unshift', filterType: TypeProduct.Film}));
-      case 'Нулевой' :
-        return dispatch(setLevel({action: 'unshift', filterType: Mastery.Null}));
-      case 'Любительский' :
-        return dispatch(setLevel({action: 'unshift', filterType: Mastery.Amateur}));
-      case 'Профессиональный' :
-        return dispatch(setLevel({action: 'unshift', filterType: Mastery.Professional}));
+      case TypeProduct.Collectible :
+        return dispatch(setType({action: SetFilterMode.Unshift, filterType: TypeProduct.Collectible}));
+      case TypeProduct.Instant :
+        return dispatch(setType({action: SetFilterMode.Unshift, filterType: TypeProduct.Instant}));
+      case TypeProduct.Digital :
+        return dispatch(setType({action: SetFilterMode.Unshift, filterType: TypeProduct.Digital}));
+      case TypeProduct.Film :
+        return dispatch(setType({action: SetFilterMode.Unshift, filterType: TypeProduct.Film}));
+      case Mastery.Null :
+        return dispatch(setLevel({action: SetFilterMode.Unshift, filterType: Mastery.Null}));
+      case Mastery.Amateur :
+        return dispatch(setLevel({action: SetFilterMode.Unshift, filterType: Mastery.Amateur}));
+      case Mastery.Professional :
+        return dispatch(setLevel({action: SetFilterMode.Unshift, filterType: Mastery.Professional}));
     }
   };
 
@@ -154,14 +153,14 @@ function CatalogFilter ({onResetPage}: CatalogFilterProps): JSX.Element {
 
   const setDisabled = (filterName: string) => {
     switch(filterName) {
-      case 'Видеокамера':
-        return !!filters?.includes('Фотокамера');
-      case 'Фотокамера' :
-        return !!filters?.includes('Видеокамера');
-      case 'Плёночная' :
-        return !!filters?.includes('Видеокамера');
-      case 'Моментальная' :
-        return !!filters?.includes('Видеокамера');
+      case CategoryProduct.Camera:
+        return !!filters?.includes(CategoryProduct.Camcorder);
+      case CategoryProduct.Camcorder :
+        return !!filters?.includes(CategoryProduct.Camera);
+      case TypeProduct.Instant :
+        return !!filters?.includes(CategoryProduct.Camera);
+      case TypeProduct.Digital :
+        return !!filters?.includes(CategoryProduct.Camera);
     }
   };
 

@@ -24,7 +24,7 @@ function App(): JSX.Element {
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
-    }, 1000);
+    }, 500);
 
     if (parseIds) {
       parseIds.forEach((el) => {
@@ -43,7 +43,7 @@ function App(): JSX.Element {
   return(
     <HistoryRouter history={browserHistory}>
       <Routes>
-        <Route path={'/catalog'} element={<Header />}>
+        <Route path={`/${AppRoutes.Catalog}`} element={<Header />}>
           <Route index element={<Catalog/>}/>
           <Route path={`${AppRoutes.Product}/:id`} element={<Product/>}/>
         </Route>

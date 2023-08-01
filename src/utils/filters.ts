@@ -3,12 +3,12 @@ import { CardProductInfo } from '../types/types';
 
 // фильтр категорий
 export const filterCategory = (cameras: CardProductInfo[], filterName: CategoryProduct | null) => {
-  if (filterName === 'Видеокамера') {
-    return cameras.filter((camera) => camera.category === 'Видеокамера');
+  if (filterName === CategoryProduct.Camera) {
+    return cameras.filter((camera) => camera.category === CategoryProduct.Camera);
   }
 
-  if (filterName === 'Фотокамера') {
-    return cameras.filter((camera) => camera.category === 'Фотоаппарат');
+  if (filterName === CategoryProduct.Camcorder) {
+    return cameras.filter((camera) => camera.category === CategoryProduct.CamcoderAlt);
   }
   return cameras;
 };

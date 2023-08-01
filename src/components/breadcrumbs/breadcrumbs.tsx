@@ -9,7 +9,7 @@ type BreadcrumbProps = {
 function Breadcrumb({ name, id}: BreadcrumbProps): JSX.Element {
 
   const translateRoute = (route: string) =>
-    route.includes('catalog') ? 'Каталог' : route;
+    route.includes(AppRoutes.Catalog) ? 'Каталог' : route;
 
   const location = useLocation();
 
