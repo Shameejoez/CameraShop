@@ -1,7 +1,7 @@
 /* eslint-disable no-nested-ternary */
 import { ChangeEvent, useEffect } from 'react';
 import { useAppDispatch } from '../../hooks';
-import { setMode, setSort } from '../../store/site-process/filter-slice';
+import { setMode, setSort } from '../../store/filter-process/filter-slice';
 import { SortMode, SortName } from '../../consts';
 import useSearchParamsCustom from '../../hooks/use-search-params-custom/use-search-params-custom';
 

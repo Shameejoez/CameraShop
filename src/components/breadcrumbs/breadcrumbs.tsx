@@ -8,15 +8,21 @@ type BreadcrumbProps = {
 
 function Breadcrumb({ name, id}: BreadcrumbProps): JSX.Element {
 
-  const translateRoute = (route: string) =>
-    route.includes('catalog') ? 'Каталог' : route;
+  const translateRoute = (route: string) => {
+    switch (route) {
+      case 'catalog' :
+        return 'Каталог';
+      case 'basket':
+        return 'Корзина';
+    }
+  };
 
   const location = useLocation();
 
-  let crumbLink = '';
   const allRoutes = location.pathname.split('/').filter((route) => route !== '' && route !== 'product');
 
   const crumbs = allRoutes.map((crumb, i) => {
+    let crumbLink = '';
     crumbLink += `/${crumb}`;
     return (
       <li className="breadcrumbs__item" key={crumb} data-testid={`${crumb}-test`}>

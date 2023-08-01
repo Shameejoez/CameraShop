@@ -28,7 +28,6 @@ function SearchBar (): JSX.Element {
     setInputValue('');
   };
 
-
   const onChangeSetInputValue = (e: ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
 

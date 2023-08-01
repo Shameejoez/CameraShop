@@ -2,7 +2,7 @@
 import { ChangeEvent, useEffect } from 'react';
 import { CategoryProduct, FilterCategoryName, Mastery, TypeProduct } from '../../consts';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { setCategory, setLevel, setRangePrice, setType } from '../../store/site-process/filter-slice';
+import { setCategory, setLevel, setRangePrice, setType } from '../../store/filter-process/filter-slice';
 import useSearchParamsCustom from '../../hooks/use-search-params-custom/use-search-params-custom';
 import { camerasSelector } from '../../store/data-process/data-selectors';
 
@@ -26,7 +26,6 @@ function CatalogFilter ({onResetPage}: CatalogFilterProps): JSX.Element {
     if ((filters as string[])?.length >= 1) {
       filters?.forEach((el) => onChangePushFilters(el));
     }
-
   }, [filters, prices]);
 
 
@@ -104,8 +103,8 @@ function CatalogFilter ({onResetPage}: CatalogFilterProps): JSX.Element {
     }
 
     if (Number(e.target.value) < camerasPricesMin) {
-      e.target.value = String(camerasPricesMin);
-      setPriceUpParams(String(camerasPricesMin));
+      e.target.value = String(prices.min === 0 ? 1990 : prices.min);
+      setPriceUpParams(String(prices.min === 0 ? 1990 : prices.min));
     }
   };
 

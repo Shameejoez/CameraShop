@@ -1,5 +1,5 @@
 import Breadcrumb from '../components/breadcrumbs/breadcrumbs';
-import { COUNT_SLIDER_VISIBLE_ELEMENT, LoadingStatus, RAITING_COUNT, SLIDER_STEP, START_SLIDER_POSITION } from '../consts';
+import { COUNT_SLIDER_VISIBLE_ELEMENT, LoadingStatus, RAITING_COUNT, SLIDER_STEP, START_SLIDER_POSITION, defaultCard } from '../consts';
 import StarsRating from '../components/stars-rating/stars-rating';
 import CardProduct from '../components/card-product/card-product';
 import { useAppDispatch, useAppSelector } from '../hooks';
@@ -9,13 +9,22 @@ import { useParams } from 'react-router-dom';
 import { getCamera, getReviews, getSimilarCameras, postReview } from '../store/action';
 import ProductTabs from '../components/product-tabs/product-tabs';
 import ReviewList from '../components/review/review-list/review-list';
-import { sendRewiew } from '../types/types';
+import { CardProductInfo, sendRewiew } from '../types/types';
 import ErrorConnectMessage from '../components/error-conntect-message/error-connect-message';
 import ButtonScrollUp from '../components/button-scroll-up/button-scroll-up';
 import Spinner from '../components/spinner/spinner';
+import BasketAddItem from '../components/basket-popups/basket-add-item';
+import BasketAddSucess from '../components/basket-popups/basket-add-sucess';
+
+type ProductProps = {
+  isActiveSuccessBasket: string;
+  isActiveAddBasket: string;
+  onClickSetBasketAdd: (isActive: string) => void;
+  onClickBasketSucess: (isActive: string) => void;
+}
 
 
-function Product(): JSX.Element {
+function Product({isActiveAddBasket, isActiveSuccessBasket, onClickBasketSucess, onClickSetBasketAdd}: ProductProps): JSX.Element {
   const [loading, setLoading] = useState<boolean>(false);
   const { id } = useParams();
   const dispatch = useAppDispatch();
@@ -25,7 +34,12 @@ function Product(): JSX.Element {
   const FIRST_REVIEWS_PATH = 1;
   const [visibleArrayPathReviews, setVisibleArrayPathReviews] = useState(FIRST_REVIEWS_PATH);
   const getCameraStatus = useAppSelector(takeGetCameraStatus);
+  const [curentCamera, setCurrentCamera] = useState<CardProductInfo>(defaultCard);
 
+  const getCurrentCamera = (camera: CardProductInfo) => {
+    onClickSetBasketAdd('is-active');
+    setCurrentCamera(camera);
+  };
   useEffect(() => {
     setLoading(true);
     setTimeout(() => {
@@ -118,7 +132,7 @@ function Product(): JSX.Element {
                     <p className="rate__count"><span className="visually-hidden" >Всего оценок:</span>{reviewCount}</p>
                   </div>
                   <p className="product__price"><span className="visually-hidden">Цена:</span>{price.toLocaleString('ru-Ru')} ₽</p>
-                  <button className="btn btn--purple" type="button" name='add-to-basket'>
+                  <button className="btn btn--purple" type="button" name='add-to-basket' onClick={()=> getCurrentCamera(currentProduct)}>
                     <svg width={24} height={16} aria-hidden="true">
                       <use xlinkHref="#icon-add-basket" />
                     </svg>Добавить в корзину
@@ -138,7 +152,9 @@ function Product(): JSX.Element {
                       {/* Похожие товары */}
                       {
                         similarProducts.map((camera) => (
-                          <CardProduct camera={camera} key={camera.id} onReviewsBack={onClickVisibleArrayPathReviewsBack} />))
+                          <CardProduct camera={camera} key={camera.id} onReviewsBack={onClickVisibleArrayPathReviewsBack} onClickGetCurrentCamera={getCurrentCamera}
+                            onClickSetAddBasket={onClickSetBasketAdd}
+                          />))
                       }
                     </div>
                   </div>
@@ -168,9 +184,10 @@ function Product(): JSX.Element {
         <ErrorConnectMessage isVisible={getCameraStatus === LoadingStatus.Rejected ? 'is-active' : ''}/>
       </main>
       <ButtonScrollUp onScrollUp={onScrollUp}/>
+      <BasketAddItem camera={curentCamera} isActive={isActiveAddBasket} onClickSetBasketAdd={onClickSetBasketAdd} onClickBasketSucess={onClickBasketSucess}/>
+      <BasketAddSucess onClickSetBasketSucess={onClickBasketSucess} isActive={isActiveSuccessBasket}/>
     </>
   );
 }
-
 
 export default Product;

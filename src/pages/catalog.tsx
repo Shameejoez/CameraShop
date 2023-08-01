@@ -6,20 +6,36 @@ import CatalogFilter from '../components/catalog-filter/catalog-filter';
 import Pagination from '../components/pagination/pagination';
 import { useAppSelector } from '../hooks';
 import { camerasSelector, takeGetCamerasStatus } from '../store/data-process/data-selectors';
-import { LoadingStatus, PRODUCTS_ON_PAGE } from '../consts';
+import { LoadingStatus, PRODUCTS_ON_PAGE, defaultCard } from '../consts';
 import ErrorConnectMessage from '../components/error-conntect-message/error-connect-message';
 import useSearchParamsCustom from '../hooks/use-search-params-custom/use-search-params-custom';
 import { filterRangePrice } from '../utils/filters';
-import { takeRangePrice } from '../store/site-process/filter-selectors';
+import { takeRangePrice } from '../store/filter-process/filter-selectors';
+import BasketAddItem from '../components/basket-popups/basket-add-item';
+import BasketAddSucess from '../components/basket-popups/basket-add-sucess';
+import { CardProductInfo } from '../types/types';
+import { useState } from 'react';
 
-function Catalog(): JSX.Element {
+type CatalogProps = {
+  isActiveSuccessBasket: string;
+  isActiveAddBasket: string;
+  onClickSetBasketAdd: (isActive: string) => void;
+  onClickBasketSucess: (isActive: string) => void;
+}
+
+function Catalog({isActiveSuccessBasket, onClickBasketSucess, onClickSetBasketAdd, isActiveAddBasket}: CatalogProps): JSX.Element {
   const rangePrice = useAppSelector(takeRangePrice);
   const cameras = filterRangePrice(useAppSelector(camerasSelector), rangePrice.min, rangePrice.max);
   const getCamerasStatus = useAppSelector(takeGetCamerasStatus);
+  const [curentCamera, setCurrentCamera] = useState<CardProductInfo>(defaultCard);
 
   const {page, setPageParams} = useSearchParamsCustom({initialPage: 0});
   const currentPageHandler = (pageNumber: number) => {
     setPageParams(pageNumber);
+  };
+
+  const getCurrentCamera = (camera: CardProductInfo) => {
+    setCurrentCamera(camera);
   };
 
   const catalogPageCount = Math.ceil(cameras.length / PRODUCTS_ON_PAGE);
@@ -41,7 +57,7 @@ function Catalog(): JSX.Element {
         <Breadcrumb />
         <section className="catalog">
           <div className="container">
-            <h1 className="title title--h2" >Каталог фото- и видеотехники</h1>
+            <h1 className="title title--h2" onClick={() => onClickSetBasketAdd('is-active')}>Каталог фото- и видеотехники</h1>
             <div className="page-content__columns">
               <div className="catalog__aside">
                 <CatalogFilter onResetPage={currentPageHandler}/>
@@ -52,7 +68,11 @@ function Catalog(): JSX.Element {
 
                   { cameras.length === 0 ? 'Ничего не найдено' :
                     renderCatalogBook()[page].map((camera) =>
-                      <CardProduct camera={camera} key={camera.id}/>
+                      (
+                        <CardProduct camera={camera} key={camera.id} onClickGetCurrentCamera={getCurrentCamera}
+                          onClickSetAddBasket={onClickSetBasketAdd}
+                        />
+                      )
                     )}
                 </div>
                 {
@@ -68,8 +88,11 @@ function Catalog(): JSX.Element {
         getCamerasStatus === LoadingStatus.Rejected &&
      <ErrorConnectMessage isVisible={getCamerasStatus === LoadingStatus.Rejected ? 'is-active' : ''}/>
       }
+      <BasketAddItem camera={curentCamera} isActive={isActiveAddBasket} onClickSetBasketAdd={onClickSetBasketAdd} onClickBasketSucess={onClickBasketSucess}/>
+      <BasketAddSucess isActive={isActiveSuccessBasket} onClickSetBasketSucess={onClickBasketSucess}/>
     </main>
   );
 }
+
 
 export default Catalog;
