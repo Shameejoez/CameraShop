@@ -36,7 +36,7 @@ function CatalogSort (): JSX.Element {
   };
 
   return (
-    <div className="catalog-sort">
+    <div className="catalog-sort" data-testid={'sort-catalog-test'}>
       <form action="#">
         <div className="catalog-sort__inner">
           <p className="title title--h5">Сортировать:</p>

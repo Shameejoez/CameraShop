@@ -117,11 +117,12 @@ describe('useSearchParamsCustom', () => {
 
   describe('filterParams', () => {
     it('shold filterParams is works', async() => {
-      browserHistory.replace('/catalog');
+      await waitFor(() => browserHistory.push('/catalog'));
       render(fakeApp);
 
+      expect(await screen.findByTestId('sort-catalog-test')).toBeInTheDocument();
       const chekOne = await screen.findByText('Коллекционная', {}, {timeout: 2000});
-      await userEvent.click(chekOne);
+      userEvent.click(chekOne);
       await waitFor(() => expect(browserHistory.location.search).toBe('?filters=%D0%9A%D0%BE%D0%BB%D0%BB%D0%B5%D0%BA%D1%86%D0%B8%D0%BE%D0%BD%D0%BD%D0%B0%D1%8F&page=1'));
 
     });
@@ -133,8 +134,8 @@ describe('useSearchParamsCustom', () => {
 
       const activeButton = await screen.findByTestId('2-pag-test', {}, {timeout: 2000});
 
-      await userEvent.click(activeButton);
-      expect(browserHistory.location.search).toBe('?page=2');
+      userEvent.click(activeButton);
+      await waitFor(() => expect(browserHistory.location.search).toBe('?page=2'));
 
     });
   });

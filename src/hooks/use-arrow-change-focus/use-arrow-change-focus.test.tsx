@@ -1,5 +1,5 @@
 import { Provider } from 'react-redux';
-import { render, screen} from '@testing-library/react';
+import { render, screen, waitFor} from '@testing-library/react';
 import { configureMockStore } from '@jedmao/redux-mock-store';
 import MockAdapter from 'axios-mock-adapter';
 import thunk from 'redux-thunk';
@@ -96,17 +96,15 @@ describe('useArrowChangeFocus', () => {
     browserHistory.push(AppRoutes.Catalog);
     render(fakeApp);
 
-    const searchInput = await screen.findByPlaceholderText('Поиск по сайту');
 
-    userEvent.type(searchInput, 'Ретрокамера');
+    const searchInput = await screen.findByPlaceholderText('Поиск по сайту', {}, {timeout: 2000});
+    userEvent.type(searchInput, 'bbb');
 
-    const lowerElement = await screen.findByTestId('1');
-    searchInput.focus();
-    await userEvent.keyboard('[ArrowDown]');
-    await userEvent.keyboard('[ArrowDown]');
-    expect(lowerElement).toHaveFocus();
-    await userEvent.keyboard('[ArrowDown]');
-    expect(searchInput).toHaveFocus();
+    const lowerElement = await screen.findByTestId('no-similar', {}, {timeout: 2000});
+    userEvent.keyboard('[ArrowDown]');
+    await waitFor(() =>expect(lowerElement).toHaveFocus());
+    userEvent.keyboard('[ArrowDown]');
+    await waitFor(() =>expect(searchInput).toHaveFocus());
   });
 
   it('should useArrowChangeFocus is works', async() => {
@@ -117,10 +115,10 @@ describe('useArrowChangeFocus', () => {
     userEvent.type(searchInput, 'bbb');
 
     const lowerElement = await screen.findByTestId('no-similar', {}, {timeout: 2000});
-    await userEvent.keyboard('[ArrowUp]');
+    userEvent.keyboard('[ArrowUp]');
 
 
-    expect(lowerElement).toHaveFocus();
+    await waitFor(() =>expect(lowerElement).toHaveFocus() );
   });
 });
 

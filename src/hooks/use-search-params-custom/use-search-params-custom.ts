@@ -1,6 +1,6 @@
 import { useSearchParams } from 'react-router-dom';
 import {useState, ChangeEvent, useEffect} from 'react';
-import { PriceRange, TypeProduct } from '../../consts';
+import { CategoryProduct, PriceRange, TypeProduct } from '../../consts';
 import { RangePrice } from '../../types/types';
 
 type useSearchParamsCustomProps = {
@@ -37,7 +37,7 @@ const useSearchParamsCustom = ({initialPage, initialFilter, initialSortType, ini
 
     let filterParams = search.get('filters')?.split(',') ?? [];
 
-    if (checked && currenFilter === 'Видеокамера') {
+    if (checked && currenFilter === CategoryProduct.Camera) {
       filterParams = filterParams.filter((filter) => (filter !== TypeProduct.Instant && filter !== TypeProduct.Digital));
     }
 

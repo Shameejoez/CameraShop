@@ -133,7 +133,7 @@ describe('ReviewForm', () => {
   it('should render Review Form', async() => {
     render(fakeApp);
     const addComment = await screen.findByRole('button', {name: 'Оставить свой отзыв' }, {timeout: 2000});
-    await userEvent.click(addComment);
+    userEvent.click(addComment);
     await screen.findByTestId('review-form-test' , {}, {timeout: 2000});
   });
 });
