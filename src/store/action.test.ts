@@ -94,7 +94,7 @@ const productArray: CardProductInfo [] = [
 ];
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-global.window = Object.create(window);
+global.window ??= Object.create(window);
 const url = 'http://localhost';
 Object.defineProperty(window, 'location', {
   value: {
