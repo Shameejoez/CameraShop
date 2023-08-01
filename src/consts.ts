@@ -1,4 +1,4 @@
-import { CardProductInfo } from "./types/types";
+import { CardProductInfo } from './types/types';
 
 export const SLIDER_STEP = 955; //пиксели шаг слайдера
 export const COUNT_SLIDER_VISIBLE_ELEMENT = 3;
@@ -6,9 +6,6 @@ export const START_SLIDER_POSITION = 0;
 export const STARS_COUNT = 5;
 export const REVIEW_COUNT = 3; // количесто отызов в одном блоке
 export const PRODUCTS_ON_PAGE = 9;
-
-
-
 
 export enum PriceRange {
   Min = 1990,

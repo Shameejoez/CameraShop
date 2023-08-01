@@ -17,7 +17,6 @@ type BasketAddItemProps = {
 function BasketAddItem ({camera, isActive, onClickSetBasketAdd, onClickBasketSucess, place}: BasketAddItemProps) :JSX.Element {
   const dispatch = useAppDispatch();
   const refModal = useRef<HTMLInputElement | null>(null);
-
   useFocusLockModal({isVisible: isActive , ref: refModal});
   useKeyDownEsc({handler: onClickSetBasketAdd, isVisible: isActive});
   useOutsideClick({elementRef: refModal, handler: onClickSetBasketAdd });
@@ -33,7 +32,6 @@ function BasketAddItem ({camera, isActive, onClickSetBasketAdd, onClickBasketSuc
   const onClickDeleteAllMyCamera = () => {
     dispatch(deleteMyCameras({...camera, mode: 'all'}));
     onClickSetBasketAdd('');
-    onClickBasketSucess('is-active');
   };
 
   return (
@@ -68,7 +66,7 @@ function BasketAddItem ({camera, isActive, onClickSetBasketAdd, onClickBasketSuc
                 <div>
                   <button className="btn btn--purple modal__btn modal__btn--half-width" type="button" onClick={onClickDeleteAllMyCamera}>Удалить
                   </button>
-                  <a className="btn btn--transparent modal__btn modal__btn--half-width" href="#">Продолжить покупки
+                  <a className="btn btn--transparent modal__btn modal__btn--half-width" href="#" onClick={() => onClickSetBasketAdd('')}>Продолжить покупки
                   </a>
                   <button className="cross-btn" type="button" aria-label="Закрыть попап">
                     <svg width={10} height={10} aria-hidden="true">
