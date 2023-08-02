@@ -6,8 +6,7 @@ import useSearchParamsCustom from '../../hooks/use-search-params-custom/use-sear
 
 function CatalogSort (): JSX.Element {
   const dispatch = useAppDispatch();
-  const { setSortTypeParams, sortType } = useSearchParamsCustom({initialSortType: null});
-  const { setSortOrderParams, sortOrder } = useSearchParamsCustom({initialSortOrder: null});
+  const { setSortTypeParams, sortType, setSortOrderParams, sortOrder } = useSearchParamsCustom({initialSortType: null, initialSortOrder: null});
 
   useEffect(() => {
     // eslint-disable-next-line no-nested-ternary
@@ -22,19 +21,47 @@ function CatalogSort (): JSX.Element {
   }, [sortOrder, sortType, dispatch]);
 
   const onChangeSetSearchParams = (e: ChangeEvent<HTMLInputElement>) =>
-    (e.target.id === SortTypeId.SortIncrease || e.target.id === SortTypeId.SortDecrease) ? setSortOrderParams(e) : setSortTypeParams(e);
+    (e.target.id === SortTypeId.SortIncrease || e.target.id === SortTypeId.SortDecrease) ? setSortOrderParams(e.target.id as SortTypeId) : setSortTypeParams(e.target.id as SortTypeId);
 
   const onSortButtonChange = (e: ChangeEvent<HTMLInputElement>) => {
     onChangeSetSearchParams(e);
     switch (e.target.id) {
       case SortTypeId.SortPrice:
-        return dispatch(setSort(SortName.Price));
+        if(!sortOrder) {
+          dispatch(setMode(SortMode.Increase));
+          setSortOrderParams('up' as SortTypeId);
+          dispatch(setSort(SortName.Price));
+        } else {
+          dispatch(setSort(SortName.Price));
+        }
+        break;
       case SortTypeId.SortPopular:
-        return dispatch(setSort(SortName.Rating));
+        if(!sortOrder) {
+          dispatch(setMode(SortMode.Increase));
+          setSortOrderParams('up' as SortTypeId);
+          dispatch(setSort(SortName.Rating));
+        } else {
+          dispatch(setSort(SortName.Rating));
+        }
+        break;
       case SortTypeId.SortIncrease:
-        return dispatch(setMode(SortMode.Increase));
+        if (!sortType) {
+          dispatch(setSort(SortName.Price));
+          setSortTypeParams('sortPrice' as SortTypeId);
+          dispatch(setMode(SortMode.Increase));
+        } else {
+          dispatch(setMode(SortMode.Increase));
+        }
+        break;
       case SortTypeId.SortDecrease:
-        return dispatch(setMode(SortMode.Decrease));
+        if (!sortType) {
+          dispatch(setSort(SortName.Price));
+          setSortTypeParams('sortPrice' as SortTypeId);
+          dispatch(setMode(SortMode.Decrease));
+        } else {
+          dispatch(setMode(SortMode.Decrease));
+        }
+        break;
     }
   };
 
@@ -45,17 +72,19 @@ function CatalogSort (): JSX.Element {
           <p className="title title--h5">Сортировать:</p>
           <div className="catalog-sort__type">
             <div className="catalog-sort__btn-text">
-              <input type="radio" id="sortPrice" name="sort" value={'цена'} onChange={(e)=> onSortButtonChange(e)}/>
+              <input type="radio" id="sortPrice" name="sort" value={'цена'} checked={sortType === SortTypeId.SortPrice} onChange={(e)=> onSortButtonChange(e)}/>
               <label htmlFor="sortPrice">по цене</label>
             </div>
             <div className="catalog-sort__btn-text">
-              <input type="radio" id="sortPopular" name="sort" onChange={(e)=> onSortButtonChange(e)}/>
+              <input type="radio" id="sortPopular" name="sort" checked={sortType === SortTypeId.SortPopular} onChange={(e)=> onSortButtonChange(e)}/>
               <label htmlFor="sortPopular">по популярности</label>
             </div>
           </div>
           <div className="catalog-sort__order">
             <div className="catalog-sort__btn catalog-sort__btn--up">
-              <input type="radio" id="up" name="sort-icon" aria-label="По возрастанию" onChange={(e)=> onSortButtonChange(e)} data-testid={'up-test'}/>
+              <input type="radio" id="up" name="sort-icon" aria-label="По возрастанию" checked={sortOrder === SortTypeId.SortIncrease}
+                onChange={(e)=> onSortButtonChange(e)} data-testid={'up-test'}
+              />
               <label htmlFor="up">
                 <svg width={16} height={14} aria-hidden="true">
                   <use xlinkHref="#icon-sort" />
@@ -63,7 +92,9 @@ function CatalogSort (): JSX.Element {
               </label>
             </div>
             <div className="catalog-sort__btn catalog-sort__btn--down">
-              <input type="radio" id="down" name="sort-icon" aria-label="По убыванию" onChange={(e)=> onSortButtonChange(e)} data-testid={'down-test'}/>
+              <input type="radio" id="down" name="sort-icon" aria-label="По убыванию" checked={sortOrder === SortTypeId.SortDecrease}
+                onChange={(e)=> onSortButtonChange(e)} data-testid={'down-test'}
+              />
               <label htmlFor="down">
                 <svg width={16} height={14} aria-hidden="true">
                   <use xlinkHref="#icon-sort" />
@@ -75,6 +106,5 @@ function CatalogSort (): JSX.Element {
       </form>
     </div>);
 }
-
 
 export default CatalogSort;

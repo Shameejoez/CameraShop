@@ -1,5 +1,5 @@
 import { ChangeEvent, useEffect, useState } from 'react';
-import { CategoryProduct, FilterCategoryName, Mastery, PriceRange, SetFilterMode, TypeProduct, validatePrice } from '../../consts';
+import { CategoryProduct, FilterCategoryName, Mastery, PriceRange, SetFilterMode, TypeProduct } from '../../consts';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { setCategory, setLevel, setRangePrice, setType } from '../../store/site-process/filter-slice';
 import useSearchParamsCustom from '../../hooks/use-search-params-custom/use-search-params-custom';
@@ -15,7 +15,8 @@ function CatalogFilter ({onResetPage}: CatalogFilterProps): JSX.Element {
   const camerasPrices = useAppSelector(camerasSelector).map((camera) => camera.price);
   const camerasPricesMin = Math.min(...camerasPrices);
   const camerasPricesMax = Math.max(...camerasPrices);
-  const [min, setMin] = useState<string>()
+  const [min, setMin] = useState<string>('');
+  const [max, setMax] = useState<string>('');
 
   useEffect(() => {
     dispatch(setRangePrice({
@@ -23,12 +24,14 @@ function CatalogFilter ({onResetPage}: CatalogFilterProps): JSX.Element {
       max:  prices.max === 0 ? PriceRange.Max : prices.max
     }));
 
+    setMin(prices.min ? String(prices.min) : '');
+    setMax(prices.max ? String(prices.max) : '');
+
     if ((filters as string[])?.length >= 1) {
       filters?.forEach((el) => onChangePushFilters(el));
     }
 
   }, [filters, prices]);
-
 
   const onChangePushFilters = (filterName: string) => {
     switch(filterName) {
@@ -54,18 +57,34 @@ function CatalogFilter ({onResetPage}: CatalogFilterProps): JSX.Element {
     }
   };
 
+
   const onChangeSetPriceMin = (e: ChangeEvent<HTMLInputElement>) =>{
-    console.log(e.target.value);
-   /*   if (e.target.value.match(/^(?=.*[!@#$%^&(),.+=/\/\]\[{}?><":;|])/)) {
-      console.log('loa')
-    } */
+
+    const currentValue = e.target.value.trim().replace(/\D/g , '');
+
+    if (currentValue === '') {
+      setMin(currentValue);
+      setPriceDownParams(currentValue);
+      return;
+    }
+
+    if (Number(currentValue) > camerasPricesMax) {
+      setMin(String(camerasPricesMax));
+      setPriceDownParams(String(camerasPricesMax));
+      return;
+    }
+
+
+    if(Number(max) > 0 && Number(currentValue) > Number(max)) {
+      setMin(max);
+      setPriceDownParams(max);
+      return;
+    }
 
     onResetPage(0);
     setPageParams(0);
-    if (e.target.value.includes('-')) {
-      e.target.value = '';
-    }
-    setPriceDownParams(e.target.value);
+    setMin(currentValue);
+    setPriceDownParams(currentValue);
 
   };
 
@@ -77,39 +96,46 @@ function CatalogFilter ({onResetPage}: CatalogFilterProps): JSX.Element {
     }
 
     if(Number(e.target.value) < camerasPricesMin) {
-      e.target.value = String(camerasPricesMin);
+      setMin(String(camerasPricesMin));
       setPriceDownParams(String(camerasPricesMin));
     }
     if(Number(e.target.value) > camerasPricesMax) {
-      e.target.value = String(camerasPricesMax);
+      String(String(camerasPricesMax));
       setPriceDownParams(String(camerasPricesMax));
     }
   };
 
   const onChangeSetPriceMax = (e: ChangeEvent<HTMLInputElement>) =>{
+    const currentValue = e.target.value.trim().replace(/\D/g , '');
+    if (currentValue === '') {
+      setMax(String(currentValue));
+      setPriceUpParams(currentValue);
+      return;
+    }
+
     onResetPage(0);
     setPageParams(0);
-    if (e.target.value.includes('-')) {
-      e.target.value = '';
-    }
+
     if (Number(e.target.value) > camerasPricesMax) {
-      e.target.value = String(camerasPricesMax);
+      setMax(String(camerasPricesMax));
       setPriceUpParams(String(camerasPricesMax));
     }
     else {
+      setMax(String(e.target.value));
       setPriceUpParams(e.target.value);
     }
   };
 
   const onBlurSetPriceMax = (e: ChangeEvent<HTMLInputElement>) => {
-    onResetPage(0);
-    setPageParams(0);
     if (e.target.value === '') {
       return;
     }
 
+    onResetPage(0);
+    setPageParams(0);
+
     if (Number(e.target.value) < camerasPricesMin) {
-      e.target.value = String(prices.min === 0 ? PriceRange.Min : prices.min);
+      setMax(String(prices.min === 0 ? PriceRange.Min : prices.min));
       setPriceUpParams(String(prices.min === 0 ? PriceRange.Min : prices.min));
     }
   };
@@ -197,14 +223,14 @@ function CatalogFilter ({onResetPage}: CatalogFilterProps): JSX.Element {
           <div className="catalog-filter__price-range">
             <div className="custom-input">
               <label>
-                <input type="number" name="priceDowm" id='priceMin' value={min} placeholder={String(camerasPricesMin)} onChange={onChangeSetPriceMin}
+                <input type="text" name="priceDowm" id='priceMin' placeholder={String(camerasPricesMin)} value={min} onChange={onChangeSetPriceMin}
                   onBlur={onBlurSetPriceMin} data-testid={'priceDown-test'}
                 />
               </label>
             </div>
             <div className="custom-input">
               <label>
-                <input type="number" name="priceUp" id='priceMax' placeholder={String(camerasPricesMax)} onChange={onChangeSetPriceMax}
+                <input type="text" name="priceUp" id='priceMax' placeholder={String(camerasPricesMax)} value={max} onChange={onChangeSetPriceMax}
                   onBlur={onBlurSetPriceMax} data-testid={'priceUp-test'}
                 />
               </label>

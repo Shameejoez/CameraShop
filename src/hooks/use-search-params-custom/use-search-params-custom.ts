@@ -1,6 +1,6 @@
 import { useSearchParams } from 'react-router-dom';
 import {useState, ChangeEvent, useEffect} from 'react';
-import { CategoryProduct, PriceRange, TypeProduct } from '../../consts';
+import { CategoryProduct, PriceRange, SortTypeId, TypeProduct } from '../../consts';
 import { RangePrice } from '../../types/types';
 
 type useSearchParamsCustomProps = {
@@ -90,20 +90,19 @@ const useSearchParamsCustom = ({initialPage, initialFilter, initialSortType, ini
   };
 
   // Название сортировки
-  const setSortTypeParams = (e: ChangeEvent<HTMLInputElement>) => {
-    const currenSort = e.target.id;
-    search.set('sort', currenSort);
+  const setSortTypeParams = (type: SortTypeId) => {
+
+    search.set('sort', type);
 
     setSearch(search);
-    setSortType(currenSort);
+    setSortType(type);
   };
   // порядок сортировки
-  const setSortOrderParams = (e: ChangeEvent<HTMLInputElement>) => {
-    const currentOrder = e.target.id;
-    search.set('sortOrder', currentOrder);
+  const setSortOrderParams = (mode: SortTypeId) => {
+    search.set('sortOrder', mode);
 
     setSearch(search);
-    setSortOrder(currentOrder);
+    setSortOrder(mode);
   };
   // Для настройки фильтров и сортировок по параметрам;
   const setAllParams = () => {

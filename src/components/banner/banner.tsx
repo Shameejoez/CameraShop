@@ -4,10 +4,15 @@ import { takePromo } from '../../store/data-process/data-selectors';
 import { getPromo } from '../../store/action';
 import { AppRoutes } from '../../consts';
 import { Link } from 'react-router-dom';
+import { deleteAllFilters } from '../../store/site-process/filter-slice';
 
 function Banner (): JSX.Element | null {
   const promo = useAppSelector(takePromo);
   const dispatch = useAppDispatch();
+
+  const onInfoButtonClick = () => {
+    dispatch(deleteAllFilters());
+  };
 
   useEffect(() => {
 
@@ -30,7 +35,7 @@ function Banner (): JSX.Element | null {
         <source type="image/webp" srcSet={`${previewImgWebp}, ${previewImgWebp2x}`} /><img src={previewImg} srcSet={previewImg2x} width={1280} height={280} alt="баннер" />
       </picture>
       <p className="banner__info"><span className="banner__message">Новинка!</span><span className="title title--h1">{name}</span><span className="banner__text">Профессиональная камера от&nbsp;известного производителя</span>
-        <Link className="btn" data-testid={'promo-link'} to={`${AppRoutes.Product}/${id}#description`}>Подробнее</Link>
+        <Link className="btn" data-testid={'promo-link'} to={`${AppRoutes.Product}/${id}#description`} onClick={onInfoButtonClick}>Подробнее</Link>
       </p>
     </div>
   );

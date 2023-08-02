@@ -2,8 +2,9 @@ import { Link } from 'react-router-dom';
 import { AppRoutes, RAITING_COUNT } from '../../consts';
 import { CardProductInfo } from '../../types/types';
 import StarsRating from '../stars-rating/stars-rating';
-import { useAppSelector } from '../../hooks';
+import { useAppDispatch, useAppSelector } from '../../hooks';
 import { takeRatings } from '../../store/data-process/data-selectors';
+import { deleteAllFilters } from '../../store/site-process/filter-slice';
 
 type CardProductProps = {
   camera: CardProductInfo;
@@ -12,10 +13,16 @@ type CardProductProps = {
 }
 
 function CardProduct ({camera, onReviewsBack = () => void 0}: CardProductProps):JSX.Element {
+  const dispatch = useAppDispatch();
 
   const { id, name, price, type, previewImg, previewImg2x, previewImgWebp, previewImgWebp2x, reviewCount } = camera;
 
   const rating = useAppSelector(takeRatings).filter((el) => el.id === id )[0]?.currentRating;
+
+  const onInfoButtonClick = () => {
+    onReviewsBack();
+    dispatch(deleteAllFilters());
+  };
 
   const renderStarsRating = () =>
     Array.from({length: RAITING_COUNT}, (_, i) =>
@@ -42,7 +49,7 @@ function CardProduct ({camera, onReviewsBack = () => void 0}: CardProductProps):
       <div className="product-card__buttons">
         <button className="btn btn--purple product-card__btn" type="button">Купить
         </button>
-        <Link className="btn btn--transparent" to={`/catalog/${AppRoutes.Product}/${id}#description`} onClick={onReviewsBack}>Подробнее
+        <Link className="btn btn--transparent" to={`/catalog/${AppRoutes.Product}/${id}#description`} onClick={onInfoButtonClick}>Подробнее
         </Link>
       </div>
     </div>

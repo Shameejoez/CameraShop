@@ -63,7 +63,7 @@ export const ReviewCustomInputData = [
   },
 ];
 
-export const validatePrice = /^(?=.*[!@#$%^&(),.+=//\][{}?><":;|])/;
+export const validatePrice = /^(?=.*[!@#$%^&(),.+=//\][{}?><":;|])/gi;
 
 export const RatingStarCategories = [ 'Отлично', 'Хорошо', 'Нормально', 'Плохо', 'Ужасно'];
 

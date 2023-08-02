@@ -51,6 +51,12 @@ export const filterSlicer = createSlice({
         newTypes = state.filter.type.filter((el) => el !== action.payload.filterType);
         state.filter.type = newTypes;
       }
+
+    },
+    deleteAllFilters(state) {
+      state.filter.category = null;
+      state.filter.level = [];
+      state.filter.type = [];
     },
     setRangePrice(state, action: PayloadAction<RangePrice>) {
       state.rangePrice.min = action.payload.min;
@@ -59,5 +65,5 @@ export const filterSlicer = createSlice({
   }
 });
 
-export const {setSort, setMode, setLevel, setType, setCategory, setRangePrice} = filterSlicer.actions;
+export const {setSort, setMode, setLevel, setType, setCategory, setRangePrice, deleteAllFilters} = filterSlicer.actions;
 
