@@ -6,7 +6,7 @@ import { RangePrice, SetFilter } from '../../types/types';
 const initialState: siteStore = {
   currentSort: {
     name: SortName.Unknown,
-    mode: SortMode.Increase
+    mode: SortMode.Unknown
   },
   filter: {
     category: null,

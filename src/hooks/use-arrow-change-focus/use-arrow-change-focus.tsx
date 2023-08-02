@@ -57,8 +57,15 @@ const useArrowChangeFocus = ({ ref, inputValue }: arrowChangeFocusProps) => {
 
     };
 
-    const onClickSetFocus = (e: MouseEvent) => {
-      if (e.target === firstElement) {
+    const onKeyDownSetFocus = (e: KeyboardEvent ) => {
+      if (e.target === firstElement || document.activeElement === firstElement) {
+        setElementFocus(0);
+        setFocus(true);
+      }
+    };
+
+    const onClickSetFocus = (e: MouseEvent ) => {
+      if (e.target === firstElement || document.activeElement === firstElement) {
         setElementFocus(0);
         setFocus(true);
       } else {
@@ -67,12 +74,13 @@ const useArrowChangeFocus = ({ ref, inputValue }: arrowChangeFocusProps) => {
       }
     };
 
-
+    document.addEventListener('keydown', onKeyDownSetFocus);
     document.addEventListener('keydown', onUpArrowShift);
     document.addEventListener('click', onClickSetFocus);
     document.addEventListener('keydown', onDownArrowShift);
 
     return () => {
+      document.removeEventListener('keydown', onKeyDownSetFocus);
       document.removeEventListener('keydown', onDownArrowShift);
       document.removeEventListener('click', onClickSetFocus);
       document.removeEventListener('keydown', onUpArrowShift);

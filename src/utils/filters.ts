@@ -8,7 +8,7 @@ export const filterCategory = (cameras: CardProductInfo[], filterName: CategoryP
   }
 
   if (filterName === CategoryProduct.Camcorder) {
-    return cameras.filter((camera) => camera.category === CategoryProduct.CamcoderAlt);
+    return cameras.filter((camera) => camera.category === 'Фотоаппарат');
   }
   return cameras;
 };

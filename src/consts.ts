@@ -34,6 +34,7 @@ export enum SortName {
 export enum SortMode {
   Increase = 'Increase',
   Decrease = 'Decrease',
+  Unknown = 'unknown'
 }
 
 
@@ -62,6 +63,7 @@ export const ReviewCustomInputData = [
   },
 ];
 
+export const validatePrice = /^(?=.*[!@#$%^&(),.+=//\][{}?><":;|])/;
 
 export const RatingStarCategories = [ 'Отлично', 'Хорошо', 'Нормально', 'Плохо', 'Ужасно'];
 
@@ -96,7 +98,6 @@ export enum Unknown {
 export enum CategoryProduct {
     Camcorder = 'Фотокамера',
     Camera = 'Видеокамера',
-    CamcoderAlt = 'Фотоаппарат'
 }
 
 export enum Mastery {

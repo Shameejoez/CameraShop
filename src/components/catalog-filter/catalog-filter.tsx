@@ -1,5 +1,5 @@
-import { ChangeEvent, useEffect } from 'react';
-import { CategoryProduct, FilterCategoryName, Mastery, PriceRange, SetFilterMode, TypeProduct } from '../../consts';
+import { ChangeEvent, useEffect, useState } from 'react';
+import { CategoryProduct, FilterCategoryName, Mastery, PriceRange, SetFilterMode, TypeProduct, validatePrice } from '../../consts';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { setCategory, setLevel, setRangePrice, setType } from '../../store/site-process/filter-slice';
 import useSearchParamsCustom from '../../hooks/use-search-params-custom/use-search-params-custom';
@@ -15,6 +15,7 @@ function CatalogFilter ({onResetPage}: CatalogFilterProps): JSX.Element {
   const camerasPrices = useAppSelector(camerasSelector).map((camera) => camera.price);
   const camerasPricesMin = Math.min(...camerasPrices);
   const camerasPricesMax = Math.max(...camerasPrices);
+  const [min, setMin] = useState<string>()
 
   useEffect(() => {
     dispatch(setRangePrice({
@@ -54,6 +55,11 @@ function CatalogFilter ({onResetPage}: CatalogFilterProps): JSX.Element {
   };
 
   const onChangeSetPriceMin = (e: ChangeEvent<HTMLInputElement>) =>{
+    console.log(e.target.value);
+   /*   if (e.target.value.match(/^(?=.*[!@#$%^&(),.+=/\/\]\[{}?><":;|])/)) {
+      console.log('loa')
+    } */
+
     onResetPage(0);
     setPageParams(0);
     if (e.target.value.includes('-')) {
@@ -191,7 +197,7 @@ function CatalogFilter ({onResetPage}: CatalogFilterProps): JSX.Element {
           <div className="catalog-filter__price-range">
             <div className="custom-input">
               <label>
-                <input type="number" name="priceDowm" id='priceMin' placeholder={String(camerasPricesMin)} onChange={onChangeSetPriceMin}
+                <input type="number" name="priceDowm" id='priceMin' value={min} placeholder={String(camerasPricesMin)} onChange={onChangeSetPriceMin}
                   onBlur={onBlurSetPriceMin} data-testid={'priceDown-test'}
                 />
               </label>

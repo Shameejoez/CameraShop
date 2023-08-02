@@ -15,7 +15,10 @@ function CatalogSort (): JSX.Element {
       sortType === SortTypeId.SortPopular ? dispatch(setSort(SortName.Rating)) :
         dispatch(setSort(SortName.Unknown));
 
-    sortOrder === SortTypeId.SortDecrease ? dispatch(setMode(SortMode.Decrease)) : dispatch(setMode(SortMode.Increase));
+    // eslint-disable-next-line no-nested-ternary
+    sortOrder === SortTypeId.SortDecrease ? dispatch(setMode(SortMode.Decrease)) :
+      sortOrder === SortTypeId.SortIncrease ? dispatch(setMode(SortMode.Increase)) :
+        dispatch(setMode(SortMode.Unknown));
   }, [sortOrder, sortType, dispatch]);
 
   const onChangeSetSearchParams = (e: ChangeEvent<HTMLInputElement>) =>
@@ -52,7 +55,7 @@ function CatalogSort (): JSX.Element {
           </div>
           <div className="catalog-sort__order">
             <div className="catalog-sort__btn catalog-sort__btn--up">
-              <input type="radio" id="up" name="sort-icon" defaultChecked aria-label="По возрастанию" onChange={(e)=> onSortButtonChange(e)} data-testid={'up-test'}/>
+              <input type="radio" id="up" name="sort-icon" aria-label="По возрастанию" onChange={(e)=> onSortButtonChange(e)} data-testid={'up-test'}/>
               <label htmlFor="up">
                 <svg width={16} height={14} aria-hidden="true">
                   <use xlinkHref="#icon-sort" />
