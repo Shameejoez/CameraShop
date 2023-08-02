@@ -2,6 +2,7 @@ import { useAppDispatch, useAppSelector } from '../../hooks';
 import { takeMyCameras } from '../../store/basket-process/basket-selectors';
 import { addMyCameras, deleteMyCameras } from '../../store/basket-process/basket-slice';
 import { CardProductInfo } from '../../types/types';
+import { useState } from 'react';
 
 type BasketItemProps = {
   camera: CardProductInfo;
@@ -14,27 +15,28 @@ function BasketItem ({camera, onClickGetCurrentCamera, onClickSetBasketAdd}: Bas
 
   const dispatch = useAppDispatch();
   const count = useAppSelector(takeMyCameras).find((el) => el.id === camera.id)?.count;
+  const [countCamera, setCountCamera] = useState<number>(1);
 
   const {category, previewImg2x, previewImgWebp, previewImg, previewImgWebp2x, level, name, type, price, vendorCode, id} = camera;
 
   const onClickDeleteAll = () => {
     onClickGetCurrentCamera(camera);
     onClickSetBasketAdd('is-active');
-  }
+  };
   const onClickPlusCount = () => {
     if(count !== 99) {
       dispatch(addMyCameras(camera));
     }
   };
 
-  const onClickDeleteOneMyCamera = () => {
+  const onClickMinusCount = () => {
     if (count !== 1) {
       dispatch(deleteMyCameras({...camera, mode: 'one'}));
     }
   };
-/*   const onClickDeleteAllMyCamera = () => {
+   const onClickDeleteAllMyCamera = () => {
     dispatch(deleteMyCameras({...camera, mode: 'all'}));
-  }; */
+  };
 
   return (
     <li className="basket-item">
@@ -54,13 +56,13 @@ function BasketItem ({camera, onClickGetCurrentCamera, onClickSetBasketAdd}: Bas
       </div>
       <p className="basket-item__price"><span className="visually-hidden">Цена:</span>{price.toLocaleString('ru-Ru')} ₽</p>
       <div className="quantity">
-        <button className="btn-icon btn-icon--prev" aria-label="уменьшить количество товара" onClick={onClickDeleteOneMyCamera} disabled={(count as number) <= 1}>
+        <button className="btn-icon btn-icon--prev" aria-label="уменьшить количество товара" onClick={onClickMinusCount} disabled={(count as number) <= 1}>
           <svg width={7} height={12} aria-hidden="true">
             <use xlinkHref="#icon-arrow" />
           </svg>
         </button>
         <label className="visually-hidden" htmlFor="counter1" />
-        <input type="number" id={`counter${id}`} aria-label="количество товара" value={count} />
+        <input type="number" id={`counter${id}`} aria-label="количество товара" defaultValue={count} />
         <button className="btn-icon btn-icon--next" aria-label="увеличить количество товара" onClick={onClickPlusCount} disabled={(count as number) >= 99}>
           <svg width={7} height={12} aria-hidden="true">
             <use xlinkHref="#icon-arrow" />
@@ -68,7 +70,7 @@ function BasketItem ({camera, onClickGetCurrentCamera, onClickSetBasketAdd}: Bas
         </button>
       </div>
       <div className="basket-item__total-price"><span className="visually-hidden">Общая цена:</span>{(price * (count as number)).toLocaleString('ru-Ru')} ₽</div>
-      <button className="cross-btn" type="button" aria-label="Удалить товар" onClick={onClickDeleteAll}>
+      <button className="cross-btn" type="button" aria-label="Удалить товар" onClick={onClickDeleteAllMyCamera}>
         <svg width={10} height={10} aria-hidden="true">
           <use xlinkHref="#icon-close" />
         </svg>

@@ -36,13 +36,12 @@ export const basketSlicer = createSlice({
         state.myCameras = newMyCameras;
       }
     },
-    setbasketAddItem(state, action: PayloadAction<BasketPopupStatus>) {
-      state.basketAddItem = action.payload;
-    },
-    setBasketAddSucess(state, action: PayloadAction<BasketPopupStatus>) {
-      state.basketAddItem = action.payload;
-    },
+    replaceCountMyCameras(state, action: PayloadAction<{id: CardProductInfo['id']} & {newCount: number}>) {
+      const currentItem = state.myCameras.find((el) => el.id === action.payload.id);
+      const indexItem = state.myCameras.indexOf(currentItem as CardProductInfo & {count?: number});
+      state.myCameras[indexItem].count = action.payload.newCount;
+    }
   }
 });
 
-export const {addMyCameras, deleteMyCameras, setbasketAddItem, setBasketAddSucess} = basketSlicer.actions;
+export const {addMyCameras, deleteMyCameras} = basketSlicer.actions;
