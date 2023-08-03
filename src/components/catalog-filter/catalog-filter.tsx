@@ -134,7 +134,7 @@ function CatalogFilter ({onResetPage}: CatalogFilterProps): JSX.Element {
     onResetPage(0);
     setPageParams(0);
 
-    if (Number(e.target.value) < camerasPricesMin) {
+    if (Number(e.target.value) < Number(min)) {
       setMax(String(prices.min === 0 ? PriceRange.Min : prices.min));
       setPriceUpParams(String(prices.min === 0 ? PriceRange.Min : prices.min));
     }

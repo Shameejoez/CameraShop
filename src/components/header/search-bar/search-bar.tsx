@@ -38,8 +38,7 @@ function SearchBar (): JSX.Element {
 
   const onKeyDownEnterRedirectProduct = (e: KeyboardEvent) => {
 
-    if(e.code === 'Enter' && inFocus) {
-
+    if((e.code === 'Enter' && inFocus) || (e.code === 'NumpadEnter' && inFocus)) {
       setInputValue('');
       browserHistory.push(`/catalog/product/${inFocus}#description`);
     }
