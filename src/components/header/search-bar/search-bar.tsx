@@ -16,9 +16,9 @@ function SearchBar (): JSX.Element {
       return;
     }
     setInFocus(focusedEllement[0].id);
-    document.addEventListener('keydown', onKeyDownEnterRedirectProduct);
+   /*  document.addEventListener('keydown', onKeyDownEnterRedirectProduct);
 
-    return () => document.removeEventListener('keydown', onKeyDownEnterRedirectProduct);
+    return () => document.removeEventListener('keydown', onKeyDownEnterRedirectProduct); */
   }, [focusedEllement]);
 
 
@@ -36,7 +36,7 @@ function SearchBar (): JSX.Element {
 
   const searchProducts = productNames.filter((el) => el.name.toLocaleLowerCase().includes(inputValue.toLocaleLowerCase()));
 
-  const onKeyDownEnterRedirectProduct = (e: KeyboardEvent) => {
+  const onKeyDownEnterRedirectProduct = (e: React.KeyboardEvent) => {
 
     if((e.key === 'Enter' && inFocus) || (e.key === 'NumpadEnter' && inFocus)) {
       setInputValue('');
@@ -59,7 +59,7 @@ function SearchBar (): JSX.Element {
     }
     if (searchProducts.length > 0) {
       return searchProducts.map((el) =>(
-        <li key={el.name} className="form-search__select-item" data-testid={el.id}
+        <li key={el.name} className="form-search__select-item" data-testid={el.id} onKeyDown={onKeyDownEnterRedirectProduct}
           tabIndex={0} onClick={() => onClickRedirectProduct(el.id)}
         >{el.name}
         </li>));
