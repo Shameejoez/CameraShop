@@ -21,7 +21,7 @@ const useArrowChangeFocus = ({ ref, inputValue }: arrowChangeFocusProps) => {
       if (!isFocus) {
         return;
       }
-      if (e.code !== 'ArrowDown') {
+      if (e.key !== 'ArrowDown') {
         return;
       }
       e.preventDefault();
@@ -42,7 +42,7 @@ const useArrowChangeFocus = ({ ref, inputValue }: arrowChangeFocusProps) => {
         return;
       }
 
-      if (e.code !== 'ArrowUp') {
+      if (e.key !== 'ArrowUp') {
         return;
       }
       e.preventDefault();
