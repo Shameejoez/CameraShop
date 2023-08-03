@@ -7,6 +7,18 @@ export const STARS_COUNT = 5;
 export const REVIEW_COUNT = 3; // количесто отызов в одном блоке
 export const PRODUCTS_ON_PAGE = 9;
 
+export enum SetFilterMode {
+  Push = 'push',
+  Unshift = 'unshift'
+}
+
+export enum SortTypeId {
+  SortPopular = 'sortPopular',
+  SortPrice = 'sortPrice',
+  SortIncrease = 'up',
+  SortDecrease = 'down'
+}
+
 export enum PriceRange {
   Min = 1990,
   Max = 199000
@@ -24,6 +36,7 @@ export enum SortName {
 export enum SortMode {
   Increase = 'Increase',
   Decrease = 'Decrease',
+  Unknown = 'unknown'
 }
 
 export enum BasketPopupStatus {

@@ -37,7 +37,7 @@ function SearchBar (): JSX.Element {
 
   const onKeyDownEnterRedirectProduct = (e: KeyboardEvent) => {
 
-    if(e.code === 'Enter' && inFocus) {
+    if(e.key === 'Enter' && inFocus) {
 
       setInputValue('');
       browserHistory.push(`/catalog/product/${inFocus}#description`);

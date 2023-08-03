@@ -2,9 +2,10 @@ import { Link } from 'react-router-dom';
 import { AppRoutes, RAITING_COUNT } from '../../consts';
 import { CardProductInfo } from '../../types/types';
 import StarsRating from '../stars-rating/stars-rating';
-import { useAppSelector } from '../../hooks';
+import { useAppDispatch, useAppSelector } from '../../hooks';
 import { takeRatings } from '../../store/data-process/data-selectors';
 import { takeMyCameras } from '../../store/basket-process/basket-selectors';
+import { deleteAllFilters } from '../../store/filter-process/filter-slice';
 
 type CardProductProps = {
   camera: CardProductInfo;
@@ -15,12 +16,18 @@ type CardProductProps = {
 }
 
 function CardProduct ({camera, onReviewsBack = () => void 0, onClickGetCurrentCamera, onClickSetAddBasket}: CardProductProps):JSX.Element {
+  const dispatch = useAppDispatch();
   const myCameras = useAppSelector(takeMyCameras);
   const addedCamera = myCameras.find((cam) => cam.name === camera.name);
 
   const onClickAddCamera = () => {
     onClickSetAddBasket('is-active');
     onClickGetCurrentCamera(camera);
+  };
+
+  const onInfoButtonClick = () => {
+    onReviewsBack();
+    dispatch(deleteAllFilters());
   };
 
   const { id, name, price, type, previewImg, previewImg2x, previewImgWebp, previewImgWebp2x, reviewCount } = camera;
@@ -66,7 +73,7 @@ function CardProduct ({camera, onReviewsBack = () => void 0, onClickGetCurrentCa
         {
           renderBuyButton()
         }
-        <Link className="btn btn--transparent" to={`/catalog/${AppRoutes.Product}/${id}#description`} onClick={onReviewsBack}>Подробнее
+        <Link className="btn btn--transparent" to={`/catalog/${AppRoutes.Product}/${id}#description`} onClick={onInfoButtonClick}>Подробнее
         </Link>
       </div>
     </div>

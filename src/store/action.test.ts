@@ -94,7 +94,7 @@ const productArray: CardProductInfo [] = [
   }
 ];
 
-global.window = Object.create(window);
+global.window ??= Object.create(window);
 const url = 'http://localhost';
 Object.defineProperty(window, 'location', {
   value: {

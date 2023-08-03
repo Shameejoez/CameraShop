@@ -1,6 +1,6 @@
 import { useSearchParams } from 'react-router-dom';
 import {useState, ChangeEvent, useEffect} from 'react';
-import { TypeProduct } from '../../consts';
+import { CategoryProduct, PriceRange, SortTypeId, TypeProduct } from '../../consts';
 import { RangePrice } from '../../types/types';
 
 type useSearchParamsCustomProps = {
@@ -22,7 +22,7 @@ const useSearchParamsCustom = ({initialPage, initialFilter, initialSortType, ini
   const [sortOrder, setSortOrder] = useState<string | null>(initialSortOrder ?? null);
   const [prices, setPrices] = useState<RangePrice>({
     min: initialPrice?.min ?? 0,
-    max: initialPrice?.max ?? 199000,
+    max: initialPrice?.max ?? PriceRange.Max,
   });
 
   useEffect(() => {
@@ -32,12 +32,12 @@ const useSearchParamsCustom = ({initialPage, initialFilter, initialSortType, ini
 
   /// Фильтры
   const setFilterParams = (e: ChangeEvent<HTMLInputElement>) => {
-    const {id, checked } = e.target;
-    const currenFilter = id;
+    const { id: currenFilter, checked } = e.target;
+
 
     let filterParams = search.get('filters')?.split(',') ?? [];
 
-    if (checked && currenFilter === 'Видеокамера') {
+    if (checked && currenFilter === CategoryProduct.Camera) {
       filterParams = filterParams.filter((filter) => (filter !== TypeProduct.Instant && filter !== TypeProduct.Digital));
     }
 
@@ -90,20 +90,19 @@ const useSearchParamsCustom = ({initialPage, initialFilter, initialSortType, ini
   };
 
   // Название сортировки
-  const setSortTypeParams = (e: ChangeEvent<HTMLInputElement>) => {
-    const currenSort = e.target.id;
-    search.set('sort', currenSort);
+  const setSortTypeParams = (type: SortTypeId) => {
+
+    search.set('sort', type);
 
     setSearch(search);
-    setSortType(currenSort);
+    setSortType(type);
   };
   // порядок сортировки
-  const setSortOrderParams = (e: ChangeEvent<HTMLInputElement>) => {
-    const currentOrder = e.target.id;
-    search.set('sortOrder', currentOrder);
+  const setSortOrderParams = (mode: SortTypeId) => {
+    search.set('sortOrder', mode);
 
     setSearch(search);
-    setSortOrder(currentOrder);
+    setSortOrder(mode);
   };
   // Для настройки фильтров и сортировок по параметрам;
   const setAllParams = () => {
