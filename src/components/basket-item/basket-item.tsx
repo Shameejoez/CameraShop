@@ -1,8 +1,8 @@
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { takeMyCameras } from '../../store/basket-process/basket-selectors';
-import { addMyCameras, deleteMyCameras } from '../../store/basket-process/basket-slice';
+import { addMyCameras, deleteMyCameras, replaceCountMyCameras } from '../../store/basket-process/basket-slice';
 import { CardProductInfo } from '../../types/types';
-import { useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 
 type BasketItemProps = {
   camera: CardProductInfo;
@@ -17,6 +17,10 @@ function BasketItem ({camera, onClickGetCurrentCamera, onClickSetBasketAdd}: Bas
   const count = useAppSelector(takeMyCameras).find((el) => el.id === camera.id)?.count;
   const [countCamera, setCountCamera] = useState<number>(1);
 
+   useEffect(() => {
+    setCountCamera(Number(count));
+  },[count]);
+
   const {category, previewImg2x, previewImgWebp, previewImg, previewImgWebp2x, level, name, type, price, vendorCode, id} = camera;
 
   const onClickDeleteAll = () => {
@@ -29,12 +33,33 @@ function BasketItem ({camera, onClickGetCurrentCamera, onClickSetBasketAdd}: Bas
     }
   };
 
+  const onChangesetCount = (e: ChangeEvent<HTMLInputElement>) => {
+   // console.log(e.target.value);
+    const currentValue = e.target.value.trim().replace(/\D/g , '');
+
+    if(Number(currentValue) > 99) {
+      console.log(currentValue);
+      dispatch(replaceCountMyCameras({id: camera.id, newCount: 99}));
+      return;
+    }
+
+    if(Number(currentValue) < 1) {
+      console.log(currentValue);
+      dispatch(replaceCountMyCameras({id: camera.id, newCount: 1}));
+      return;
+    }
+
+    console.log(currentValue);
+    setCountCamera(Number(currentValue));
+    dispatch(replaceCountMyCameras({id: camera.id, newCount: countCamera}));
+  };
+
   const onClickMinusCount = () => {
     if (count !== 1) {
       dispatch(deleteMyCameras({...camera, mode: 'one'}));
     }
   };
-   const onClickDeleteAllMyCamera = () => {
+  const onClickDeleteAllMyCamera = () => {
     dispatch(deleteMyCameras({...camera, mode: 'all'}));
   };
 
@@ -62,7 +87,7 @@ function BasketItem ({camera, onClickGetCurrentCamera, onClickSetBasketAdd}: Bas
           </svg>
         </button>
         <label className="visually-hidden" htmlFor="counter1" />
-        <input type="number" id={`counter${id}`} aria-label="количество товара" defaultValue={count} />
+        <input type="text" id={`counter${id}`} aria-label="количество товара" value={countCamera} onChange={onChangesetCount} />
         <button className="btn-icon btn-icon--next" aria-label="увеличить количество товара" onClick={onClickPlusCount} disabled={(count as number) >= 99}>
           <svg width={7} height={12} aria-hidden="true">
             <use xlinkHref="#icon-arrow" />

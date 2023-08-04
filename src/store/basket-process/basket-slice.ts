@@ -44,4 +44,4 @@ export const basketSlicer = createSlice({
   }
 });
 
-export const {addMyCameras, deleteMyCameras} = basketSlicer.actions;
+export const {addMyCameras, deleteMyCameras, replaceCountMyCameras} = basketSlicer.actions;
