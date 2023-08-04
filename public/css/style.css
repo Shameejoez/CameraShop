@@ -1595,6 +1595,8 @@ button,
 
 .form-search__select-list {
   position: absolute;
+  display: flex;
+  flex-direction: column;
   top: 49px;
   left: 0;
   z-index: 4;

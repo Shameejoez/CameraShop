@@ -14,7 +14,7 @@ const useArrowChangeFocus = ({ ref, inputValue }: arrowChangeFocusProps) => {
       setElementFocus(0);
     }
 
-    const focusElements = ref.current?.querySelectorAll('li, input') as (NodeListOf<HTMLElement>);
+    const focusElements = ref.current?.querySelectorAll('a, input') as (NodeListOf<HTMLElement>);
     const firstElement = focusElements[0];
 
     const onDownArrowShift = (e: KeyboardEvent) => {
@@ -58,6 +58,11 @@ const useArrowChangeFocus = ({ ref, inputValue }: arrowChangeFocusProps) => {
     };
 
     const onKeyDownSetFocus = (e: KeyboardEvent ) => {
+
+      if(e.key === 'Enter' && e.target === firstElement) {
+        e.preventDefault();
+      }
+
       if (e.target === firstElement || document.activeElement === firstElement) {
         setElementFocus(0);
         setFocus(true);
@@ -68,6 +73,7 @@ const useArrowChangeFocus = ({ ref, inputValue }: arrowChangeFocusProps) => {
       if (e.target === firstElement || document.activeElement === firstElement) {
         setElementFocus(0);
         setFocus(true);
+
       } else {
         setFocus(false);
         setElementFocus(0);
@@ -85,7 +91,7 @@ const useArrowChangeFocus = ({ ref, inputValue }: arrowChangeFocusProps) => {
       document.removeEventListener('click', onClickSetFocus);
       document.removeEventListener('keydown', onUpArrowShift);
     };
-  }, [elementFocus, ref, isFocus, inputValue]);
+  }, [elementFocus, ref, isFocus, inputValue ]);
 
 };
 

@@ -1,25 +1,27 @@
 import { useAppSelector } from '../../../hooks';
 import { takeCameras } from '../../../store/data-process/data-selectors';
 import { useState, ChangeEvent, useRef, useEffect } from 'react';
-import browserHistory from '../../../browser-history';
 import useArrowChangeFocus from '../../../hooks/use-arrow-change-focus/use-arrow-change-focus';
+import { Link, useLocation } from 'react-router-dom';
 
 function SearchBar (): JSX.Element {
   const productNames = useAppSelector(takeCameras).map((el) => ({id:el.id ,name:el.name}));
   const [inputValue, setInputValue] = useState<string>('');
   const barRef = useRef<HTMLDivElement | null>(null);
-  const [inFocus, setInFocus] = useState<number | null>(null);
-  const focusedEllement = productNames.filter((el) => el.name === document.activeElement?.textContent);
+  const location = useLocation();
+  //const [inFocus, setInFocus] = useState<number | null>(null);
+  //const focusedEllement = productNames.filter((el) => el.name === document.activeElement?.textContent);
 
   useEffect(() => {
-    if (document.activeElement?.textContent !== focusedEllement[0]?.name) {
+    setInputValue('');
+    /*     if (document.activeElement?.textContent !== focusedEllement[0]?.name) {
       return;
     }
-    setInFocus(focusedEllement[0].id);
-   /*  document.addEventListener('keydown', onKeyDownEnterRedirectProduct);
+    setInFocus(focusedEllement[0].id); */
+    /*  document.addEventListener('keydown', onKeyDownEnterRedirectProduct);
 
     return () => document.removeEventListener('keydown', onKeyDownEnterRedirectProduct); */
-  }, [focusedEllement]);
+  }, [location]);
 
 
   useArrowChangeFocus({ref: barRef, inputValue: inputValue});
@@ -36,7 +38,7 @@ function SearchBar (): JSX.Element {
 
   const searchProducts = productNames.filter((el) => el.name.toLocaleLowerCase().includes(inputValue.toLocaleLowerCase()));
 
-  const onKeyDownEnterRedirectProduct = (e: React.KeyboardEvent) => {
+  /*   const onKeyDownEnterRedirectProduct = (e: React.KeyboardEvent) => {
 
     if((e.key === 'Enter' && inFocus) || (e.key === 'NumpadEnter' && inFocus)) {
       setInputValue('');
@@ -52,17 +54,17 @@ function SearchBar (): JSX.Element {
     browserHistory.push(`/catalog/product/${id}#description`);
   };
 
-
+ */
   const renderSearchItem = () => {
     if ( searchProducts.length === 0 ) {
       return <li className="form-search__select-item" data-testid={'no-similar'} tabIndex={0} >Не найдено</li>;
     }
     if (searchProducts.length > 0) {
       return searchProducts.map((el) =>(
-        <li key={el.name} className="form-search__select-item" data-testid={el.id} onKeyDown={onKeyDownEnterRedirectProduct}
-          tabIndex={0} onClick={() => onClickRedirectProduct(el.id)}
+        <Link to={`/catalog/product/${el.id}#description`} key={el.name} className="form-search__select-item" data-testid={el.id}
+          tabIndex={0}
         >{el.name}
-        </li>));
+        </Link>));
     }
   };
 
