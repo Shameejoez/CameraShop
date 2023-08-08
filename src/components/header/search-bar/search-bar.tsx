@@ -36,7 +36,7 @@ function SearchBar (): JSX.Element {
 
   };
 
-  const searchProducts = productNames.filter((el) => el.name.toLocaleLowerCase().includes(inputValue.toLocaleLowerCase()));
+  const searchProducts = productNames.filter((el) => el.name.toLocaleLowerCase().includes(inputValue.length > 0 ? inputValue.toLocaleLowerCase() : '$$$'.toLocaleLowerCase()));
 
   /*   const onKeyDownEnterRedirectProduct = (e: React.KeyboardEvent) => {
 

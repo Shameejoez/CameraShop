@@ -38,6 +38,21 @@ const productArray: CardProductInfo [] = [
     reviewCount: 5,
     type: TypeProduct.Collectible,
     vendorCode: 'DA4IU67AD5',
+  },
+  {
+    category: CategoryProduct.Camcorder,
+    description: 'Немецкий',
+    id: 21,
+    level: Mastery.Amateur,
+    name: 'ЫЫЫЫЫЫЫЫ',
+    previewImg: 'img/content/das.jpg',
+    previewImg2x: 'img/content/das.jpg',
+    previewImgWebp: 'img/content/das.webp',
+    previewImgWebp2x: 'img/content/das.webp',
+    price: 73450,
+    reviewCount: 5,
+    type: TypeProduct.Collectible,
+    vendorCode: 'DA4IU67AD5',
   }
 ];
 
@@ -96,11 +111,11 @@ describe('useArrowChangeFocus', () => {
     browserHistory.push(AppRoutes.Catalog);
     render(fakeApp);
 
-
     const searchInput = await screen.findByPlaceholderText('Поиск по сайту', {}, {timeout: 2000});
-    userEvent.type(searchInput, 'bbb');
+    //userEvent.clear(searchInput)
+    userEvent.type(searchInput, 'ЫЫЫЫЫЫЫЫ');
 
-    const lowerElement = await screen.findByTestId('no-similar', {}, {timeout: 2000});
+    const lowerElement = await screen.findByTestId('21', {}, {timeout: 2000});
     userEvent.keyboard('[ArrowDown]');
     await waitFor(() =>expect(lowerElement).toHaveFocus());
     userEvent.keyboard('[ArrowDown]');
@@ -112,13 +127,13 @@ describe('useArrowChangeFocus', () => {
     render(fakeApp);
 
     const searchInput = await screen.findByPlaceholderText('Поиск по сайту', {}, {timeout: 2000});
-    userEvent.type(searchInput, 'bbb');
+    userEvent.type(searchInput, 'ЫЫЫЫЫЫЫЫ');
 
-    const lowerElement = await screen.findByTestId('no-similar', {}, {timeout: 2000});
+    const lowerElement = await screen.findByTestId('21', {}, {timeout: 2000});
     userEvent.keyboard('[ArrowUp]');
 
 
-    await waitFor(() =>expect(lowerElement).toHaveFocus() );
+    await waitFor(() =>expect(lowerElement).toHaveFocus());
   });
 });
 
