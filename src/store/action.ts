@@ -104,22 +104,22 @@ export const postReview = createAsyncThunk<Review, sendRewiew, {extra: Extra}>(
 export const postCupon = createAsyncThunk<number, string, {extra: Extra}>(
   Action.COUPON,
 
-  async(coupon, {extra}) => {
-
+  async(coupon, {extra, }) => {
     const {api} = extra;
-    const {data} = await api.post<number>(ApiRoutes.coupon, coupon);
+    const {data} = await api.post<number>('coupons', {coupon});
     return data;
+
   }
 );
 
 // запрос на заказ
-export const postOrders = createAsyncThunk<undefined, Order, {extra: Extra}>(
+export const postOrders = createAsyncThunk<undefined | string, Order, {extra: Extra}>(
   Action.POST_ORDER,
 
   async(order, {extra}) => {
 
     const {api} = extra;
-    const {data} = await api.post<undefined>(ApiRoutes.order, order);
+    const {data} = await api.post<undefined | string>(ApiRoutes.order, order);
 
     return data;
   }

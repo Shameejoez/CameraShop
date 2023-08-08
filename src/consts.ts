@@ -7,6 +7,13 @@ export const STARS_COUNT = 5;
 export const REVIEW_COUNT = 3; // количесто отызов в одном блоке
 export const PRODUCTS_ON_PAGE = 9;
 
+export enum CuponStatus {
+  Rejected = 'rejected',
+  NotValid = 'notValid',
+  Vaild = 'valid',
+  Unknown = 'unknow'
+}
+
 export enum SetFilterMode {
   Push = 'push',
   Unshift = 'unshift'

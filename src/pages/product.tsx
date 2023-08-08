@@ -13,7 +13,7 @@ import { CardProductInfo, sendRewiew } from '../types/types';
 import ErrorConnectMessage from '../components/error-conntect-message/error-connect-message';
 import ButtonScrollUp from '../components/button-scroll-up/button-scroll-up';
 import Spinner from '../components/spinner/spinner';
-import BasketAddItem from '../components/basket-popups/basket-add-item';
+import BasketAddItem from '../components/basket-popups/basket-add-delete-item';
 import BasketAddSucess from '../components/basket-popups/basket-add-sucess';
 
 type ProductProps = {

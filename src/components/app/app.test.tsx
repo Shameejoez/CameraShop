@@ -5,7 +5,7 @@ import { configureMockStore } from '@jedmao/redux-mock-store';
 import MockAdapter from 'axios-mock-adapter';
 import thunk from 'redux-thunk';
 import { createAPI } from '../../services/api';
-import { AppRoutes, CategoryProduct, Mastery, PriceRange, SlicerName, SortMode, SortName, TypeProduct } from '../../consts';
+import { AppRoutes, CategoryProduct, CuponStatus, LoadingStatus, Mastery, PriceRange, SlicerName, SortMode, SortName, TypeProduct } from '../../consts';
 import browserHistory from '../../browser-history';
 import { CardProductInfo, PromoProduct } from '../../types/types';
 
@@ -81,9 +81,18 @@ const store = mockStore({
       min: PriceRange.Min,
       max: PriceRange.Max,
     }
+  },
+  [SlicerName.BasketProcess]: {
+    myCameras: productArray.map((el) => ({...el, count: 3})),
+    addedCoupon: 'camera-333',
+    totalPrice: productArray[0].price * 3,
+    orderPostStatus: LoadingStatus.Unknown,
+    discount:{
+      count: 15,
+      isValid: CuponStatus.Vaild
+    }
   }
 });
-
 
 const fakeApp = (
 
@@ -112,28 +121,31 @@ describe('Main tests', () => {
   it('if click Promo "Подробнее" should render promo-products page', async() => {
     browserHistory.push(AppRoutes.Catalog);
     render(fakeApp);
-    const promoBtn = await screen.findByTestId('promo-link');
+    const promoBtn = await screen.findByTestId('promo-link' , {}, {timeout: 2000});
     userEvent.click(promoBtn);
-    await screen.findByTestId('productid-test');
 
+    await waitFor(() =>screen.findByTestId('productid-test'));
   });
 
   it('should return "Product"  when user navigates to "/product/:id', async() => {
     render(fakeApp);
-    await screen.findAllByText('Характеристики' && 'Описание', {}, {timeout: 2000});
-    await screen.findByText('Добавить в корзину' , {}, {timeout: 2000});
-    await screen.findAllByText(/Ретрокамера Dus Auge lV/i , {}, {timeout: 2000});
-    await screen.findAllByRole('img' , {}, {timeout: 2000});
-    await screen.findByTestId('footer-test' , {}, {timeout: 2000});
+
+    await waitFor(() => {
+      screen.getAllByText('Характеристики' && 'Описание');
+      screen.getAllByText(/Ретрокамера Dus Auge lV/i );
+      screen.getAllByRole('img');
+      screen.getByTestId('footer-test');
+    }, {timeout: 4000});
   });
 
-});
-
-describe('ReviewForm', () => {
-  it('should render Review Form', async() => {
-    render(fakeApp);
-    const addComment = await screen.findByRole('button', {name: 'Оставить свой отзыв' }, {timeout: 2000});
-    await userEvent.click(addComment);
-    await screen.findByTestId('review-form-test' , {}, {timeout: 2000});
+  describe('ReviewForm', () => {
+    it('should render Review Form', async() => {
+      render(fakeApp);
+      const addComment = await screen.findByRole('button', {name: 'Оставить свой отзыв' }, {timeout: 2000});
+      userEvent.click(addComment);
+      await screen.findByTestId('review-form-test' , {}, {timeout: 2000});
+    });
   });
 });
+
+

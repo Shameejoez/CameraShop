@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import { CardProductInfo, PromoProduct } from '../../types/types';
-import { AppRoutes, CategoryProduct, Mastery, PriceRange, SlicerName, SortMode, SortName, TypeProduct } from '../../consts';
+import { AppRoutes, CategoryProduct, CuponStatus, LoadingStatus, Mastery, PriceRange, SlicerName, SortMode, SortName, TypeProduct } from '../../consts';
 import { createAPI } from '../../services/api';
 import MockAdapter from 'axios-mock-adapter';
 import thunk from 'redux-thunk';
@@ -81,6 +81,16 @@ const store = mockStore({
     rangePrice: {
       min: PriceRange.Min,
       max: PriceRange.Max,
+    }
+  },
+  [SlicerName.BasketProcess]: {
+    myCameras: productArray.map((el) => ({...el, count: 3})),
+    addedCoupon: 'camera-333',
+    totalPrice: productArray[0].price * 3,
+    orderPostStatus: LoadingStatus.Unknown,
+    discount:{
+      count: 15,
+      isValid: CuponStatus.Vaild
     }
   }
 });

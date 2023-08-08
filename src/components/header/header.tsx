@@ -1,13 +1,22 @@
-import { Outlet, Link } from 'react-router-dom';
+import { Outlet, Link, useLocation } from 'react-router-dom';
 import Footer from '../footer/footer';
 import HeaderNavElement from './header-nav-element/header-nav-element';
 import { AppRoutes, HeaderNames } from '../../consts';
 import SearchBar from './search-bar/search-bar';
 import { takeMyCameras } from '../../store/basket-process/basket-selectors';
-import { useAppSelector } from '../../hooks';
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import { useEffect } from 'react';
+import { deleteAllFilters } from '../../store/filter-process/filter-slice';
 
 function Header ():JSX.Element {
   const camerasCount = useAppSelector(takeMyCameras).map((el) => el.count);
+  const dispatch = useAppDispatch();
+  const location = useLocation();
+
+  useEffect(() => {
+    dispatch(deleteAllFilters());
+
+  }, [location]);
 
   const renderTotalCount = () => {
     if (camerasCount.length > 0) {

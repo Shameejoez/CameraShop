@@ -11,7 +11,7 @@ import ErrorConnectMessage from '../components/error-conntect-message/error-conn
 import useSearchParamsCustom from '../hooks/use-search-params-custom/use-search-params-custom';
 import { filterRangePrice } from '../utils/filters';
 import { takeRangePrice } from '../store/filter-process/filter-selectors';
-import BasketAddItem from '../components/basket-popups/basket-add-item';
+import BasketAddItem from '../components/basket-popups/basket-add-delete-item';
 import BasketAddSucess from '../components/basket-popups/basket-add-sucess';
 import { CardProductInfo } from '../types/types';
 import { useState } from 'react';
@@ -88,8 +88,8 @@ function Catalog({isActiveSuccessBasket, onClickBasketSucess, onClickSetBasketAd
         getCamerasStatus === LoadingStatus.Rejected &&
      <ErrorConnectMessage isVisible={getCamerasStatus === LoadingStatus.Rejected ? 'is-active' : ''}/>
       }
-      <BasketAddItem camera={curentCamera} isActive={isActiveAddBasket} onClickSetBasketAdd={onClickSetBasketAdd} onClickBasketSucess={onClickBasketSucess}/>
-      <BasketAddSucess isActive={isActiveSuccessBasket} onClickSetBasketSucess={onClickBasketSucess}/>
+   {/*    <BasketAddItem camera={curentCamera} isActive={isActiveAddBasket} onClickSetBasketAdd={onClickSetBasketAdd} onClickBasketSucess={onClickBasketSucess}/>
+      <BasketAddSucess isActive={isActiveSuccessBasket} onClickSetBasketSucess={onClickBasketSucess}/> */}
     </main>
   );
 }

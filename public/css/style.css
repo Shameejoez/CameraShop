@@ -907,7 +907,7 @@ button,
   background-color: rgba(0, 0, 0, 0.6);
   -webkit-transform: scale(1.2);
   -ms-transform: scale(1.2);
-  transform: scale(1.2);
+  transform: scale(1.2); 
   visibility: hidden;
   opacity: 0;
   -webkit-transition: opacity 0.6s cubic-bezier(0.55, 0, 0.1, 1), visibility 0.6s cubic-bezier(0.55, 0, 0.1, 1), -webkit-transform 0.6s cubic-bezier(0.55, 0, 0.1, 1);
@@ -1026,13 +1026,13 @@ button,
 }
 
 .modal__btn--half-width {
-  width: calc((100% - 10px * 2) / 2);
+  width:  calc((100% - 10px * 2) / 2); 
 }
 
 .modal.is-active {
   -webkit-transform: scale(1);
   -ms-transform: scale(1);
-  transform: scale(1);
+  transform: scale(1); 
   visibility: visible;
   opacity: 1;
   pointer-events: auto;
@@ -1595,6 +1595,8 @@ button,
 
 .form-search__select-list {
   position: absolute;
+  display: flex;
+  flex-direction: column;
   top: 49px;
   left: 0;
   z-index: 4;

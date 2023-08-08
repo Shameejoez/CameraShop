@@ -46,6 +46,7 @@ export type Review = {
 
 export type Order = {
     camerasIds: CardProductInfo['id'] [];
+    coupon: string | null;
 }
 
 export type sendRewiew = Omit <Review, 'id' | 'createAt'>;

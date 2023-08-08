@@ -14,7 +14,7 @@ type BasketAddItemProps = {
     place?: string;
 }
 
-function BasketAddItem ({camera, isActive, onClickSetBasketAdd, onClickBasketSucess, place}: BasketAddItemProps) :JSX.Element {
+function BasketAddDeleteItem ({camera, isActive, onClickSetBasketAdd, onClickBasketSucess, place}: BasketAddItemProps) :JSX.Element {
   const dispatch = useAppDispatch();
   const refModal = useRef<HTMLInputElement | null>(null);
   useFocusLockModal({isVisible: isActive , ref: refModal});
@@ -35,7 +35,7 @@ function BasketAddItem ({camera, isActive, onClickSetBasketAdd, onClickBasketSuc
   };
 
   return (
-    <div className={`modal ${isActive}`} style={isActive === 'is-active' ? {width: 'calc(100% - 16.8px)'} : undefined} >
+    <div className={`modal ${isActive}`} style={{width: 'calc(100% - 16.8px)'}} >
       <div className="modal__wrapper">
         <div className="modal__overlay" />
         <div className="modal__content" ref={refModal}>
@@ -63,7 +63,7 @@ function BasketAddItem ({camera, isActive, onClickSetBasketAdd, onClickBasketSuc
           <div className="modal__buttons">
             {
               place === 'basket' ?
-                <div>
+                <>
                   <button className="btn btn--purple modal__btn modal__btn--half-width" type="button" onClick={onClickDeleteAllMyCamera}>Удалить
                   </button>
                   <a className="btn btn--transparent modal__btn modal__btn--half-width" href="#" onClick={() => onClickSetBasketAdd('')}>Продолжить покупки
@@ -73,7 +73,7 @@ function BasketAddItem ({camera, isActive, onClickSetBasketAdd, onClickBasketSuc
                       <use xlinkHref="#icon-close" />
                     </svg>
                   </button>
-                </div> :
+                </> :
                 <button className="btn btn--purple modal__btn modal__btn--fit-width" type="button" onClick={onClickAddMyCameras}>
                   <svg width={24} height={16} aria-hidden="true">
                     <use xlinkHref="#icon-add-basket" />
@@ -92,4 +92,4 @@ function BasketAddItem ({camera, isActive, onClickSetBasketAdd, onClickBasketSuc
   );
 }
 
-export default BasketAddItem;
+export default BasketAddDeleteItem;

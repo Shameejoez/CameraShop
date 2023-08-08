@@ -14,14 +14,14 @@ const useArrowChangeFocus = ({ ref, inputValue }: arrowChangeFocusProps) => {
       setElementFocus(0);
     }
 
-    const focusElements = ref.current?.querySelectorAll('li, input') as (NodeListOf<HTMLElement>);
+    const focusElements = ref.current?.querySelectorAll('a, input') as (NodeListOf<HTMLElement>);
     const firstElement = focusElements[0];
 
     const onDownArrowShift = (e: KeyboardEvent) => {
       if (!isFocus) {
         return;
       }
-      if (e.code !== 'ArrowDown') {
+      if (e.key !== 'ArrowDown') {
         return;
       }
       e.preventDefault();
@@ -42,7 +42,7 @@ const useArrowChangeFocus = ({ ref, inputValue }: arrowChangeFocusProps) => {
         return;
       }
 
-      if (e.code !== 'ArrowUp') {
+      if (e.key !== 'ArrowUp') {
         return;
       }
       e.preventDefault();
@@ -57,35 +57,41 @@ const useArrowChangeFocus = ({ ref, inputValue }: arrowChangeFocusProps) => {
 
     };
 
-    const onKeyDownSetFocus = (e: KeyboardEvent ) => {
+/*     const onKeyDownSetFocus = (e: KeyboardEvent ) => {
+
+      if(e.key === 'Enter' && e.target === firstElement) {
+        e.preventDefault();
+      }
+
       if (e.target === firstElement || document.activeElement === firstElement) {
         setElementFocus(0);
         setFocus(true);
       }
-    };
+    }; */
 
     const onClickSetFocus = (e: MouseEvent ) => {
       if (e.target === firstElement || document.activeElement === firstElement) {
         setElementFocus(0);
         setFocus(true);
+
       } else {
         setFocus(false);
         setElementFocus(0);
       }
     };
 
-    document.addEventListener('keydown', onKeyDownSetFocus);
+    //document.addEventListener('keydown', onKeyDownSetFocus);
     document.addEventListener('keydown', onUpArrowShift);
     document.addEventListener('click', onClickSetFocus);
     document.addEventListener('keydown', onDownArrowShift);
 
     return () => {
-      document.removeEventListener('keydown', onKeyDownSetFocus);
+    //  document.removeEventListener('keydown', onKeyDownSetFocus);
       document.removeEventListener('keydown', onDownArrowShift);
       document.removeEventListener('click', onClickSetFocus);
       document.removeEventListener('keydown', onUpArrowShift);
     };
-  }, [elementFocus, ref, isFocus, inputValue]);
+  }, [elementFocus, ref, isFocus, inputValue ]);
 
 };
 

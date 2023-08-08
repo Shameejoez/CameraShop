@@ -1,4 +1,4 @@
-import { BasketPopupStatus, CategoryProduct, LoadingStatus, Mastery, SortMode, SortName, TypeProduct } from '../consts';
+import { CategoryProduct, CuponStatus, LoadingStatus, Mastery, SortMode, SortName, TypeProduct } from '../consts';
 import { store} from '../store';
 import { CardProductInfo, ProductRating, PromoProduct, Review } from './types';
 
@@ -35,8 +35,11 @@ export type siteStore = {
 
 export type basketStore = {
     myCameras: (CardProductInfo & {count?: number})[];
-    coupon: string;
+    addedCoupon: string;
     totalPrice: number;
-    basketAddSucess: BasketPopupStatus;
-    basketAddItem: BasketPopupStatus;
- }
+    orderPostStatus: LoadingStatus;
+    discount:{
+        count: number;
+        isValid: CuponStatus;
+        };
+    };

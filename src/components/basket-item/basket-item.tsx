@@ -17,16 +17,17 @@ function BasketItem ({camera, onClickGetCurrentCamera, onClickSetBasketAdd}: Bas
   const count = useAppSelector(takeMyCameras).find((el) => el.id === camera.id)?.count;
   const [countCamera, setCountCamera] = useState<number>(1);
 
-   useEffect(() => {
+  useEffect(() => {
     setCountCamera(Number(count));
   },[count]);
 
   const {category, previewImg2x, previewImgWebp, previewImg, previewImgWebp2x, level, name, type, price, vendorCode, id} = camera;
 
-  const onClickDeleteAll = () => {
+  const onClickDeleteItem = () => {
     onClickGetCurrentCamera(camera);
     onClickSetBasketAdd('is-active');
   };
+
   const onClickPlusCount = () => {
     if(count !== 99) {
       dispatch(addMyCameras(camera));
@@ -34,33 +35,27 @@ function BasketItem ({camera, onClickGetCurrentCamera, onClickSetBasketAdd}: Bas
   };
 
   const onChangesetCount = (e: ChangeEvent<HTMLInputElement>) => {
-   // console.log(e.target.value);
+
     const currentValue = e.target.value.trim().replace(/\D/g , '');
 
     if(Number(currentValue) > 99) {
-      console.log(currentValue);
       dispatch(replaceCountMyCameras({id: camera.id, newCount: 99}));
       return;
     }
 
     if(Number(currentValue) < 1) {
-      console.log(currentValue);
       dispatch(replaceCountMyCameras({id: camera.id, newCount: 1}));
       return;
     }
 
-    console.log(currentValue);
     setCountCamera(Number(currentValue));
-    dispatch(replaceCountMyCameras({id: camera.id, newCount: countCamera}));
+    dispatch(replaceCountMyCameras({id: camera.id, newCount: Number(currentValue)}));
   };
 
   const onClickMinusCount = () => {
     if (count !== 1) {
       dispatch(deleteMyCameras({...camera, mode: 'one'}));
     }
-  };
-  const onClickDeleteAllMyCamera = () => {
-    dispatch(deleteMyCameras({...camera, mode: 'all'}));
   };
 
   return (
@@ -95,7 +90,7 @@ function BasketItem ({camera, onClickGetCurrentCamera, onClickSetBasketAdd}: Bas
         </button>
       </div>
       <div className="basket-item__total-price"><span className="visually-hidden">Общая цена:</span>{(price * (count as number)).toLocaleString('ru-Ru')} ₽</div>
-      <button className="cross-btn" type="button" aria-label="Удалить товар" onClick={onClickDeleteAllMyCamera}>
+      <button className="cross-btn" type="button" aria-label="Удалить товар" onClick={onClickDeleteItem}>
         <svg width={10} height={10} aria-hidden="true">
           <use xlinkHref="#icon-close" />
         </svg>
