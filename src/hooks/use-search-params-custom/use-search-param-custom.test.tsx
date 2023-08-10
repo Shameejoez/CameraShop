@@ -4,7 +4,7 @@ import { configureMockStore } from '@jedmao/redux-mock-store';
 import MockAdapter from 'axios-mock-adapter';
 import thunk from 'redux-thunk';
 import { createAPI } from '../../services/api';
-import { AppRoutes, CategoryProduct, Mastery, PriceRange, SlicerName, SortMode, SortName, TypeProduct } from '../../consts';
+import { AppRoutes, CategoryProduct, CouponStatus, LoadingStatus, Mastery, PriceRange, SlicerName, SortMode, SortName, TypeProduct } from '../../consts';
 import browserHistory from '../../browser-history';
 import { CardProductInfo, PromoProduct } from '../../types/types';
 import userEvent from '@testing-library/user-event';
@@ -103,6 +103,16 @@ const store = mockStore({
       min: PriceRange.Min,
       max: PriceRange.Max,
     }
+  },
+  [SlicerName.BasketProcess]: {
+    myCameras: productArray.map((el) => ({...el, count: 3})),
+    addedCoupon: 'camera-333',
+    totalPrice: productArray[0].price * 3,
+    orderPostStatus: LoadingStatus.Unknown,
+    discount:{
+      count: 15,
+      isValid: CouponStatus.Vaild
+    }
   }
 });
 
@@ -159,7 +169,7 @@ describe('useSearchParamsCustom', () => {
       const sortRating = await screen.findByText(/по популярности/i , {}, {timeout: 2000});
 
       userEvent.click(sortRating);
-      await waitFor(() => expect(browserHistory.location.search).toBe('?sort=sortPopular'), {timeout: 2000} );
+      await waitFor(() => expect(browserHistory.location.search).toBe('?sort=sortPopular&sortOrder=up'), {timeout: 2000} );
     });
 
   });
@@ -170,7 +180,7 @@ describe('useSearchParamsCustom', () => {
       render(fakeApp);
       const modeUp = await screen.findByTestId('down-test', {}, {timeout: 2000});
       userEvent.click(modeUp);
-      await waitFor(() => expect(browserHistory.location.search).toBe('?sortOrder=down'), {timeout: 2000} );
+      await waitFor(() => expect(browserHistory.location.search).toBe('?sortOrder=down&sort=sortPrice'), {timeout: 2000} );
     });
   });
 });

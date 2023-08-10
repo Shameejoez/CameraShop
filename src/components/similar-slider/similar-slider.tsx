@@ -3,15 +3,19 @@ import CardProduct from '../card-product/card-product';
 
 type SimilarSliderProps = {
   cameras: CardProductInfo[];
+  onClicksetCurrentCamera: (camera: CardProductInfo) => void;
+  onClickSetAddBasket: (isActive: string) => void;
 }
 
-function SimilarSlider ({cameras}: SimilarSliderProps): JSX.Element {
+function SimilarSlider ({cameras, onClicksetCurrentCamera, onClickSetAddBasket}: SimilarSliderProps): JSX.Element {
+
+
   return (
     <div className="product-similar__slider">
       <div className="product-similar__slider-list">
         {/* Похожие товары */}
         {
-          cameras.map((camera) => <CardProduct camera={camera} key={camera.id} />)
+          cameras.map((camera) => <CardProduct camera={camera} key={camera.id} onClickGetCurrentCamera={onClicksetCurrentCamera} onClickSetAddBasket={onClickSetAddBasket} />)
         }
       </div>
       <button className="slider-controls slider-controls--prev" type="button" aria-label="Предыдущий слайд" disabled>

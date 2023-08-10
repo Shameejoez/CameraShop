@@ -4,16 +4,27 @@ import { CardProductInfo } from '../../types/types';
 import StarsRating from '../stars-rating/stars-rating';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { takeRatings } from '../../store/data-process/data-selectors';
-import { deleteAllFilters } from '../../store/site-process/filter-slice';
+import { takeMyCameras } from '../../store/basket-process/basket-selectors';
+import { deleteAllFilters } from '../../store/filter-process/filter-slice';
 
 type CardProductProps = {
   camera: CardProductInfo;
+  onClickGetCurrentCamera: (camera: CardProductInfo) => void;
+  onClickSetAddBasket: (isActive: string) => void;
     // передается в случае карточики с похожими товарами
     onReviewsBack?: () => void;
 }
 
-function CardProduct ({camera, onReviewsBack = () => void 0}: CardProductProps):JSX.Element {
-  const dispatch = useAppDispatch();
+function CardProduct ({camera, onReviewsBack = () => void 0, onClickGetCurrentCamera, onClickSetAddBasket}: CardProductProps):JSX.Element {
+  const dispatch = useAppDispatch()
+  const myCameras = useAppSelector(takeMyCameras);
+  const addedCamera = myCameras.find((cam) => cam.name === camera.name);
+
+  const onClickAddCamera = () => {
+    onClickSetAddBasket('is-active');
+    onClickGetCurrentCamera(camera);
+  };
+
 
   const { id, name, price, type, previewImg, previewImg2x, previewImgWebp, previewImgWebp2x, reviewCount } = camera;
 
@@ -28,6 +39,18 @@ function CardProduct ({camera, onReviewsBack = () => void 0}: CardProductProps):
     Array.from({length: RAITING_COUNT}, (_, i) =>
       <StarsRating key={i} isActive={ i + 1 <= Math.ceil(rating)}/>
     );
+
+  const renderBuyButton = () =>
+    addedCamera ?
+      <Link className="btn btn--purple-border product-card__btn product-card__btn--in-cart" to={AppRoutes.Basket}>
+        <svg width={16} height={16} aria-hidden="true">
+          <use xlinkHref="#icon-basket" />
+        </svg>В корзине
+      </Link> :
+      <button
+        className="btn btn--purple product-card__btn" type="button" onClick={onClickAddCamera}
+      >Купить
+      </button>;
 
   return (
     <div className="product-card" data-testid={'product-card-test'}>
@@ -47,14 +70,16 @@ function CardProduct ({camera, onReviewsBack = () => void 0}: CardProductProps):
         </p>
       </div>
       <div className="product-card__buttons">
-        <button className="btn btn--purple product-card__btn" type="button">Купить
-        </button>
-        <Link className="btn btn--transparent" to={`/catalog/${AppRoutes.Product}/${id}#description`} onClick={onInfoButtonClick}>Подробнее
+
+        {
+          renderBuyButton()
+        }
+        <Link className="btn btn--transparent" to={`/${AppRoutes.Product}/${id}#description`} onClick={onInfoButtonClick}>Подробнее
         </Link>
       </div>
     </div>
   );
 }
 
-
 export default CardProduct;
+

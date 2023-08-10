@@ -101,25 +101,25 @@ export const postReview = createAsyncThunk<Review, sendRewiew, {extra: Extra}>(
 );
 
 //купон на скидку
-export const postCupon = createAsyncThunk<number, string, {extra: Extra}>(
+export const postCoupon = createAsyncThunk<number, string, {extra: Extra}>(
   Action.COUPON,
 
-  async(coupon, {extra}) => {
-
+  async(coupon, {extra, }) => {
     const {api} = extra;
-    const {data} = await api.post<number>(ApiRoutes.coupon, coupon);
+    const {data} = await api.post<number>(ApiRoutes.coupon, {coupon});
     return data;
+
   }
 );
 
 // запрос на заказ
-export const postOrders = createAsyncThunk<undefined, Order, {extra: Extra}>(
+export const postOrders = createAsyncThunk<undefined | string, Order, {extra: Extra}>(
   Action.POST_ORDER,
 
   async(order, {extra}) => {
 
     const {api} = extra;
-    const {data} = await api.post<undefined>(ApiRoutes.order, order);
+    const {data} = await api.post<undefined | string>(ApiRoutes.order, order);
 
     return data;
   }
@@ -133,7 +133,7 @@ export const getPromo = createAsyncThunk<PromoProduct, undefined, {extra: Extra}
   async(_, {extra}) => {
 
     const {api} = extra;
-    const {data} = await api.get<PromoProduct>('/promo');
+    const {data} = await api.get<PromoProduct>(ApiRoutes.promo);
 
     return data;
   }

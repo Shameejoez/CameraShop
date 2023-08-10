@@ -1,13 +1,13 @@
-import { screen, render, fireEvent } from '@testing-library/react';
+import { CardProductInfo, PromoProduct } from '../../../types/types';
+import { AppRoutes, CategoryProduct, CouponStatus, LoadingStatus, Mastery, PriceRange, SlicerName, SortMode, SortName, TypeProduct } from '../../../consts';
 import { createAPI } from '../../../services/api';
 import MockAdapter from 'axios-mock-adapter';
 import thunk from 'redux-thunk';
-import { AppRoutes, CategoryProduct, CouponStatus, LoadingStatus, Mastery, PriceRange, SlicerName, SortMode, SortName, TypeProduct } from '../../../consts';
-import { CardProductInfo, PromoProduct } from '../../../types/types';
 import { configureMockStore } from '@jedmao/redux-mock-store';
 import { Provider } from 'react-redux';
-import App from '../../app/app';
-import browserHistory from '../../../browser-history';
+import { render, screen } from '@testing-library/react';
+import { MemoryRouter } from 'react-router-dom';
+import BasketError from './basket-error';
 
 const promo: PromoProduct = {
   id: 1,
@@ -46,7 +46,7 @@ const mockApi = new MockAdapter(api);
 const middlewares = [thunk.withExtraArgument(api)];
 
 mockApi
-  .onGet(`${AppRoutes.Catalog}${AppRoutes.Product}/1`)
+  .onGet(`${AppRoutes.Catalog}/${AppRoutes.Product}/1`)
   .reply(200, productArray[0]);
 
 
@@ -92,38 +92,16 @@ const store = mockStore({
   }
 });
 
+describe('basket-error', () => {
+  it('should render basket-error', () => {
+    render(
+      <Provider store={store}>
+        <MemoryRouter>
+          <BasketError isActive='is-active' onClickSetBasketError={jest.fn}/>
+        </MemoryRouter>
+      </Provider>);
 
-const fakeApp = (
+    expect(screen.getByTestId('popup-error-test')).toBeInTheDocument();
 
-  <Provider store={store}>
-    <App />
-  </Provider>
-
-);
-describe('ReviewForm', () => {
-
-  it('should render ReviewForm', async() => {
-    browserHistory.push(`/${AppRoutes.Product}/1`);
-    render(fakeApp);
-
-    const addComment = await screen.findByRole('button', {name: 'Оставить свой отзыв'} , {timeout: 2000});
-    fireEvent.click(addComment);
-
-    const mockTypingEvent = { target: { value: 'Антон'}};
-    const nameInput = await screen.findByRole('textbox', {name: 'Ваше имя'}, {timeout: 2000} );
-    const advantageInput = await screen.findByRole('textbox', {name: 'Достоинства'} , {timeout: 2000});
-    const disadvantageInput = await screen.findByRole('textbox', {name: 'Недостатки'} , {timeout: 2000});
-    const reviewInput = await screen.findByRole('textbox', {name: 'Комментарий'} , {timeout: 2000});
-
-    fireEvent.change(nameInput , mockTypingEvent);
-    fireEvent.change(advantageInput , mockTypingEvent);
-    fireEvent.change(disadvantageInput , mockTypingEvent);
-    fireEvent.change(reviewInput , mockTypingEvent);
-
-    expect((nameInput as HTMLInputElement).value).toBe('Антон');
-    expect((advantageInput as HTMLInputElement).value).toBe('Антон');
-    expect((disadvantageInput as HTMLInputElement).value).toBe('Антон');
-    expect((reviewInput as HTMLInputElement).value).toBe('Антон');
   });
-
 });

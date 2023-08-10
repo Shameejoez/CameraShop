@@ -1,7 +1,7 @@
 import { ChangeEvent, useEffect, useState } from 'react';
 import { CategoryProduct, FilterCategoryName, Mastery, PriceRange, SetFilterMode, TypeProduct } from '../../consts';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { setCategory, setLevel, setRangePrice, setType } from '../../store/site-process/filter-slice';
+import { setCategory, setLevel, setRangePrice, setType } from '../../store/filter-process/filter-slice';
 import useSearchParamsCustom from '../../hooks/use-search-params-custom/use-search-params-custom';
 import { camerasSelector } from '../../store/data-process/data-selectors';
 

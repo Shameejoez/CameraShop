@@ -12,12 +12,22 @@ import { useAppDispatch, useAppSelector } from '../../hooks';
 import { takeCameras, takeGetCamerasStatus } from '../../store/data-process/data-selectors';
 import { getReviews } from '../../store/action';
 import Spinner from '../spinner/spinner';
+import Basket from '../../pages/basket';
 
 function App(): JSX.Element {
   const [loading, setLoading] = useState<boolean>(false);
   const getCamerasStatus = useAppSelector(takeGetCamerasStatus);
   const dispatch = useAppDispatch();
   const cameras = useAppSelector(takeCameras);
+  const [addBasketVisible, setAddBasket] = useState<string>('');
+  const [basketSucessViisble, setBasketSucess] = useState<string>('');
+
+  const setAddBasketHandler = (isActive: string) => {
+    setAddBasket(isActive);
+  };
+  const setBasketSucessHandler = (isActive: string) => {
+    setBasketSucess(isActive);
+  };
 
   const parseIds = parseProductsId(cameras);
   useEffect(() => {
@@ -43,10 +53,27 @@ function App(): JSX.Element {
   return(
     <HistoryRouter history={browserHistory}>
       <Routes>
-        <Route path={`/${AppRoutes.Catalog}`} element={<Header />}>
-          <Route index element={<Catalog/>}/>
-          <Route path={`${AppRoutes.Product}/:id`} element={<Product/>}/>
+        <Route element={<Header />}>
+          <Route path={'/catalog'} index element={
+            <Catalog isActiveAddBasket={addBasketVisible} isActiveSuccessBasket={basketSucessViisble}
+              onClickBasketSucess={setBasketSucessHandler} onClickSetBasketAdd={setAddBasketHandler}
+            />
+          }
+          />
+          <Route path={`${AppRoutes.Product}/:id`} element={
+            <Product isActiveAddBasket={addBasketVisible} isActiveSuccessBasket={basketSucessViisble}
+              onClickBasketSucess={setBasketSucessHandler} onClickSetBasketAdd={setAddBasketHandler}
+            />
+          }
+          />
+          <Route path={'basket'} element={
+            <Basket isActiveAddBasket={addBasketVisible} isActiveSuccessBasket={basketSucessViisble}
+              onClickBasketSucess={setBasketSucessHandler} onClickSetBasketAdd={setAddBasketHandler}
+            />
+          }
+          />
         </Route>
+
         <Route path={'*'} element={<NotFound />}/>
       </Routes>
     </HistoryRouter>

@@ -4,7 +4,7 @@ import { takePromo } from '../../store/data-process/data-selectors';
 import { getPromo } from '../../store/action';
 import { AppRoutes } from '../../consts';
 import { Link } from 'react-router-dom';
-import { deleteAllFilters } from '../../store/site-process/filter-slice';
+import { deleteAllFilters } from '../../store/filter-process/filter-slice';
 
 function Banner (): JSX.Element | null {
   const promo = useAppSelector(takePromo);

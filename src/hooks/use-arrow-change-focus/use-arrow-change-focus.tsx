@@ -57,6 +57,7 @@ const useArrowChangeFocus = ({ ref, inputValue }: arrowChangeFocusProps) => {
 
     };
 
+
     const onKeyDownSetFocus = (e: KeyboardEvent ) => {
 
       if(e.key === 'Enter' && e.target === firstElement) {
@@ -86,6 +87,7 @@ const useArrowChangeFocus = ({ ref, inputValue }: arrowChangeFocusProps) => {
     document.addEventListener('keydown', onDownArrowShift);
 
     return () => {
+
       document.removeEventListener('keydown', onKeyDownSetFocus);
       document.removeEventListener('keydown', onDownArrowShift);
       document.removeEventListener('click', onClickSetFocus);

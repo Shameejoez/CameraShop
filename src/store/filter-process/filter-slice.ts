@@ -66,4 +66,3 @@ export const filterSlicer = createSlice({
 });
 
 export const {setSort, setMode, setLevel, setType, setCategory, setRangePrice, deleteAllFilters} = filterSlicer.actions;
-

@@ -9,18 +9,9 @@ function SearchBar (): JSX.Element {
   const [inputValue, setInputValue] = useState<string>('');
   const barRef = useRef<HTMLDivElement | null>(null);
   const location = useLocation();
-  //const [inFocus, setInFocus] = useState<number | null>(null);
-  //const focusedEllement = productNames.filter((el) => el.name === document.activeElement?.textContent);
 
   useEffect(() => {
     setInputValue('');
-    /*     if (document.activeElement?.textContent !== focusedEllement[0]?.name) {
-      return;
-    }
-    setInFocus(focusedEllement[0].id); */
-    /*  document.addEventListener('keydown', onKeyDownEnterRedirectProduct);
-
-    return () => document.removeEventListener('keydown', onKeyDownEnterRedirectProduct); */
   }, [location]);
 
 
@@ -30,7 +21,6 @@ function SearchBar (): JSX.Element {
     setInputValue('');
   };
 
-
   const onChangeSetInputValue = (e: ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
 
@@ -38,23 +28,6 @@ function SearchBar (): JSX.Element {
 
   const searchProducts = productNames.filter((el) => el.name.toLocaleLowerCase().includes(inputValue.length > 0 ? inputValue.toLocaleLowerCase() : '$$$'.toLocaleLowerCase()));
 
-  /*   const onKeyDownEnterRedirectProduct = (e: React.KeyboardEvent) => {
-
-    if((e.key === 'Enter' && inFocus) || (e.key === 'NumpadEnter' && inFocus)) {
-      setInputValue('');
-      browserHistory.push(`/catalog/product/${inFocus}#description`);
-    }
-    setInFocus(null);
-    window.blur();
-  };
-
-  const onClickRedirectProduct = (id: number) => {
-    window.blur();
-    setInputValue('');
-    browserHistory.push(`/catalog/product/${id}#description`);
-  };
-
- */
   const renderSearchItem = () => {
     if ( searchProducts.length === 0 ) {
       return <li className="form-search__select-item" data-testid={'no-similar'} tabIndex={0} >Не найдено</li>;

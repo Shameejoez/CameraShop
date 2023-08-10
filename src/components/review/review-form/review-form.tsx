@@ -40,7 +40,7 @@ function ReviewForm ({ isVisible, setIsVisible, onSubmit, setIsVisibleSuccess, }
 
   const onBlurDirtyRating = () => {
     setRatingDirty(true);
-    chekValidRating(rating); // чтобы выдать ошибку нужны оба параметра( ratingError и ratingDirty)
+    chekValidRating(rating); //чтобы выдать ошибку нужны оба параметра( ratingError и ratingDirty)
 
   };
 
