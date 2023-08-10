@@ -73,7 +73,6 @@ function App(): JSX.Element {
           }
           />
         </Route>
-
         <Route path={'*'} element={<NotFound />}/>
       </Routes>
     </HistoryRouter>
