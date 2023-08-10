@@ -1,6 +1,6 @@
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { takeMyCameras } from '../../store/basket-process/basket-selectors';
-import { addMyCameras, deleteMyCameras, replaceCountMyCameras } from '../../store/basket-process/basket-slice';
+import { replaceCountMyCameras } from '../../store/basket-process/basket-slice';
 import { CardProductInfo } from '../../types/types';
 import { ChangeEvent, useEffect, useState } from 'react';
 
@@ -15,11 +15,11 @@ function BasketItem ({camera, onClickGetCurrentCamera, onClickSetBasketAdd}: Bas
 
   const dispatch = useAppDispatch();
   const count = useAppSelector(takeMyCameras).find((el) => el.id === camera.id)?.count;
-  const [countCamera, setCountCamera] = useState<number>(1);
+  const [countCamera, setCountCamera] = useState<number>(count as number);
 
   useEffect(() => {
-    setCountCamera(Number(count));
-  },[count]);
+    dispatch(replaceCountMyCameras({id: camera.id, newCount: countCamera}));
+  },[countCamera]);
 
   const {category, previewImg2x, previewImgWebp, previewImg, previewImgWebp2x, level, name, type, price, vendorCode, id} = camera;
 
@@ -30,7 +30,13 @@ function BasketItem ({camera, onClickGetCurrentCamera, onClickSetBasketAdd}: Bas
 
   const onClickPlusCount = () => {
     if(count !== 99) {
-      dispatch(addMyCameras(camera));
+      setCountCamera((prev) => prev + 1);
+    }
+  };
+
+  const onClickMinusCount = () => {
+    if (count !== 1) {
+      setCountCamera((prev) => prev - 1);
     }
   };
 
@@ -39,27 +45,20 @@ function BasketItem ({camera, onClickGetCurrentCamera, onClickSetBasketAdd}: Bas
     const currentValue = e.target.value.trim().replace(/\D/g , '');
 
     if(Number(currentValue) > 99) {
-      dispatch(replaceCountMyCameras({id: camera.id, newCount: 99}));
+      setCountCamera(99);
       return;
     }
 
     if(Number(currentValue) < 1) {
-      dispatch(replaceCountMyCameras({id: camera.id, newCount: 1}));
+      setCountCamera(1);
       return;
     }
-
     setCountCamera(Number(currentValue));
-    dispatch(replaceCountMyCameras({id: camera.id, newCount: Number(currentValue)}));
   };
 
-  const onClickMinusCount = () => {
-    if (count !== 1) {
-      dispatch(deleteMyCameras({...camera, mode: 'one'}));
-    }
-  };
 
   return (
-    <li className="basket-item">
+    <li className="basket-item" data-testid={'basket-item-test'}>
       <div className="basket-item__img">
         <picture>
           <source type="image/webp" srcSet={`/${previewImgWebp}, /${previewImgWebp2x}`} /><img src={`/${previewImg}`} srcSet={`/${previewImg2x}`} width={140} height={120} alt={name} />

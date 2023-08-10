@@ -1,13 +1,13 @@
 import BasketItem from '../components/basket-item/basket-item';
-import BasketAddItem from '../components/basket-popups/basket-add-delete-item';
-import BasketAddSucess from '../components/basket-popups/basket-add-sucess';
-import BasketError from '../components/basket-popups/basket-error';
+import BasketAddItem from '../components/basket-popups/basket-add-delete-item/basket-add-delete-item';
+import BasketAddSucess from '../components/basket-popups/basket-add-sccess/basket-add-sucess';
+import BasketError from '../components/basket-popups/basket-error/basket-error';
 import Breadcrumb from '../components/breadcrumbs/breadcrumbs';
-import { CuponStatus, LoadingStatus, defaultCard } from '../consts';
+import { CouponStatus, LoadingStatus, defaultCard } from '../consts';
 import { useAppDispatch, useAppSelector } from '../hooks';
-import { postCupon, postOrders } from '../store/action';
-import { takeAddedCoupon, takeCuponStatus, takeDiscount, takeMyCameras, takeOrderStatus, takeTotalPrice } from '../store/basket-process/basket-selectors';
-import { resetStatusCupon, resetStatusOrder, setAddedCoupon } from '../store/basket-process/basket-slice';
+import { postCoupon, postOrders } from '../store/action';
+import { takeAddedCoupon, takeCouponStatus, takeDiscount, takeMyCameras, takeOrderStatus, takeTotalPrice } from '../store/basket-process/basket-selectors';
+import { resetStatusCoupon, resetStatusOrder, setAddedCoupon } from '../store/basket-process/basket-slice';
 import { CardProductInfo } from '../types/types';
 import { useState, ChangeEvent, useEffect } from 'react';
 
@@ -23,11 +23,11 @@ function Basket ({isActiveAddBasket, isActiveSuccessBasket, onClickBasketSucess,
   const myCameras = useAppSelector(takeMyCameras);
   const orderStatus = useAppSelector(takeOrderStatus);
   const addedCoupon = useAppSelector(takeAddedCoupon);
-  const cuponStatus = useAppSelector(takeCuponStatus);
+  const couponStatus = useAppSelector(takeCouponStatus);
   const totalPrice = useAppSelector(takeTotalPrice);
   const discount = totalPrice / 100 * (useAppSelector(takeDiscount));
   const [curentCamera, setCurrentCamera] = useState<CardProductInfo>(defaultCard);
-  const [cuponField, setCuponField] = useState<string>(addedCoupon);
+  const [couponField, setCouponField] = useState<string>(addedCoupon);
   const priceToPay = totalPrice - discount;
   const [isErrorVisible, setErrorVisible] = useState<string>('');
 
@@ -45,24 +45,24 @@ function Basket ({isActiveAddBasket, isActiveSuccessBasket, onClickBasketSucess,
     }
   }, [isErrorVisible, orderStatus]);
 
-  const onChangeSetCupon = (e: ChangeEvent<HTMLInputElement>) => {
-    dispatch(resetStatusCupon());
-    setCuponField(e.target.value);
+  const onChangeSetCoupon = (e: ChangeEvent<HTMLInputElement>) => {
+    dispatch(resetStatusCoupon());
+    setCouponField(e.target.value);
   };
 
   const onClickSetErrorVisible = (mode: string) => {
     setErrorVisible(mode);
   };
 
-  const setCuponFieldStyle = () => {
-    if (cuponField.length === 0) {
+  const setCouponFieldStyle = () => {
+    if (couponField.length === 0) {
       return '';
     }
-    if(cuponField.length > 0 && cuponStatus === CuponStatus.Rejected) {
+    if(couponField.length > 0 && couponStatus === CouponStatus.Rejected) {
       return 'is-invalid';
     }
-    if((cuponField.length > 0 && cuponStatus === CuponStatus.Vaild) || (cuponField.length > 0 && cuponField === addedCoupon)) {
-      dispatch(setAddedCoupon(cuponField));
+    if((couponField.length > 0 && couponStatus === CouponStatus.Vaild) || (couponField.length > 0 && couponField === addedCoupon)) {
+      dispatch(setAddedCoupon(couponField));
       return 'is-valid';
     }
     return '';
@@ -73,8 +73,8 @@ function Basket ({isActiveAddBasket, isActiveSuccessBasket, onClickBasketSucess,
     dispatch(postOrders({camerasIds: ids, coupon: addedCoupon === '' ? null : addedCoupon}));
   };
 
-  const onClickUseCupon = () => {
-    dispatch(postCupon(cuponField));
+  const onClickUseCoupon = () => {
+    dispatch(postCoupon(couponField));
   };
 
   return (
@@ -94,14 +94,14 @@ function Basket ({isActiveAddBasket, isActiveSuccessBasket, onClickBasketSucess,
                 <p className="title title--h4">Если у вас есть промокод на скидку, примените его в этом поле</p>
                 <div className="basket-form">
                   <form action="#">
-                    <div className={`custom-input ${setCuponFieldStyle()}`} >
+                    <div className={`custom-input ${setCouponFieldStyle()}`} >
                       <label><span className="custom-input__label">Промокод</span>
-                        <input type="text" name="promo" placeholder="Введите промокод" value={cuponField} onChange={onChangeSetCupon}/>
+                        <input type="text" name="promo" placeholder="Введите промокод" value={couponField} onChange={onChangeSetCoupon}/>
                       </label>
                       <p className="custom-input__error">Промокод неверный</p>
                       <p className="custom-input__success">Промокод принят!</p>
                     </div>
-                    <button className="btn" type="button" onClick={onClickUseCupon}>Применить
+                    <button className="btn" type="button" onClick={onClickUseCoupon}>Применить
                     </button>
                   </form>
                 </div>

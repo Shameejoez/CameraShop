@@ -1,8 +1,8 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { basketStore } from '../../types/state';
-import { CuponStatus, LoadingStatus, SlicerName } from '../../consts';
+import { CouponStatus, LoadingStatus, SlicerName } from '../../consts';
 import { CardProductInfo } from '../../types/types';
-import { postCupon, postOrders } from '../action';
+import { postCoupon, postOrders } from '../action';
 
 const initialState : basketStore = {
   myCameras: [],
@@ -11,7 +11,7 @@ const initialState : basketStore = {
   orderPostStatus: LoadingStatus.Unknown,
   discount: {
     count: 0,
-    isValid: CuponStatus.Unknown
+    isValid: CouponStatus.Unknown
   }
 };
 
@@ -35,10 +35,10 @@ export const basketSlicer = createSlice({
       const currentItem = state.myCameras.find((el) => el.id === action.payload.id);
       if (action.payload.mode === 'one' && currentItem) {
         (currentItem.count as number)--;
-        state.totalPrice = state.totalPrice - currentItem.price;
+        state.totalPrice = state.totalPrice - currentItem.price ?? 0;
       } else {
         const newMyCameras = state.myCameras.filter((cameras) => cameras.id !== action.payload.id);
-        state.totalPrice = state.totalPrice - ( ( currentItem?.price as number ) * ( currentItem?.count as number ));
+        state.totalPrice = state.totalPrice - ( ( currentItem?.price as number ) * ( currentItem?.count as number )) ?? 0;
         state.myCameras = newMyCameras;
       }
     },
@@ -47,12 +47,14 @@ export const basketSlicer = createSlice({
       const currentItem = state.myCameras.find((el) => el.id === action.payload.id);
       const indexItem = state.myCameras.indexOf(currentItem as CardProductInfo & {count?: number});
       state.myCameras[indexItem].count = action.payload.newCount;
+      const preTotal = state.myCameras.map((el) => (el.count as number) * el.price);
+      state.totalPrice = preTotal.reduce((prev, el) => el + prev) ?? 0;
     },
     setAddedCoupon(state, action: PayloadAction<string>) {
       state.addedCoupon = action.payload;
     },
-    resetStatusCupon(state) {
-      state.discount.isValid = CuponStatus.Unknown;
+    resetStatusCoupon(state) {
+      state.discount.isValid = CouponStatus.Unknown;
     },
     resetStatusOrder(state) {
       state.orderPostStatus = LoadingStatus.Unknown;
@@ -60,12 +62,12 @@ export const basketSlicer = createSlice({
   }, extraReducers: (builder) => {
     builder
     // действия с купоном
-      .addCase(postCupon.fulfilled, (state, action) => {
+      .addCase(postCoupon.fulfilled, (state, action) => {
         state.discount.count = action.payload;
-        state.discount.isValid = CuponStatus.Vaild;
+        state.discount.isValid = CouponStatus.Vaild;
       })
-      .addCase(postCupon.rejected, (state) => {
-        state.discount.isValid = CuponStatus.Rejected;
+      .addCase(postCoupon.rejected, (state) => {
+        state.discount.isValid = CouponStatus.Rejected;
       })
       //запрос на заказ
       .addCase(postOrders.fulfilled, (state) => {
@@ -79,4 +81,4 @@ export const basketSlicer = createSlice({
   }
 });
 
-export const {addMyCameras, deleteMyCameras, replaceCountMyCameras, resetStatusCupon, resetStatusOrder, setAddedCoupon} = basketSlicer.actions;
+export const {addMyCameras, deleteMyCameras, replaceCountMyCameras, resetStatusCoupon, resetStatusOrder, setAddedCoupon} = basketSlicer.actions;

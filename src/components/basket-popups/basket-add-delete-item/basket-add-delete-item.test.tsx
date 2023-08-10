@@ -1,12 +1,12 @@
-import { screen, render, fireEvent } from '@testing-library/react';
+import { CardProductInfo, PromoProduct } from '../../../types/types';
+import { AppRoutes, CategoryProduct, CouponStatus, LoadingStatus, Mastery, PriceRange, SlicerName, SortMode, SortName, TypeProduct } from '../../../consts';
 import { createAPI } from '../../../services/api';
 import MockAdapter from 'axios-mock-adapter';
 import thunk from 'redux-thunk';
-import { AppRoutes, CategoryProduct, CouponStatus, LoadingStatus, Mastery, PriceRange, SlicerName, SortMode, SortName, TypeProduct } from '../../../consts';
-import { CardProductInfo, PromoProduct } from '../../../types/types';
 import { configureMockStore } from '@jedmao/redux-mock-store';
 import { Provider } from 'react-redux';
 import App from '../../app/app';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import browserHistory from '../../../browser-history';
 
 const promo: PromoProduct = {
@@ -46,7 +46,7 @@ const mockApi = new MockAdapter(api);
 const middlewares = [thunk.withExtraArgument(api)];
 
 mockApi
-  .onGet(`${AppRoutes.Catalog}${AppRoutes.Product}/1`)
+  .onGet(`${AppRoutes.Catalog}/${AppRoutes.Product}/1`)
   .reply(200, productArray[0]);
 
 
@@ -92,7 +92,6 @@ const store = mockStore({
   }
 });
 
-
 const fakeApp = (
 
   <Provider store={store}>
@@ -100,30 +99,18 @@ const fakeApp = (
   </Provider>
 
 );
-describe('ReviewForm', () => {
 
-  it('should render ReviewForm', async() => {
-    browserHistory.push(`/${AppRoutes.Product}/1`);
+
+describe('basket-add-delet-item', () => {
+  it('shuld render basket-add-delet-item', async() => {
+    browserHistory.push('/product/1');
     render(fakeApp);
 
-    const addComment = await screen.findByRole('button', {name: 'Оставить свой отзыв'} , {timeout: 2000});
-    fireEvent.click(addComment);
+    await waitFor(() =>screen.findByTestId('productid-test'));
 
-    const mockTypingEvent = { target: { value: 'Антон'}};
-    const nameInput = await screen.findByRole('textbox', {name: 'Ваше имя'}, {timeout: 2000} );
-    const advantageInput = await screen.findByRole('textbox', {name: 'Достоинства'} , {timeout: 2000});
-    const disadvantageInput = await screen.findByRole('textbox', {name: 'Недостатки'} , {timeout: 2000});
-    const reviewInput = await screen.findByRole('textbox', {name: 'Комментарий'} , {timeout: 2000});
+    const addButton = await screen.findByTestId('main-add-product-test');
+    fireEvent.click(addButton);
+    await waitFor(() => expect(screen.getByTestId('popup-success-delete-test')).toHaveClass('is-active'));
 
-    fireEvent.change(nameInput , mockTypingEvent);
-    fireEvent.change(advantageInput , mockTypingEvent);
-    fireEvent.change(disadvantageInput , mockTypingEvent);
-    fireEvent.change(reviewInput , mockTypingEvent);
-
-    expect((nameInput as HTMLInputElement).value).toBe('Антон');
-    expect((advantageInput as HTMLInputElement).value).toBe('Антон');
-    expect((disadvantageInput as HTMLInputElement).value).toBe('Антон');
-    expect((reviewInput as HTMLInputElement).value).toBe('Антон');
   });
-
 });

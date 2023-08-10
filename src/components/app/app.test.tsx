@@ -5,7 +5,7 @@ import { configureMockStore } from '@jedmao/redux-mock-store';
 import MockAdapter from 'axios-mock-adapter';
 import thunk from 'redux-thunk';
 import { createAPI } from '../../services/api';
-import { AppRoutes, CategoryProduct, CuponStatus, LoadingStatus, Mastery, PriceRange, SlicerName, SortMode, SortName, TypeProduct } from '../../consts';
+import { AppRoutes, CategoryProduct, CouponStatus, LoadingStatus, Mastery, PriceRange, SlicerName, SortMode, SortName, TypeProduct } from '../../consts';
 import browserHistory from '../../browser-history';
 import { CardProductInfo, PromoProduct } from '../../types/types';
 
@@ -89,7 +89,7 @@ const store = mockStore({
     orderPostStatus: LoadingStatus.Unknown,
     discount:{
       count: 15,
-      isValid: CuponStatus.Vaild
+      isValid: CouponStatus.Vaild
     }
   }
 });
@@ -145,6 +145,13 @@ describe('Main tests', () => {
       userEvent.click(addComment);
       await screen.findByTestId('review-form-test' , {}, {timeout: 2000});
     });
+  });
+
+  it('should render basket item', async() => {
+    browserHistory.replace(`/${AppRoutes.Basket}`);
+    render(fakeApp);
+    expect(await screen.findByRole('button', {name: 'Оформить заказ'}, {timeout: 2000})).toBeInTheDocument();
+    expect(await screen.findByRole('heading', {name: 'Корзина'}, {timeout: 2000})).toBeInTheDocument();
   });
 });
 

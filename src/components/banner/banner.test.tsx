@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 import { createAPI } from '../../services/api';
 import MockAdapter from 'axios-mock-adapter';
 import thunk from 'redux-thunk';
-import { AppRoutes, CategoryProduct, CuponStatus, LoadingStatus, Mastery, PriceRange, SlicerName, SortMode, SortName, TypeProduct } from '../../consts';
+import { AppRoutes, CategoryProduct, CouponStatus, LoadingStatus, Mastery, PriceRange, SlicerName, SortMode, SortName, TypeProduct } from '../../consts';
 import { configureMockStore } from '@jedmao/redux-mock-store';
 import { Provider } from 'react-redux';
 import App from '../app/app';
@@ -88,7 +88,7 @@ const store = mockStore({
     orderPostStatus: LoadingStatus.Unknown,
     discount:{
       count: 15,
-      isValid: CuponStatus.Vaild
+      isValid: CouponStatus.Vaild
     }
   }
 });

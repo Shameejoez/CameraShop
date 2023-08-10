@@ -13,8 +13,8 @@ import { CardProductInfo, sendRewiew } from '../types/types';
 import ErrorConnectMessage from '../components/error-conntect-message/error-connect-message';
 import ButtonScrollUp from '../components/button-scroll-up/button-scroll-up';
 import Spinner from '../components/spinner/spinner';
-import BasketAddItem from '../components/basket-popups/basket-add-delete-item';
-import BasketAddSucess from '../components/basket-popups/basket-add-sucess';
+import BasketAddItem from '../components/basket-popups/basket-add-delete-item/basket-add-delete-item';
+import BasketAddSucess from '../components/basket-popups/basket-add-sccess/basket-add-sucess';
 
 type ProductProps = {
   isActiveSuccessBasket: string;
@@ -132,7 +132,7 @@ function Product({isActiveAddBasket, isActiveSuccessBasket, onClickBasketSucess,
                     <p className="rate__count"><span className="visually-hidden" >Всего оценок:</span>{reviewCount}</p>
                   </div>
                   <p className="product__price"><span className="visually-hidden">Цена:</span>{price.toLocaleString('ru-Ru')} ₽</p>
-                  <button className="btn btn--purple" type="button" name='add-to-basket' onClick={()=> getCurrentCamera(currentProduct)}>
+                  <button className="btn btn--purple" type="button" name='add-to-basket' data-testid={'main-add-product-test'} onClick={()=> getCurrentCamera(currentProduct)}>
                     <svg width={24} height={16} aria-hidden="true">
                       <use xlinkHref="#icon-add-basket" />
                     </svg>Добавить в корзину

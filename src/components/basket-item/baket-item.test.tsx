@@ -1,13 +1,14 @@
-import { screen, render, fireEvent } from '@testing-library/react';
-import { createAPI } from '../../../services/api';
+import { Provider } from 'react-redux';
+import { render, screen, waitFor} from '@testing-library/react';
+import { configureMockStore } from '@jedmao/redux-mock-store';
 import MockAdapter from 'axios-mock-adapter';
 import thunk from 'redux-thunk';
-import { AppRoutes, CategoryProduct, CouponStatus, LoadingStatus, Mastery, PriceRange, SlicerName, SortMode, SortName, TypeProduct } from '../../../consts';
-import { CardProductInfo, PromoProduct } from '../../../types/types';
-import { configureMockStore } from '@jedmao/redux-mock-store';
-import { Provider } from 'react-redux';
-import App from '../../app/app';
-import browserHistory from '../../../browser-history';
+import { createAPI } from '../../services/api';
+import { AppRoutes, CategoryProduct, CouponStatus, LoadingStatus, Mastery, PriceRange, SlicerName, SortMode, SortName, TypeProduct } from '../../consts';
+import browserHistory from '../../browser-history';
+import { CardProductInfo, PromoProduct } from '../../types/types';
+import userEvent from '@testing-library/user-event';
+import App from '../app/app';
 
 const promo: PromoProduct = {
   id: 1,
@@ -92,38 +93,61 @@ const store = mockStore({
   }
 });
 
-
 const fakeApp = (
 
   <Provider store={store}>
     <App />
   </Provider>
-
 );
-describe('ReviewForm', () => {
 
-  it('should render ReviewForm', async() => {
-    browserHistory.push(`/${AppRoutes.Product}/1`);
+describe('basket-item', () => {
+  const user = userEvent.setup();
+
+  it('should render basket item', async() => {
+    browserHistory.push(`/${AppRoutes.Basket}`);
     render(fakeApp);
-
-    const addComment = await screen.findByRole('button', {name: 'Оставить свой отзыв'} , {timeout: 2000});
-    fireEvent.click(addComment);
-
-    const mockTypingEvent = { target: { value: 'Антон'}};
-    const nameInput = await screen.findByRole('textbox', {name: 'Ваше имя'}, {timeout: 2000} );
-    const advantageInput = await screen.findByRole('textbox', {name: 'Достоинства'} , {timeout: 2000});
-    const disadvantageInput = await screen.findByRole('textbox', {name: 'Недостатки'} , {timeout: 2000});
-    const reviewInput = await screen.findByRole('textbox', {name: 'Комментарий'} , {timeout: 2000});
-
-    fireEvent.change(nameInput , mockTypingEvent);
-    fireEvent.change(advantageInput , mockTypingEvent);
-    fireEvent.change(disadvantageInput , mockTypingEvent);
-    fireEvent.change(reviewInput , mockTypingEvent);
-
-    expect((nameInput as HTMLInputElement).value).toBe('Антон');
-    expect((advantageInput as HTMLInputElement).value).toBe('Антон');
-    expect((disadvantageInput as HTMLInputElement).value).toBe('Антон');
-    expect((reviewInput as HTMLInputElement).value).toBe('Антон');
+    expect(await screen.findByRole('button', {name: 'Оформить заказ'})).toBeInTheDocument();
+    expect(await screen.findByRole('heading', {name: 'Корзина'})).toBeInTheDocument();
+    expect(await screen.findByTestId('basket-item-test', {}, {timeout: 2000})).toBeInTheDocument();
   });
 
+
+  it('should working button plus', async() => {
+    browserHistory.push(`/${AppRoutes.Basket}`);
+    render(fakeApp);
+
+    await waitFor(() => expect(screen.getByTestId('basket-item-test')), {timeout: 2000});
+    const countInput = await screen.findByRole('textbox', {name: 'количество товара'});
+    const buttonPlus = await screen.findByRole('button', {name: 'увеличить количество товара'});
+
+    user.click(buttonPlus);
+
+    await waitFor(() => expect(countInput).toHaveValue('4'));
+  });
+
+  it('sould working button minus', async() => {
+    browserHistory.push(`/${AppRoutes.Basket}`);
+    render(fakeApp);
+
+    await waitFor(() => expect(screen.getByTestId('basket-item-test')), {timeout: 2000});
+    const countInput = await screen.findByRole('textbox', {name: 'количество товара'});
+    const buttonMinus = await screen.findByRole('button', {name: 'уменьшить количество товара'});
+
+    user.click(buttonMinus);
+
+    await waitFor(() => expect(countInput).toHaveValue('2'));
+
+  });
+
+  it('should working input counter', async() => {
+    browserHistory.push(`/${AppRoutes.Basket}`);
+    render(fakeApp);
+
+    await waitFor(() => expect(screen.getByTestId('basket-item-test')), {timeout: 2000});
+    const countInput = await screen.findByRole('textbox', {name: 'количество товара'});
+
+    user.type(countInput, '4');
+
+    await waitFor(() => expect(countInput).toHaveValue('34'));
+  });
 });

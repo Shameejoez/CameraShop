@@ -1,11 +1,11 @@
-import useFocusLockModal from '../../hooks/use-focus-lock/use-focus-lock-modal';
+import useFocusLockModal from '../../../hooks/use-focus-lock/use-focus-lock-modal';
 import { useRef } from 'react';
-import useKeyDownEsc from '../../hooks/use-key-down-esc/use-key-down-esc';
-import useOutsideClick from '../../hooks/use-out-side-click/use-out-side-click';
+import useKeyDownEsc from '../../../hooks/use-key-down-esc/use-key-down-esc';
+import useOutsideClick from '../../../hooks/use-out-side-click/use-out-side-click';
 import { Link } from 'react-router-dom';
-import { useAppSelector } from '../../hooks';
-import { takeMyCameras, takeOrderStatus } from '../../store/basket-process/basket-selectors';
-import { LoadingStatus } from '../../consts';
+import { useAppSelector } from '../../../hooks';
+import { takeMyCameras, takeOrderStatus } from '../../../store/basket-process/basket-selectors';
+import { LoadingStatus } from '../../../consts';
 
 type BasketAddSuccessProps = {
     onClickSetBasketSucess: (isActive: string) => void;
@@ -26,7 +26,7 @@ function BasketAddSucess ({onClickSetBasketSucess, isActive, place}: BasketAddSu
   };
 
   return (
-    <div className={`modal ${isActive} modal--narrow`} style={{width: 'calc(100% - 16.8px)'}}>
+    <div className={`modal ${isActive} modal--narrow`} style={{width: 'calc(100% - 16.8px)'}} data-testid={'basket-add-success'}>
       <div className="modal__wrapper">
         <div className="modal__overlay" />
         <div className="modal__content" ref={refModal}>
@@ -36,7 +36,7 @@ function BasketAddSucess ({onClickSetBasketSucess, isActive, place}: BasketAddSu
                 <p className="title title--h4">{
                   // eslint-disable-next-line no-nested-ternary
                   orderStatus === LoadingStatus.Rejected ? 'Добавьте товар в корзину' :
-                    myCameras.length > 0 /* && orderStatus === LoadingStatus.Rejected */ ? 'Ошибка сервера, попробуйте позднее' :
+                    myCameras.length > 0 ? 'Ошибка сервера, попробуйте позднее' :
                       'Спасибо за покупку'
                 }
                 </p>
@@ -63,7 +63,7 @@ function BasketAddSucess ({onClickSetBasketSucess, isActive, place}: BasketAddSu
                 </svg>
                 <div className="modal__buttons">
                   <Link to="/catalog" className="btn btn--transparent modal__btn" onClick={() =>onClickSetVisibleBasketSuccess('')}>Продолжить покупки</Link>
-                  <Link to={'/catalog/basket'} className="btn btn--purple modal__btn modal__btn--fit-width" onClick={() => onClickSetVisibleBasketSuccess('')}>Перейти в корзину</Link>
+                  <Link to={'/basket'} className="btn btn--purple modal__btn modal__btn--fit-width" onClick={() => onClickSetVisibleBasketSuccess('')}>Перейти в корзину</Link>
                 </div>
               </>
           }

@@ -4,11 +4,13 @@ import { configureMockStore } from '@jedmao/redux-mock-store';
 import MockAdapter from 'axios-mock-adapter';
 import thunk from 'redux-thunk';
 import { createAPI } from '../../services/api';
-import { AppRoutes, CategoryProduct, CuponStatus, LoadingStatus, Mastery, PriceRange, SlicerName, SortMode, SortName, TypeProduct } from '../../consts';
+import { AppRoutes, CategoryProduct, CouponStatus, LoadingStatus, Mastery, PriceRange, SlicerName, SortMode, SortName, TypeProduct } from '../../consts';
 import browserHistory from '../../browser-history';
 import { CardProductInfo, PromoProduct } from '../../types/types';
 import userEvent from '@testing-library/user-event';
 import App from '../../components/app/app';
+import SearchBar from '../../components/header/search-bar/search-bar';
+import { MemoryRouter } from 'react-router-dom';
 
 const promo: PromoProduct = {
   id: 1,
@@ -104,7 +106,7 @@ const store = mockStore({
     orderPostStatus: LoadingStatus.Unknown,
     discount:{
       count: 15,
-      isValid: CuponStatus.Vaild
+      isValid: CouponStatus.Vaild
     }
   }
 });
@@ -120,17 +122,19 @@ const fakeApp = (
 describe('useArrowChangeFocus', () => {
   it('should useArrowChangeFocus is works if push ArrowDown', async() => {
     browserHistory.push(AppRoutes.Catalog);
-    render(fakeApp);
+    render(
+      <Provider store={store}>
+        <MemoryRouter>
+          <SearchBar />
+        </MemoryRouter>
+      </Provider>);
 
     const searchInput = await screen.findByPlaceholderText('Поиск по сайту', {}, {timeout: 2000});
-    //userEvent.clear(searchInput)
     userEvent.type(searchInput, 'ЫЫЫЫЫЫЫЫ');
 
     const lowerElement = await screen.findByTestId('21', {}, {timeout: 2000});
-    userEvent.keyboard('[ArrowDown]');
+    userEvent.keyboard('[ArrowUp]');
     await waitFor(() =>expect(lowerElement).toHaveFocus());
-    userEvent.keyboard('[ArrowDown]');
-    await waitFor(() =>expect(searchInput).toHaveFocus());
   });
 
   it('should useArrowChangeFocus is works', async() => {

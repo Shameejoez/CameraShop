@@ -41,7 +41,7 @@ function Header ():JSX.Element {
             </ul>
           </nav>
           <SearchBar/>
-          <Link className="header__basket-link" to={AppRoutes.Basket}>
+          <Link className="header__basket-link" to={`/${AppRoutes.Basket}`}>
             <svg width={16} height={16} aria-hidden="true">
               <use xlinkHref="#icon-basket" />
             </svg>

@@ -160,7 +160,8 @@ describe('Reduser: data-slicer', () => {
         reviews: review,
         ratingArray: [{
           id: 88,
-          currentRating: 4,}]
+          currentRating: 4,
+        }]
       });
   });
   // опубликовать комментарий

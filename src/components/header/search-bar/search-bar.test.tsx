@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import { CardProductInfo, PromoProduct } from '../../../types/types';
-import { AppRoutes, CategoryProduct, CuponStatus, LoadingStatus, Mastery, PriceRange, SlicerName, SortMode, SortName, TypeProduct } from '../../../consts';
+import { AppRoutes, CategoryProduct, CouponStatus, LoadingStatus, Mastery, PriceRange, SlicerName, SortMode, SortName, TypeProduct } from '../../../consts';
 import { createAPI } from '../../../services/api';
 import MockAdapter from 'axios-mock-adapter';
 import thunk from 'redux-thunk';
@@ -87,7 +87,7 @@ const store = mockStore({
     orderPostStatus: LoadingStatus.Unknown,
     discount:{
       count: 15,
-      isValid: CuponStatus.Vaild
+      isValid: CouponStatus.Vaild
     }
   }
 });

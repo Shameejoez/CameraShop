@@ -69,7 +69,7 @@ function CardProduct ({camera, onReviewsBack = () => void 0, onClickGetCurrentCa
         {
           renderBuyButton()
         }
-        <Link className="btn btn--transparent" to={`/catalog/${AppRoutes.Product}/${id}#description`} onClick={onInfoButtonClick}>Подробнее
+        <Link className="btn btn--transparent" to={`/${AppRoutes.Product}/${id}#description`} onClick={onInfoButtonClick}>Подробнее
         </Link>
       </div>
     </div>

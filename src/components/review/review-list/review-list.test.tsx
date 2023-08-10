@@ -5,7 +5,7 @@ import { configureMockStore } from '@jedmao/redux-mock-store';
 import MockAdapter from 'axios-mock-adapter';
 import thunk, { ThunkDispatch } from 'redux-thunk';
 import { createAPI } from '../../../services/api';
-import { CategoryProduct, Mastery, TypeProduct, AppRoutes, SlicerName, LoadingStatus, CuponStatus } from '../../../consts';
+import { CategoryProduct, Mastery, TypeProduct, AppRoutes, SlicerName, LoadingStatus, CouponStatus } from '../../../consts';
 import browserHistory from '../../../browser-history';
 import { CardProductInfo, Review, sendRewiew } from '../../../types/types';
 import { ApiRoutes } from '../../../consts';
@@ -91,7 +91,7 @@ const store = mockStore({
     orderPostStatus: LoadingStatus.Unknown,
     discount:{
       count: 15,
-      isValid: CuponStatus.Vaild
+      isValid: CouponStatus.Vaild
     }
   }
 });
@@ -105,7 +105,7 @@ const fakeApp = (
 describe('RevieList', () => {
 
   it('the submitted comment should be rendered and rendered modal success', async() => {
-    browserHistory.push(`${AppRoutes.Catalog}/${AppRoutes.Product}/1`);
+    browserHistory.push(`/${AppRoutes.Product}/1`);
     render(fakeApp);
 
     const addComment = await screen.findByRole('button', {name: 'Оставить свой отзыв'} , {timeout: 2000});

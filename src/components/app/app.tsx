@@ -53,8 +53,8 @@ function App(): JSX.Element {
   return(
     <HistoryRouter history={browserHistory}>
       <Routes>
-        <Route path={'/catalog'} element={<Header />}>
-          <Route index element={
+        <Route element={<Header />}>
+          <Route path={'/catalog'} index element={
             <Catalog isActiveAddBasket={addBasketVisible} isActiveSuccessBasket={basketSucessViisble}
               onClickBasketSucess={setBasketSucessHandler} onClickSetBasketAdd={setAddBasketHandler}
             />
@@ -73,6 +73,7 @@ function App(): JSX.Element {
           }
           />
         </Route>
+
         <Route path={'*'} element={<NotFound />}/>
       </Routes>
     </HistoryRouter>

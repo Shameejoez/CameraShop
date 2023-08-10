@@ -1,4 +1,4 @@
-import { CategoryProduct, CuponStatus, LoadingStatus, Mastery, SortMode, SortName, TypeProduct } from '../consts';
+import { CategoryProduct, CouponStatus, LoadingStatus, Mastery, SortMode, SortName, TypeProduct } from '../consts';
 import { store} from '../store';
 import { CardProductInfo, ProductRating, PromoProduct, Review } from './types';
 
@@ -40,6 +40,6 @@ export type basketStore = {
     orderPostStatus: LoadingStatus;
     discount:{
         count: number;
-        isValid: CuponStatus;
+        isValid: CouponStatus;
         };
     };

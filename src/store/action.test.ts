@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { AxiosInstance } from 'axios';
 import { CardProductInfo, PromoProduct, Review, sendRewiew } from '../types/types';
-import { getCameras, getCamera, getSimilarCameras, getReviews, getPromo, postReview } from './action';
+import { getCameras, getCamera, getSimilarCameras, getReviews, getPromo, postReview, postCoupon, postOrders } from './action';
 import { ApiRoutes, CategoryProduct, Mastery, TypeProduct } from '../consts';
 import { configureMockStore } from '@jedmao/redux-mock-store';
 import mockAdapter from 'axios-mock-adapter';
@@ -224,6 +224,32 @@ describe('fetch products data', () => {
     });
   });
 
+  describe('postCoupon', () => {
+
+    it('should return status 200 with discount type number', async() => {
+      mockAPI
+        .onPost(ApiRoutes.coupon, {coupon: 'camera-444'})
+        .reply(200, {coupon: 'camera-444'});
+
+      const response = await store.dispatch(postCoupon('camera-444'));
+
+      expect(response.payload).toEqual({
+        coupon: 'camera-444'
+      });
+    });
+  });
+
+  describe('postOrder', () => {
+    it('shuuld return undefined and status 200', async() => {
+      mockAPI
+        .onPost(ApiRoutes.order, {camerasIds: [1, 2, 3], coupon: 'camera-444'})
+        .reply(200, undefined);
+
+      const response = await store.dispatch(postOrders({camerasIds: [1, 2, 3], coupon: 'camera-444'}));
+
+      expect(response.payload).toBe(undefined);
+    });
+  });
 });
 
 

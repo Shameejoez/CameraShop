@@ -1,9 +1,9 @@
-import { useAppDispatch } from '../../hooks';
-import useFocusLockModal from '../../hooks/use-focus-lock/use-focus-lock-modal';
-import useKeyDownEsc from '../../hooks/use-key-down-esc/use-key-down-esc';
-import useOutsideClick from '../../hooks/use-out-side-click/use-out-side-click';
-import { addMyCameras, deleteMyCameras } from '../../store/basket-process/basket-slice';
-import { CardProductInfo } from '../../types/types';
+import { useAppDispatch } from '../../../hooks';
+import useFocusLockModal from '../../../hooks/use-focus-lock/use-focus-lock-modal';
+import useKeyDownEsc from '../../../hooks/use-key-down-esc/use-key-down-esc';
+import useOutsideClick from '../../../hooks/use-out-side-click/use-out-side-click';
+import { addMyCameras, deleteMyCameras } from '../../../store/basket-process/basket-slice';
+import { CardProductInfo } from '../../../types/types';
 import { useRef } from 'react';
 
 type BasketAddItemProps = {
@@ -25,8 +25,8 @@ function BasketAddDeleteItem ({camera, isActive, onClickSetBasketAdd, onClickBas
 
   const onClickAddMyCameras = () => {
     dispatch(addMyCameras({...camera, count:1}));
-    onClickSetBasketAdd('');
     onClickBasketSucess('is-active');
+    onClickSetBasketAdd('');
   };
 
   const onClickDeleteAllMyCamera = () => {
@@ -35,7 +35,7 @@ function BasketAddDeleteItem ({camera, isActive, onClickSetBasketAdd, onClickBas
   };
 
   return (
-    <div className={`modal ${isActive}`} style={{width: 'calc(100% - 16.8px)'}} >
+    <div className={`modal ${isActive}`} style={{width: 'calc(100% - 16.8px)'}} data-testid={'popup-success-delete-test'}>
       <div className="modal__wrapper">
         <div className="modal__overlay" />
         <div className="modal__content" ref={refModal}>
@@ -74,7 +74,7 @@ function BasketAddDeleteItem ({camera, isActive, onClickSetBasketAdd, onClickBas
                     </svg>
                   </button>
                 </> :
-                <button className="btn btn--purple modal__btn modal__btn--fit-width" type="button" onClick={onClickAddMyCameras}>
+                <button className="btn btn--purple modal__btn modal__btn--fit-width" type="button" onClick={onClickAddMyCameras} data-testid={'basket-add-test-popup'}>
                   <svg width={24} height={16} aria-hidden="true">
                     <use xlinkHref="#icon-add-basket" />
                   </svg>Добавить в корзину

@@ -1,11 +1,10 @@
-import useFocusLockModal from '../../hooks/use-focus-lock/use-focus-lock-modal';
+import useFocusLockModal from '../../../hooks/use-focus-lock/use-focus-lock-modal';
 import { useRef } from 'react';
-import useKeyDownEsc from '../../hooks/use-key-down-esc/use-key-down-esc';
-import useOutsideClick from '../../hooks/use-out-side-click/use-out-side-click';
+import useKeyDownEsc from '../../../hooks/use-key-down-esc/use-key-down-esc';
+import useOutsideClick from '../../../hooks/use-out-side-click/use-out-side-click';
 import { Link } from 'react-router-dom';
-import { useAppSelector } from '../../hooks';
-import { takeMyCameras, takeOrderStatus } from '../../store/basket-process/basket-selectors';
-import { LoadingStatus } from '../../consts';
+import { useAppSelector } from '../../../hooks';
+import { takeMyCameras } from '../../../store/basket-process/basket-selectors';
 
 type BasketAddSuccessProps = {
     onClickSetBasketError: (isActive: string) => void;
@@ -15,7 +14,6 @@ type BasketAddSuccessProps = {
 function BasketError ({onClickSetBasketError, isActive}: BasketAddSuccessProps): JSX.Element {
 
   const refModal = useRef<HTMLDivElement | null>(null);
-  const orderStatus = useAppSelector(takeOrderStatus);
   useFocusLockModal({isVisible: isActive , ref: refModal});
   useKeyDownEsc({handler: onClickSetBasketError, isVisible: isActive});
   useOutsideClick({elementRef: refModal, handler: onClickSetBasketError });
@@ -26,7 +24,7 @@ function BasketError ({onClickSetBasketError, isActive}: BasketAddSuccessProps):
   };
 
   return (
-    <div className={`modal ${isActive} modal--narrow`} style={{width: 'calc(100% - 16.8px)'}}>
+    <div className={`modal ${isActive} modal--narrow`} style={{width: 'calc(100% - 16.8px)'}} data-testid={'popup-error-test'}>
       <div className="modal__wrapper">
         <div className="modal__overlay" />
         <div className="modal__content" ref={refModal}>
