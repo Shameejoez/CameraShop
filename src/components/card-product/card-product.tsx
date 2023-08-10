@@ -16,7 +16,7 @@ type CardProductProps = {
 }
 
 function CardProduct ({camera, onReviewsBack = () => void 0, onClickGetCurrentCamera, onClickSetAddBasket}: CardProductProps):JSX.Element {
-  const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch();
   const myCameras = useAppSelector(takeMyCameras);
   const addedCamera = myCameras.find((cam) => cam.name === camera.name);
 
@@ -24,7 +24,6 @@ function CardProduct ({camera, onReviewsBack = () => void 0, onClickGetCurrentCa
     onClickSetAddBasket('is-active');
     onClickGetCurrentCamera(camera);
   };
-
 
   const { id, name, price, type, previewImg, previewImg2x, previewImgWebp, previewImgWebp2x, reviewCount } = camera;
 
