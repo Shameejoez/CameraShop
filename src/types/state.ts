@@ -41,5 +41,5 @@ export type basketStore = {
     discount:{
         count: number;
         isValid: CouponStatus;
-        };
+    };
 };
