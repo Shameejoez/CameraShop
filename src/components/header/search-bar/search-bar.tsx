@@ -34,7 +34,7 @@ function SearchBar (): JSX.Element {
     }
     if (searchProducts.length > 0) {
       return searchProducts.map((el) =>(
-        <Link to={`/catalog/product/${el.id}#description`} key={el.name} className="form-search__select-item" data-testid={el.id}
+        <Link to={`/product/${el.id}#description`} key={el.name} className="form-search__select-item" data-testid={el.id}
           tabIndex={0}
         >{el.name}
         </Link>));
