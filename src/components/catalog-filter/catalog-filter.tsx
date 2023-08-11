@@ -31,7 +31,7 @@ function CatalogFilter ({onResetPage}: CatalogFilterProps): JSX.Element {
       filters?.forEach((el) => onChangePushFilters(el));
     }
 
-  }, [filters, prices]);
+  }, [prices]);
 
   const onChangePushFilters = (filterName: string) => {
     switch(filterName) {
@@ -49,7 +49,7 @@ function CatalogFilter ({onResetPage}: CatalogFilterProps): JSX.Element {
       case TypeProduct.Film :
         return dispatch(setType({action: SetFilterMode.Push, filterType: filterName}));
       case Mastery.Null :
-        return dispatch(setLevel({action: SetFilterMode.Push, filterType: filterName}));
+        return dispatch(setLevel({action: SetFilterMode.Push, filterType: Mastery.Null}));
       case Mastery.Amateur :
         return dispatch(setLevel({action: SetFilterMode.Push, filterType: filterName}));
       case Mastery.Professional :

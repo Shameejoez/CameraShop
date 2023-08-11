@@ -2,10 +2,9 @@ import { Link } from 'react-router-dom';
 import { AppRoutes, RAITING_COUNT } from '../../consts';
 import { CardProductInfo } from '../../types/types';
 import StarsRating from '../stars-rating/stars-rating';
-import { useAppDispatch, useAppSelector } from '../../hooks';
+import { useAppSelector } from '../../hooks';
 import { takeRatings } from '../../store/data-process/data-selectors';
 import { takeMyCameras } from '../../store/basket-process/basket-selectors';
-import { deleteAllFilters } from '../../store/filter-process/filter-slice';
 
 type CardProductProps = {
   camera: CardProductInfo;
@@ -16,7 +15,6 @@ type CardProductProps = {
 }
 
 function CardProduct ({camera, onReviewsBack = () => void 0, onClickGetCurrentCamera, onClickSetAddBasket}: CardProductProps):JSX.Element {
-  const dispatch = useAppDispatch();
   const myCameras = useAppSelector(takeMyCameras);
   const addedCamera = myCameras.find((cam) => cam.name === camera.name);
 
@@ -31,7 +29,6 @@ function CardProduct ({camera, onReviewsBack = () => void 0, onClickGetCurrentCa
 
   const onInfoButtonClick = () => {
     onReviewsBack();
-    dispatch(deleteAllFilters());
   };
 
   const renderStarsRating = () =>

@@ -45,7 +45,7 @@ function Breadcrumb({ name, id}: BreadcrumbProps): JSX.Element {
       <div className="container">
         <ul className="breadcrumbs__list">
           <li className="breadcrumbs__item">
-            <Link className="breadcrumbs__link" to={`/${AppRoutes.Catalog}`}>Главная
+            <Link className="breadcrumbs__link" data-testid={'main-crumb-test'} to={`/${AppRoutes.Catalog}`}>Главная
               <svg width={5} height={8} aria-hidden="true">
                 <use xlinkHref="#icon-arrow-mini" />
               </svg>

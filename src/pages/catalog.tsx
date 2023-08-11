@@ -4,9 +4,9 @@ import Breadcrumb from '../components/breadcrumbs/breadcrumbs';
 import CatalogSort from '../components/catalog-sort/catalog-sort';
 import CatalogFilter from '../components/catalog-filter/catalog-filter';
 import Pagination from '../components/pagination/pagination';
-import { useAppSelector } from '../hooks';
+import { useAppDispatch, useAppSelector } from '../hooks';
 import { camerasSelector, takeGetCamerasStatus } from '../store/data-process/data-selectors';
-import { LoadingStatus, PRODUCTS_ON_PAGE, defaultCard } from '../consts';
+import { LoadingStatus, Mastery, PRODUCTS_ON_PAGE, defaultCard } from '../consts';
 import ErrorConnectMessage from '../components/error-conntect-message/error-connect-message';
 import useSearchParamsCustom from '../hooks/use-search-params-custom/use-search-params-custom';
 import { filterRangePrice } from '../utils/filters';
@@ -15,6 +15,7 @@ import BasketAddItem from '../components/basket-popups/basket-add-delete-item/ba
 import BasketAddSucess from '../components/basket-popups/basket-add-sccess/basket-add-sucess';
 import { CardProductInfo } from '../types/types';
 import { useState } from 'react';
+import { setLevel } from '../store/filter-process/filter-slice';
 
 type CatalogProps = {
   isActiveSuccessBasket: string;
@@ -28,6 +29,7 @@ function Catalog({isActiveSuccessBasket, onClickBasketSucess, onClickSetBasketAd
   const cameras = filterRangePrice(useAppSelector(camerasSelector), rangePrice.min, rangePrice.max);
   const getCamerasStatus = useAppSelector(takeGetCamerasStatus);
   const [curentCamera, setCurrentCamera] = useState<CardProductInfo>(defaultCard);
+  const dispatch = useAppDispatch();
 
   const {page, setPageParams} = useSearchParamsCustom({initialPage: 0});
   const currentPageHandler = (pageNumber: number) => {
@@ -57,7 +59,7 @@ function Catalog({isActiveSuccessBasket, onClickBasketSucess, onClickSetBasketAd
         <Breadcrumb />
         <section className="catalog">
           <div className="container">
-            <h1 className="title title--h2" onClick={() => onClickSetBasketAdd('is-active')}>Каталог фото- и видеотехники</h1>
+            <h1 className="title title--h2" onClick={() => dispatch(setLevel({action: 'push', filterType: Mastery.Null}))}>Каталог фото- и видеотехники</h1>
             <div className="page-content__columns">
               <div className="catalog__aside">
                 <CatalogFilter onResetPage={currentPageHandler}/>
