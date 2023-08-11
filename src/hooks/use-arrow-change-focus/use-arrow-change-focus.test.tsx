@@ -8,7 +8,6 @@ import { AppRoutes, CategoryProduct, CouponStatus, LoadingStatus, Mastery, Price
 import browserHistory from '../../browser-history';
 import { CardProductInfo, PromoProduct } from '../../types/types';
 import userEvent from '@testing-library/user-event';
-import App from '../../components/app/app';
 import SearchBar from '../../components/header/search-bar/search-bar';
 import { MemoryRouter } from 'react-router-dom';
 
@@ -112,13 +111,6 @@ const store = mockStore({
 });
 
 
-const fakeApp = (
-  <Provider store={store}>
-    <App />
-  </Provider>
-
-);
-
 describe('useArrowChangeFocus', () => {
   it('should useArrowChangeFocus is works if push ArrowDown', async() => {
     browserHistory.push(AppRoutes.Catalog);
@@ -140,7 +132,12 @@ describe('useArrowChangeFocus', () => {
 
   it('should useArrowChangeFocus is works', async() => {
     browserHistory.replace(AppRoutes.Catalog);
-    render(fakeApp);
+    render(
+      <Provider store={store}>
+        <MemoryRouter>
+          <SearchBar />
+        </MemoryRouter>
+      </Provider>);
 
     const searchInput = await screen.findByPlaceholderText('Поиск по сайту', {}, {timeout: 2000});
     userEvent.type(searchInput, 'ЫЫЫЫЫЫЫЫ');
