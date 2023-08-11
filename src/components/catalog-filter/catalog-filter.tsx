@@ -4,6 +4,7 @@ import { useAppDispatch, useAppSelector } from '../../hooks';
 import { setCategory, setLevel, setRangePrice, setType } from '../../store/filter-process/filter-slice';
 import useSearchParamsCustom from '../../hooks/use-search-params-custom/use-search-params-custom';
 import { camerasSelector } from '../../store/data-process/data-selectors';
+import { takeLavel } from '../../store/filter-process/filter-selectors';
 
 type CatalogFilterProps = {
   onResetPage: (page: number) => void;
@@ -17,8 +18,10 @@ function CatalogFilter ({onResetPage}: CatalogFilterProps): JSX.Element {
   const camerasPricesMax = Math.max(...camerasPrices);
   const [min, setMin] = useState<string>('');
   const [max, setMax] = useState<string>('');
+  const level = useAppSelector(takeLavel);
 
   useEffect(() => {
+
     dispatch(setRangePrice({
       min : prices.min,
       max:  prices.max === 0 ? PriceRange.Max : prices.max
@@ -31,9 +34,10 @@ function CatalogFilter ({onResetPage}: CatalogFilterProps): JSX.Element {
       filters?.forEach((el) => onChangePushFilters(el));
     }
 
-  }, [prices]);
+  }, [prices, level]);
 
   const onChangePushFilters = (filterName: string) => {
+
     switch(filterName) {
       case CategoryProduct.Camera:
         [TypeProduct.Instant, TypeProduct.Digital].forEach((filter) => onChangeUnshiftFilters(filter));
@@ -49,7 +53,7 @@ function CatalogFilter ({onResetPage}: CatalogFilterProps): JSX.Element {
       case TypeProduct.Film :
         return dispatch(setType({action: SetFilterMode.Push, filterType: filterName}));
       case Mastery.Null :
-        return dispatch(setLevel({action: SetFilterMode.Push, filterType: Mastery.Null}));
+        return dispatch(setLevel({action: SetFilterMode.Push, filterType: filterName}));
       case Mastery.Amateur :
         return dispatch(setLevel({action: SetFilterMode.Push, filterType: filterName}));
       case Mastery.Professional :
@@ -219,7 +223,7 @@ function CatalogFilter ({onResetPage}: CatalogFilterProps): JSX.Element {
       <form action="#">
         <h2 className="visually-hidden" >Фильтр</h2>
         <fieldset className="catalog-filter__block">
-          <legend className="title title--h5">Цена, ₽</legend>
+          <legend className="title title--h5" >Цена, ₽</legend>
           <div className="catalog-filter__price-range">
             <div className="custom-input">
               <label>
