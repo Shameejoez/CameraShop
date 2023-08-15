@@ -68,7 +68,6 @@ function Basket ({isActiveAddBasket, isActiveSuccessBasket, onClickBasketSucess,
       return 'is-invalid';
     }
     if((couponField.length > 0 && couponStatus === CouponStatus.Vaild) || (couponField.length > 0 && couponField === addedCoupon)) {
-      
       return 'is-valid';
     }
     return '';
@@ -81,7 +80,6 @@ function Basket ({isActiveAddBasket, isActiveSuccessBasket, onClickBasketSucess,
 
   const onClickUseCoupon = () => {
     dispatch(postCoupon(couponField));
-  
   };
 
   const onEnterEventDisabled = (e: React.KeyboardEvent<HTMLInputElement>) => {
