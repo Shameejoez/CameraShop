@@ -5,9 +5,9 @@ import { CardProductInfo } from '../../types/types';
 import { postCoupon, postOrders } from '../action';
 
 const initialState : basketStore = {
-  myCameras: [],
-  addedCoupon: '',
-  totalPrice: 0,
+  myCameras: (JSON.parse(localStorage.getItem('myCameras') as string)) as (CardProductInfo & {count?: number})[] ?? [],
+  addedCoupon: (JSON.parse(localStorage.getItem('coupon') as string)) as string ?? '',
+  totalPrice: (JSON.parse(localStorage.getItem('totalPrice') as string)) as number ?? 0 ,
   orderPostStatus: LoadingStatus.Unknown,
   discount: {
     count: 0,
@@ -29,6 +29,10 @@ export const basketSlicer = createSlice({
       }
       const preTotal = state.myCameras.map((el) => (el.count as number) * el.price);
       state.totalPrice = preTotal.reduce((prev, el) => el + prev) ?? 0;
+
+      localStorage.setItem('myCameras', JSON.stringify(state.myCameras));
+      localStorage.setItem('totalPrice', JSON.stringify(state.totalPrice));
+
     },
     // удаление товара
     deleteMyCameras(state, action: PayloadAction<CardProductInfo & {mode: 'all' | 'one'}>) {
@@ -41,6 +45,9 @@ export const basketSlicer = createSlice({
         state.totalPrice = state.totalPrice - ( ( currentItem?.price as number ) * ( currentItem?.count as number )) ?? 0;
         state.myCameras = newMyCameras;
       }
+
+      localStorage.setItem('myCameras', JSON.stringify(state.myCameras));
+      localStorage.setItem('totalPrice', JSON.stringify(state.totalPrice));
     },
     // изменение количества товара с помощью ручного ввода
     replaceCountMyCameras(state, action: PayloadAction<{id: CardProductInfo['id']} & {newCount: number}>) {
@@ -49,16 +56,24 @@ export const basketSlicer = createSlice({
       state.myCameras[indexItem].count = action.payload.newCount;
       const preTotal = state.myCameras.map((el) => (el.count as number) * el.price);
       state.totalPrice = preTotal.reduce((prev, el) => el + prev) ?? 0;
+
+      localStorage.setItem('myCameras', JSON.stringify(state.myCameras));
+      localStorage.setItem('totalPrice', JSON.stringify(state.totalPrice));
     },
     setAddedCoupon(state, action: PayloadAction<string>) {
       state.addedCoupon = action.payload;
+      localStorage.setItem('coupon', JSON.stringify(state.addedCoupon));
     },
     resetStatusCoupon(state) {
       state.discount.isValid = CouponStatus.Unknown;
     },
     resetStatusOrder(state) {
       state.orderPostStatus = LoadingStatus.Unknown;
-    }
+    },
+    resetTotalPrice(state) {
+      state.totalPrice = 0;
+      localStorage.setItem('totalPrice', JSON.stringify(state.totalPrice));
+    },
   }, extraReducers: (builder) => {
     builder
     // действия с купоном
@@ -81,4 +96,4 @@ export const basketSlicer = createSlice({
   }
 });
 
-export const {addMyCameras, deleteMyCameras, replaceCountMyCameras, resetStatusCoupon, resetStatusOrder, setAddedCoupon} = basketSlicer.actions;
+export const {addMyCameras, deleteMyCameras, replaceCountMyCameras, resetStatusCoupon, resetStatusOrder, setAddedCoupon, resetTotalPrice} = basketSlicer.actions;

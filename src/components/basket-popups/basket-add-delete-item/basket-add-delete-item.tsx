@@ -66,7 +66,7 @@ function BasketAddDeleteItem ({camera, isActive, onClickSetBasketAdd, onClickBas
                 <>
                   <button className="btn btn--purple modal__btn modal__btn--half-width" type="button" onClick={onClickDeleteAllMyCamera}>Удалить
                   </button>
-                  <a className="btn btn--transparent modal__btn modal__btn--half-width" href="#" onClick={() => onClickSetBasketAdd('')}>Продолжить покупки
+                  <a className="btn btn--transparent modal__btn modal__btn--half-width" style={{padding: '0px 9px'}} href="#" type='button' onClick={() => onClickSetBasketAdd('')}>Продолжить покупки
                   </a>
                   <button className="cross-btn" type="button" aria-label="Закрыть попап">
                     <svg width={10} height={10} aria-hidden="true">

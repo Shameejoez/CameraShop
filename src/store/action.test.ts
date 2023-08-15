@@ -8,6 +8,7 @@ import { createAPI } from '../services/api';
 import thunk, {ThunkDispatch} from 'redux-thunk';
 import { State } from '../types/state';
 import {Action} from 'redux';
+import { resetTotalPrice } from './basket-process/basket-slice';
 
 window.open = jest.fn();
 

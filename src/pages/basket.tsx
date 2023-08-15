@@ -46,6 +46,7 @@ function Basket ({isActiveAddBasket, isActiveSuccessBasket, onClickBasketSucess,
   }, [isErrorVisible, orderStatus]);
 
   const onChangeSetCoupon = (e: ChangeEvent<HTMLInputElement>) => {
+
     dispatch(resetStatusCoupon());
     setCouponField(e.target.value);
   };
@@ -77,6 +78,12 @@ function Basket ({isActiveAddBasket, isActiveSuccessBasket, onClickBasketSucess,
     dispatch(postCoupon(couponField));
   };
 
+  const onEnterEventDisabled = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+    }
+  };
+
   return (
     <main>
       <div className="page-content">
@@ -96,12 +103,12 @@ function Basket ({isActiveAddBasket, isActiveSuccessBasket, onClickBasketSucess,
                   <form action="#">
                     <div className={`custom-input ${setCouponFieldStyle()}`} >
                       <label><span className="custom-input__label">Промокод</span>
-                        <input type="text" name="promo" placeholder="Введите промокод" value={couponField} onChange={onChangeSetCoupon}/>
+                        <input type="text" placeholder="Введите промокод" value={couponField} onKeyDown={(e) => onEnterEventDisabled(e)} onChange={onChangeSetCoupon}/>
                       </label>
                       <p className="custom-input__error">Промокод неверный</p>
                       <p className="custom-input__success">Промокод принят!</p>
                     </div>
-                    <button className="btn" type="button" onClick={onClickUseCoupon}>Применить
+                    <button className="btn" type="button" onClick={onClickUseCoupon} >Применить
                     </button>
                   </form>
                 </div>

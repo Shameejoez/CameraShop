@@ -2,6 +2,8 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import {AxiosError, AxiosInstance} from 'axios';
 import { CardProductInfo, Order, PromoProduct, Review, sendRewiew } from '../types/types';
 import { ApiRoutes } from '../consts';
+import { AppDispatch } from '../types/state';
+import { resetTotalPrice, setAddedCoupon } from './basket-process/basket-slice';
 
 type Extra = {
     api: AxiosInstance;
@@ -113,13 +115,16 @@ export const postCoupon = createAsyncThunk<number, string, {extra: Extra}>(
 );
 
 // запрос на заказ
-export const postOrders = createAsyncThunk<undefined | string, Order, {extra: Extra}>(
+export const postOrders = createAsyncThunk<undefined | string, Order, {extra: Extra; dispatch: AppDispatch}>(
   Action.POST_ORDER,
 
-  async(order, {extra}) => {
+  async(order, {extra, dispatch}) => {
 
     const {api} = extra;
     const {data} = await api.post<undefined | string>(ApiRoutes.order, order);
+    dispatch(resetTotalPrice());
+    dispatch(setAddedCoupon(''));
+    localStorage.setItem('coupon', '');
 
     return data;
   }
