@@ -27,7 +27,7 @@ function Basket ({isActiveAddBasket, isActiveSuccessBasket, onClickBasketSucess,
   const totalPrice = useAppSelector(takeTotalPrice);
   const discount = totalPrice / 100 * (useAppSelector(takeDiscount));
   const [curentCamera, setCurrentCamera] = useState<CardProductInfo>(defaultCard);
-  const [couponField, setCouponField] = useState<string>('');
+  const [couponField, setCouponField] = useState<string>(addedCoupon);
   const priceToPay = totalPrice - discount;
   const [isErrorVisible, setErrorVisible] = useState<string>('');
 
@@ -44,7 +44,11 @@ function Basket ({isActiveAddBasket, isActiveSuccessBasket, onClickBasketSucess,
       dispatch(resetStatusOrder());
     }
 
-  }, [isErrorVisible, orderStatus]);
+    if(couponStatus === CouponStatus.Vaild) {
+      dispatch(setAddedCoupon(couponField));
+    }
+
+  }, [isErrorVisible, orderStatus, couponStatus]);
 
   const onChangeSetCoupon = (e: ChangeEvent<HTMLInputElement>) => {
 
@@ -64,6 +68,7 @@ function Basket ({isActiveAddBasket, isActiveSuccessBasket, onClickBasketSucess,
       return 'is-invalid';
     }
     if((couponField.length > 0 && couponStatus === CouponStatus.Vaild) || (couponField.length > 0 && couponField === addedCoupon)) {
+      
       return 'is-valid';
     }
     return '';
@@ -76,7 +81,7 @@ function Basket ({isActiveAddBasket, isActiveSuccessBasket, onClickBasketSucess,
 
   const onClickUseCoupon = () => {
     dispatch(postCoupon(couponField));
-    dispatch(setAddedCoupon(couponField));
+  
   };
 
   const onEnterEventDisabled = (e: React.KeyboardEvent<HTMLInputElement>) => {
