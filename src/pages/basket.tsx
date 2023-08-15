@@ -27,7 +27,7 @@ function Basket ({isActiveAddBasket, isActiveSuccessBasket, onClickBasketSucess,
   const totalPrice = useAppSelector(takeTotalPrice);
   const discount = totalPrice / 100 * (useAppSelector(takeDiscount));
   const [curentCamera, setCurrentCamera] = useState<CardProductInfo>(defaultCard);
-  const [couponField, setCouponField] = useState<string>(addedCoupon);
+  const [couponField, setCouponField] = useState<string>('');
   const priceToPay = totalPrice - discount;
   const [isErrorVisible, setErrorVisible] = useState<string>('');
 
@@ -43,6 +43,7 @@ function Basket ({isActiveAddBasket, isActiveSuccessBasket, onClickBasketSucess,
     if(isErrorVisible === '') {
       dispatch(resetStatusOrder());
     }
+
   }, [isErrorVisible, orderStatus]);
 
   const onChangeSetCoupon = (e: ChangeEvent<HTMLInputElement>) => {
@@ -63,7 +64,6 @@ function Basket ({isActiveAddBasket, isActiveSuccessBasket, onClickBasketSucess,
       return 'is-invalid';
     }
     if((couponField.length > 0 && couponStatus === CouponStatus.Vaild) || (couponField.length > 0 && couponField === addedCoupon)) {
-      dispatch(setAddedCoupon(couponField));
       return 'is-valid';
     }
     return '';
@@ -76,6 +76,7 @@ function Basket ({isActiveAddBasket, isActiveSuccessBasket, onClickBasketSucess,
 
   const onClickUseCoupon = () => {
     dispatch(postCoupon(couponField));
+    dispatch(setAddedCoupon(couponField));
   };
 
   const onEnterEventDisabled = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -93,6 +94,7 @@ function Basket ({isActiveAddBasket, isActiveSuccessBasket, onClickBasketSucess,
             <h1 className="title title--h2">Корзина</h1>
             <ul className="basket__list">
               {
+                myCameras &&
                 myCameras.map((camera) => <BasketItem camera={camera} key={camera.id} onClickGetCurrentCamera={setCurrentCamera} onClickSetBasketAdd={onClickSetBasketAdd}/>)
               }
             </ul>

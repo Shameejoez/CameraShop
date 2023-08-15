@@ -6,7 +6,7 @@ import { postCoupon, postOrders } from '../action';
 
 const initialState : basketStore = {
   myCameras: (JSON.parse(localStorage.getItem('myCameras') as string)) as (CardProductInfo & {count?: number})[] ?? [],
-  addedCoupon: (JSON.parse(localStorage.getItem('coupon') as string)) as string ?? '',
+  addedCoupon: '',
   totalPrice: (JSON.parse(localStorage.getItem('totalPrice') as string)) as number ?? 0 ,
   orderPostStatus: LoadingStatus.Unknown,
   discount: {
@@ -89,6 +89,11 @@ export const basketSlicer = createSlice({
         state.orderPostStatus = LoadingStatus.Fullfield;
         state.myCameras = [];
         state.addedCoupon = '';
+        state.discount.count = 0;
+        state.totalPrice = 0;
+        localStorage.setItem('myCameras', JSON.stringify(state.myCameras));
+        localStorage.setItem('totalPrice', JSON.stringify(state.totalPrice));
+        localStorage.setItem('coupon', JSON.stringify(state.addedCoupon));
       })
       .addCase(postOrders.rejected, (state) => {
         state.orderPostStatus = LoadingStatus.Rejected;
